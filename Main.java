@@ -69,22 +69,45 @@ public class Main {
 
     // ---------------- USER LOGIN ----------------
     static void userLogin() {
-        System.out.print("Account No: ");
-        int accNo = sc.nextInt();
-        System.out.print("PIN: ");
-        int pin = sc.nextInt();
+    System.out.print("Account No: ");
+    int accNo = sc.nextInt();
 
-        for (BankAccount acc : accounts) {
-            if (acc.getAccountNumber() == accNo &&
-                acc.validatePin(pin) &&
-                acc.isActive()) {
-                System.out.println("\n🙂 Welcome back, " + acc.getName() + "!");
-                userMenu(acc);
+    for (BankAccount acc : accounts) {
+
+        if (acc.getAccountNumber() == accNo) {
+
+            if (!acc.isActive()) {
+                System.out.println("❌ Account is blocked. Contact admin.");
                 return;
             }
+
+            int attempts = 3;
+
+            while (attempts > 0) {
+                System.out.print("Enter PIN: ");
+                int pin = sc.nextInt();
+
+                if (acc.validatePin(pin)) {
+                    System.out.println("🙂 Welcome back, " + acc.getName());
+                    userMenu(acc);
+                    return;
+                } else {
+                    attempts--;
+                    System.out.println("❌ Wrong PIN. Attempts left: " + attempts);
+                }
+            }
+
+            // After 3 failed attempts
+            acc.blockAccount();
+            saveData();
+            System.out.println("🚫 Account blocked due to 3 incorrect PIN attempts.");
+            return;
         }
-        System.out.println("Login failed");
     }
+
+    System.out.println("❌ Account not found.");
+}
+
 
     // ---------------- USER MENU ----------------
     static void userMenu(BankAccount acc) {
@@ -100,9 +123,11 @@ public class Main {
             System.out.println("4. Interest Calculator");
             System.out.println("5. Loan EMI Calculator");
             System.out.println("6. Transactions");
-            System.out.println("7. Account Summary");      // NEW
-            System.out.println("8. Export Passbook");
-            System.out.println("9. Logout");
+            System.out.println("7. Account Summary");
+            System.out.println("8. Change PIN");        // NEW
+            System.out.println("9. Export Passbook");
+            System.out.println("10. Logout");
+
 
             System.out.print("Choice: ");
 
@@ -111,51 +136,113 @@ public class Main {
             switch (ch) {
                 case 1 -> {
                     System.out.print("Amount: ");
-                    acc.deposit(sc.nextDouble());
-                    saveData();
+                    double amt = sc.nextDouble();
+
+                    if (amt <= 0) {
+                    System.out.println("❌ Amount must be greater than 0.");
+                    break;
+                }
+
+                acc.deposit(amt);
+                saveData();
+
                 }
                 case 2 -> {
                     System.out.print("Amount: ");
-                    acc.withdraw(sc.nextDouble());
+                    double amt = sc.nextDouble();
+
+                    if (amt <= 0) {
+                    System.out.println("❌ Amount must be greater than 0.");
+                    break;
+                    }
+
+                    if (amt > acc.getBalance()) {
+                    System.out.println("❌ Insufficient balance.");
+                    break;
+                }
+
+                    acc.withdraw(amt);
                     saveData();
                 }
                 case 3 -> transferMoney(acc);
                 case 4 -> interestFeature(acc);
                 case 5 -> emiCalculator();
                 case 6 -> acc.printTransactions();
-                case 7 -> accountSummary(acc);     // NEW
-                case 8 -> exportPassbook(acc);
-                case 9 -> {
-                System.out.println("👋 Logged out successfully. Have a great day!");
-                return;
-            }
+                case 7 -> accountSummary(acc);
+                case 8 -> changePin(acc);        // NEW
+                case 9 -> exportPassbook(acc);
+                case 10 -> {
+                        System.out.println("👋 Logged out successfully.");
+                    return;
+                }
+
 
                 default -> System.out.println("Invalid option");
             }
         }
     }
 
-    // ---------------- TRANSFER ----------------
-    static void transferMoney(BankAccount sender) {
-        System.out.print("Receiver Acc No: ");
-        int rno = sc.nextInt();
-        System.out.print("Amount: ");
-        double amt = sc.nextDouble();
+    static void changePin(BankAccount acc) {
+    System.out.print("Enter old PIN: ");
+    int oldPin = sc.nextInt();
 
-        for (BankAccount r : accounts) {
-            if (r.getAccountNumber() == rno && r.isActive()) {
-                if (amt <= sender.getBalance()) {
-                    sender.withdraw(amt);
-                    r.deposit(amt);
-                    sender.addTransaction("Sent Rs. " + amt + " to " + r.getName());
-                    r.addTransaction("Received Rs. " + amt + " from " + sender.getName());
-                    saveData();
-                }
+    if (!acc.validatePin(oldPin)) {
+        System.out.println("❌ Incorrect old PIN.");
+        return;
+    }
+
+    System.out.print("Enter new PIN: ");
+    int newPin = sc.nextInt();
+
+    if (newPin < 1000 || newPin > 9999) {
+        System.out.println("❌ PIN must be 4 digits.");
+        return;
+    }
+
+    acc.setPin(newPin);
+    saveData();
+    System.out.println("✅ PIN changed successfully.");
+}
+
+
+    static void transferMoney(BankAccount sender) {
+
+    System.out.print("Receiver Acc No: ");
+    int rno = sc.nextInt();
+
+    System.out.print("Amount: ");
+    double amt = sc.nextDouble();
+
+    // ✅ PUT THE CHECK RIGHT HERE
+    if (amt <= 0) {
+        System.out.println("❌ Amount must be greater than 0.");
+        return;
+    }
+
+    // now continue normal logic
+    for (BankAccount r : accounts) {
+        if (r.getAccountNumber() == rno && r.isActive()) {
+
+            if (amt > sender.getBalance()) {
+                System.out.println("❌ Insufficient balance.");
                 return;
             }
+
+            sender.withdraw(amt);
+            r.deposit(amt);
+
+            sender.addTransaction("Sent Rs. " + amt + " to " + r.getName());
+            r.addTransaction("Received Rs. " + amt + " from " + sender.getName());
+
+            saveData();
+            System.out.println("✅ Transfer successful.");
+            return;
         }
-        System.out.println("Transfer failed");
     }
+
+    System.out.println("❌ Receiver account not found or blocked.");
+}
+
 
     // ---------------- INTEREST ----------------
     static void interestFeature(BankAccount acc) {
@@ -242,11 +329,21 @@ public class Main {
 
 
     static void deleteAccount() {
-        System.out.print("Account No: ");
-        int no = sc.nextInt();
+    System.out.print("Account No: ");
+    int no = sc.nextInt();
+
+    System.out.print("Are you sure you want to delete this account? (Y/N): ");
+    char ch = sc.next().charAt(0);
+
+    if (ch == 'Y' || ch == 'y') {
         accounts.removeIf(a -> a.getAccountNumber() == no);
         saveData();
+        System.out.println("✅ Account deleted successfully.");
+    } else {
+        System.out.println("❌ Deletion cancelled.");
     }
+}
+
 
     // ---------------- PASSBOOK ----------------
     static void exportPassbook(BankAccount acc) {

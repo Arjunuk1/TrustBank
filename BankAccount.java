@@ -25,6 +25,12 @@ public class BankAccount {
         addTransaction("Account created successfully");
     }
 
+    public void setPin(int newPin) {
+        this.pin = newPin;
+        addTransaction("PIN changed successfully");
+    }
+
+
     // ---------------- BASIC GETTERS ----------------
     public String getName() {
         return name;
