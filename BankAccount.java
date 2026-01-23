@@ -25,42 +25,28 @@ public class BankAccount {
         addTransaction("Account created successfully");
     }
 
-    public void setPin(int newPin) {
-        this.pin = newPin;
-        addTransaction("PIN changed successfully");
-    }
-
-
     // ---------------- BASIC GETTERS ----------------
-    public String getName() {
-        return name;
-    }
-
-    public int getAccountNumber() {
-        return accountNumber;
-    }
-
-    public int getPin() {
-        return pin;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
+    public String getName() { return name; }
+    public int getAccountNumber() { return accountNumber; }
+    public int getPin() { return pin; }
+    public double getBalance() { return balance; }
+    public boolean isActive() { return active; }
 
     public ArrayList<String> getTransactions() {
         return new ArrayList<>(transactions);
     }
 
-    // ---------------- SETTERS (for file load) ----------------
+    // ---------------- SETTERS ----------------
     public void setBalance(double balance) {
         this.balance = balance;
     }
 
+    public void setPin(int newPin) {
+        this.pin = newPin;
+        addTransaction("PIN changed successfully");
+    }
+
+    // ---------------- TRANSACTIONS ----------------
     public void addTransaction(String msg) {
         String time = LocalDateTime.now().format(dtf);
         transactions.add("[" + time + "] " + msg);
@@ -69,7 +55,7 @@ public class BankAccount {
     // ---------------- ACCOUNT STATUS ----------------
     public void blockAccount() {
         active = false;
-        addTransaction("Account blocked by admin");
+        addTransaction("Account blocked by admin/security");
     }
 
     public void unblockAccount() {
@@ -80,14 +66,12 @@ public class BankAccount {
     // ---------------- BANK OPERATIONS ----------------
     public void deposit(double amount) {
         if (!active || amount <= 0) return;
-
         balance += amount;
         addTransaction("Deposited Rs. " + amount);
     }
 
     public void withdraw(double amount) {
         if (!active || amount <= 0 || amount > balance) return;
-
         balance -= amount;
         addTransaction("Withdrew Rs. " + amount);
     }
@@ -96,19 +80,7 @@ public class BankAccount {
         return this.pin == pin;
     }
 
-    public void printLastFiveTransactions() {
-        System.out.println("\n--- Last 5 Transactions ---");
-
-        int start = Math.max(0, transactions.size() - 5);
-        for (int i = start; i < transactions.size(); i++) {
-            System.out.println(transactions.get(i));
-    }
-
-            System.out.println("----------------------------");
-    }
-
-
-    // ---------------- INTEREST CALCULATION ----------------
+    // ---------------- INTEREST ----------------
     public double calculateInterest(double rate, int years) {
         return (balance * rate * years) / 100;
     }
@@ -120,5 +92,29 @@ public class BankAccount {
             System.out.println(t);
         }
         System.out.println("----------------------------");
+    }
+
+    public void printLastFiveTransactions() {
+        System.out.println("\n--- Last 5 Transactions ---");
+        int start = Math.max(0, transactions.size() - 5);
+        for (int i = start; i < transactions.size(); i++) {
+            System.out.println(transactions.get(i));
+        }
+        System.out.println("----------------------------");
+    }
+
+    public void searchTransactions(String keyword) {
+        System.out.println("\n--- Search Results for: " + keyword + " ---");
+        boolean found = false;
+
+        for (String t : transactions) {
+            if (t.toLowerCase().contains(keyword.toLowerCase())) {
+                System.out.println(t);
+                found = true;
+            }
+        }
+
+        if (!found) System.out.println("No transactions found.");
+        System.out.println("------------------------------------------");
     }
 }
