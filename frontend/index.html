@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrustBank</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">🏦</div>
+        <div>
+          <h1>TrustBank</h1>
+          <p>Secure Banking Demo (Spring Boot + JS)</p>
+        </div>
+      </div>
+
+      <div class="status">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Not logged in</span>
+      </div>
+    </header>
+
+    <main class="grid">
+
+      <!-- CREATE ACCOUNT -->
+      <section class="card">
+        <h2>Create Account</h2>
+        <p class="muted">Create a new account with name and PIN.</p>
+
+        <div class="row">
+          <input id="cname" placeholder="Full Name" />
+          <input id="cpin" type="password" placeholder="Set PIN" />
+        </div>
+
+        <button class="btn primary" onclick="createAccount()">Create Account</button>
+        <div class="msg" id="createMsg"></div>
+      </section>
+
+      <!-- LOGIN -->
+      <section class="card">
+        <h2>Login</h2>
+        <p class="muted">Login using your account number and PIN.</p>
+
+        <div class="row">
+          <input id="lacc" placeholder="Account Number" />
+          <input id="lpin" type="password" placeholder="PIN" />
+        </div>
+
+        <div class="row">
+          <button class="btn primary" onclick="login()">Login</button>
+          <button class="btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="msg" id="loginMsg"></div>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section class="card wide">
+        <h2>Dashboard</h2>
+        <p class="muted">Perform banking actions after login.</p>
+
+        <div class="dashboard">
+          <div class="infoBox">
+            <div class="label">Logged In User</div>
+            <div class="value" id="userInfo">Not logged in</div>
+          </div>
+
+          <div class="actions">
+
+            <div class="actionCard">
+              <h3>Deposit</h3>
+              <div class="row">
+                <input id="depAmt" placeholder="Amount (Rs.)" />
+                <button class="btn success" onclick="deposit()">Deposit</button>
+              </div>
+            </div>
+
+            <div class="actionCard">
+              <h3>Withdraw</h3>
+              <div class="row">
+                <input id="withAmt" placeholder="Amount (Rs.)" />
+                <button class="btn danger" onclick="withdraw()">Withdraw</button>
+              </div>
+            </div>
+
+            <div class="actionCard">
+              <h3>Transfer</h3>
+              <div class="row">
+                <input id="toAcc" placeholder="Receiver Acc No" />
+                <input id="trAmt" placeholder="Amount (Rs.)" />
+                <button class="btn warning" onclick="transfer()">Transfer</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- TRANSACTIONS -->
+      <section class="card wide">
+        <div class="row space">
+          <div>
+            <h2>Transactions</h2>
+            <p class="muted">View your transaction history.</p>
+          </div>
+          <button class="btn" onclick="loadTransactions()">Show Transactions</button>
+        </div>
+
+        <div class="txnBox" id="txns">No transactions loaded.</div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>Made by Arjun • TrustBank Project</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

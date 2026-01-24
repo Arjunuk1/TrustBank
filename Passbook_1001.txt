@@ -1,7 +1,0 @@
-TRUSTBANK PASSBOOK
-Account: 1001
-Name: Arjun
-
-[2025-12-26 11:50] Account created successfully
-
-Balance: Rs. 16000.0
