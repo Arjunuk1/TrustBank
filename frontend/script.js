@@ -26,6 +26,7 @@ async function login() {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ accountNumber, pin })
+    
   });
 
   const data = await res.json();
@@ -55,6 +56,8 @@ async function deposit() {
 
   const data = await res.json();
   alert(data.message);
+  loadBalance();
+
 }
 
 async function withdraw() {
@@ -70,6 +73,8 @@ async function withdraw() {
 
   const data = await res.json();
   alert(data.message);
+  loadBalance();
+
 }
 
 async function transfer() {
@@ -86,6 +91,8 @@ async function transfer() {
 
   const data = await res.json();
   alert(data.message);
+  loadBalance();
+
 }
 
 async function loadTransactions() {
