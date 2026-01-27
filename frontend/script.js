@@ -117,4 +117,14 @@ function logout() {
   document.getElementById("loginMsg").innerText = "Logged out ✅";
   document.getElementById("txns").innerText = "No transactions loaded.";
   updateStatus();
+
+  async function loadBalance() {
+  if (!currentAccNo) return;
+
+  const res = await fetch(`${API}/accounts/${currentAccNo}/balance`);
+  const bal = await res.json();
+
+  document.getElementById("balance").innerText = bal.toFixed(2);
+}
+
 }
