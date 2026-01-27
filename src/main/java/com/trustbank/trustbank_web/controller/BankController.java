@@ -72,4 +72,10 @@ public class BankController {
     public List<BankAccount> allAccounts() {
         return service.getAllAccounts();
     }
+
+    @GetMapping("/accounts/{accNo}/balance")
+    public double getBalance(@PathVariable int accNo) {
+    BankAccount acc = service.find(accNo);
+        return acc != null ? acc.getBalance() : 0.0;
+    }
 }
