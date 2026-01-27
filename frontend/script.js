@@ -134,4 +134,10 @@ function logout() {
   document.getElementById("balance").innerText = bal.toFixed(2);
 }
 
+function togglePin() {
+  const pin = document.getElementById("lpin");
+  pin.type = pin.type === "password" ? "text" : "password";
+}
+
+
 }

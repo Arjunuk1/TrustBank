@@ -47,7 +47,11 @@
 
         <div class="row">
           <input id="lacc" placeholder="Account Number" />
+          <div class="row">
           <input id="lpin" type="password" placeholder="PIN" />
+          <button class="btn" onclick="togglePin()">👁</button>
+        </div>
+
         </div>
 
         <div class="row">
@@ -114,7 +118,10 @@
           <button class="btn" onclick="loadTransactions()">Show Transactions</button>
         </div>
 
-        <div class="txnBox" id="txns">No transactions loaded.</div>
+        <div class="txnList" id="txns">
+        <p class="muted">No transactions loaded.</p>
+      </div>
+
       </section>
 
     </main>
