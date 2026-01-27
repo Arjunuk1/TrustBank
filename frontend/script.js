@@ -101,8 +101,41 @@ async function loadTransactions() {
   const res = await fetch(`${API}/accounts/${currentAccNo}/transactions`);
   const data = await res.json();
 
-  document.getElementById("txns").innerText = data.join("\n");
+  const container = document.getElementById("txns");
+  container.innerHTML = "";
+
+  if (data.length === 0) {
+    container.innerHTML = "<p class='muted'>No transactions found.</p>";
+    return;
+  }
+
+  data.forEach(txn => {
+    let type = "transfer";
+    let icon = "🔁";
+
+    if (txn.includes("Deposited")) {
+      type = "deposit";
+      icon = "💰";
+    } else if (txn.includes("Withdrew")) {
+      type = "withdraw";
+      icon = "💸";
+    }
+
+    const card = document.createElement("div");
+    card.className = "txnCard";
+
+    card.innerHTML = `
+      <div class="txnLeft">
+        <div class="txnIcon">${icon}</div>
+        <div class="txnAmount ${type}">${txn}</div>
+      </div>
+      <div class="txnTime">${new Date().toLocaleString()}</div>
+    `;
+
+    container.appendChild(card);
+  });
 }
+
 
 function updateStatus() {
   const dot = document.getElementById("statusDot");
