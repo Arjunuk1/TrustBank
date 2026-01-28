@@ -188,5 +188,10 @@ if (window.location.pathname.includes("dashboard.html")) {
   }
 }
 
+function logout() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
 
 }
