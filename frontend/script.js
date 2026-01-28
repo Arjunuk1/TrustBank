@@ -1,7 +1,13 @@
+// const API = "http://localhost:8081/api";
+
+// let currentAccNo = null;
+// let currentName = null;
+
 const API = "http://localhost:8081/api";
 
-let currentAccNo = null;
-let currentName = null;
+let currentAccNo = localStorage.getItem("accNo");
+let currentName = localStorage.getItem("name");
+
 
 async function createAccount() {
   const name = document.getElementById("cname").value;
