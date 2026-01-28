@@ -32,22 +32,20 @@ async function login() {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ accountNumber, pin })
-    
   });
 
   const data = await res.json();
 
   if (data.message === "Login successful") {
-    currentAccNo = data.accountNumber;
-    currentName = data.name;
-    document.getElementById("loginMsg").innerText = "✅ Login successful";
-    document.getElementById("userInfo").innerText =
-      `Logged in as ${currentName} (Acc: ${currentAccNo})`;
+    localStorage.setItem("accNo", data.accountNumber);
+    localStorage.setItem("name", data.name);
+
+    window.location.href = "dashboard.html";
   } else {
     document.getElementById("loginMsg").innerText = "❌ Login failed";
   }
-  updateStatus();
 }
+
 
 async function deposit() {
   if (!currentAccNo) return alert("Login first!");
@@ -176,6 +174,18 @@ function logout() {
 function togglePin() {
   const pin = document.getElementById("lpin");
   pin.type = pin.type === "password" ? "text" : "password";
+}
+
+if (window.location.pathname.includes("dashboard.html")) {
+  if (!currentAccNo) {
+    window.location.href = "login.html";
+  } else {
+    document.getElementById("userInfo").innerText =
+      `${currentName} (Acc: ${currentAccNo})`;
+
+    loadBalance();
+    loadTransactions();
+  }
 }
 
 
