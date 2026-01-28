@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TrustBank | Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🏦</div>
+      <h1>TrustBank</h1>
+    </div>
+  </header>
+
+  <main class="grid">
+
+    <!-- CREATE ACCOUNT -->
+    <section class="card">
+      <h2>Create Account</h2>
+
+      <input id="cname" placeholder="Full Name" />
+      <input id="cpin" type="password" placeholder="Set PIN" />
+
+      <button class="btn primary" onclick="createAccount()">Create</button>
+      <p class="msg" id="createMsg"></p>
+    </section>
+
+    <!-- LOGIN -->
+    <section class="card">
+      <h2>Login</h2>
+
+      <input id="lacc" placeholder="Account Number" />
+      <div class="row">
+        <input id="lpin" type="password" placeholder="PIN" />
+        <button class="btn" onclick="togglePin()">👁</button>
+      </div>
+
+      <button class="btn success" onclick="login()">Login</button>
+      <p class="msg" id="loginMsg"></p>
+    </section>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
