@@ -176,6 +176,26 @@ function togglePin() {
   pin.type = pin.type === "password" ? "text" : "password";
 }
 
+function togglePin() {
+  const pin = document.getElementById("lpin");
+  pin.type = pin.type === "password" ? "text" : "password";
+}
+
+/* ================= DASHBOARD AUTO LOAD ================= */
+
+if (window.location.pathname.includes("dashboard.html")) {
+  if (!currentAccNo) {
+    window.location.href = "login.html";
+  } else {
+    document.getElementById("userInfo").innerText =
+      `${currentName} (Acc: ${currentAccNo})`;
+
+    loadBalance();
+    loadTransactions();
+  }
+}
+
+
 if (window.location.pathname.includes("dashboard.html")) {
   if (!currentAccNo) {
     window.location.href = "login.html";
