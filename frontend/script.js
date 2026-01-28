@@ -194,7 +194,7 @@ if (window.location.pathname.includes("dashboard.html")) {
     loadTransactions();
   }
 }
-
+// everything up to date
 
 if (window.location.pathname.includes("dashboard.html")) {
   if (!currentAccNo) {
