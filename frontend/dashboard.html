@@ -20,11 +20,22 @@
   <main class="grid">
 
     <!-- USER INFO -->
-    <section class="card wide">
-      <h2>Account Info</h2>
-      <p><b>User:</b> <span id="userInfo"></span></p>
-      <p><b>Balance:</b> Rs. <span id="balance">0</span></p>
-    </section>
+    <section class="card wide account-card">
+  <h2>Account Info</h2>
+
+  <div class="account-row">
+    <span class="label">User</span>
+    <span id="userInfo" class="value">—</span>
+  </div>
+
+  <div class="account-row balance-row">
+    <span class="label">Balance</span>
+    <span class="balance-amount">
+      ₹ <span id="balance">0</span>
+    </span>
+  </div>
+</section>
+
 
     <!-- ACTIONS -->
     <section class="card">
