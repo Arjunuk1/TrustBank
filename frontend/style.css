@@ -247,12 +247,19 @@ input:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.04);
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
   border: 1px solid rgba(255,255,255,0.08);
   font-size: 14px;
+  transition: all 0.2s ease;
 }
+
+.txnCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
 
 .txnLeft {
   display: flex;
@@ -261,8 +268,16 @@ input:focus {
 }
 
 .txnIcon {
-  font-size: 18px;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
 }
+
 
 .txnAmount {
   font-weight: bold;
