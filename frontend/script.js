@@ -65,18 +65,24 @@ function logout() {
 async function deposit() {
   if (!currentAccNo) return alert("Login first!");
 
+  const button = event.target;
+  setLoading(button, true);
+
   const amount = document.getElementById("depAmt").value;
 
   const res = await fetch(`${API}/accounts/deposit`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ accountNumber: currentAccNo, amount })
   });
 
   const data = await res.json();
   alert(data.message);
   loadBalance();
+
+  setLoading(button, false);
 }
+
 
 // ---------------- WITHDRAW ----------------
 async function withdraw() {
@@ -93,6 +99,8 @@ async function withdraw() {
   const data = await res.json();
   alert(data.message);
   loadBalance();
+
+  setLoading(button, false);
 }
 
 // ---------------- TRANSFER ----------------
@@ -111,6 +119,8 @@ async function transfer() {
   const data = await res.json();
   alert(data.message);
   loadBalance();
+
+  setLoading(button, false);
 }
 
 // ---------------- BALANCE ----------------
