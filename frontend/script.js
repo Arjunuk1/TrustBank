@@ -1,5 +1,16 @@
 const API = "http://localhost:8081/api";
 
+function setLoading(button, state) {
+  if (state) {
+    button.dataset.original = button.innerText;
+    button.innerText = "Processing...";
+    button.disabled = true;
+  } else {
+    button.innerText = button.dataset.original;
+    button.disabled = false;
+  }
+}
+
 // ---------------- SESSION ----------------
 let currentAccNo = localStorage.getItem("accNo");
 let currentName = localStorage.getItem("name");
