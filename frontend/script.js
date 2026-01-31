@@ -95,7 +95,10 @@ async function deposit(event) {
 
 // ---------------- WITHDRAW ----------------
 async function withdraw() {
-  if (!currentAccNo) return alert("Login first!");
+  if (!currentAccNo) {
+    showToast("Login first!", "error");
+    return;
+  }
 
   const amount = document.getElementById("withAmt").value;
 
@@ -106,15 +109,22 @@ async function withdraw() {
   });
 
   const data = await res.json();
-  alert(data.message);
-  loadBalance();
+  if (res.ok) {
+    showToast(data.message, "success");
+    loadBalance();
+  } else {
+    showToast(data.message || "Deposit failed", "error");
+  }
 
   setLoading(button, false);
 }
 
 // ---------------- TRANSFER ----------------
 async function transfer() {
-  if (!currentAccNo) return alert("Login first!");
+  if (!currentAccNo) {
+    showToast("Login first!", "error");
+    return;
+  }
 
   const toAccount = document.getElementById("toAcc").value;
   const amount = document.getElementById("trAmt").value;
@@ -126,8 +136,12 @@ async function transfer() {
   });
 
   const data = await res.json();
-  alert(data.message);
-  loadBalance();
+  if (res.ok) {
+    showToast(data.message, "success");
+    loadBalance();
+  } else {
+    showToast(data.message || "Deposit failed", "error");
+  }
 
   setLoading(button, false);
 }
