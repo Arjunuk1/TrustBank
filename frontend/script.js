@@ -62,8 +62,11 @@ function logout() {
 }
 
 // ---------------- DEPOSIT ----------------
-async function deposit() {
-  if (!currentAccNo) return alert("Login first!");
+async function deposit(event) {
+  if (!currentAccNo) {
+    showToast("Login first!", "error");
+    return;
+  }
 
   const button = event.target;
   setLoading(button, true);
@@ -72,16 +75,22 @@ async function deposit() {
 
   const res = await fetch(`${API}/accounts/deposit`, {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ accountNumber: currentAccNo, amount })
   });
 
   const data = await res.json();
-  alert(data.message);
-  loadBalance();
+
+  if (res.ok) {
+    showToast(data.message, "success");
+    loadBalance();
+  } else {
+    showToast(data.message || "Deposit failed", "error");
+  }
 
   setLoading(button, false);
 }
+
 
 
 // ---------------- WITHDRAW ----------------
