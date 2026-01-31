@@ -133,6 +133,18 @@ async function loadBalance() {
   document.getElementById("balance").innerText = bal.toFixed(2);
 }
 
+function showToast(message, type = "success") {
+  const toast = document.getElementById("toast");
+
+  toast.className = `toast show ${type}`;
+  toast.innerText = message;
+
+  setTimeout(() => {
+    toast.className = "toast";
+  }, 2500);
+}
+
+
 // ---------------- TRANSACTIONS ----------------
 async function loadTransactions() {
   if (!currentAccNo) return;
