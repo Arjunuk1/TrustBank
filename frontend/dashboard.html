@@ -60,9 +60,20 @@
     <!-- TRANSACTIONS -->
     <section class="card wide">
       <div class="row space">
-        <h2>Transactions</h2>
-        <button class="btn" onclick="loadTransactions()">Refresh</button>
-      </div>
+  <div>
+    <h2>Transactions</h2>
+    <p class="muted">Filter and view your transaction history.</p>
+  </div>
+  <button class="btn" onclick="loadTransactions()">Refresh</button>
+</div>
+
+<div class="row" style="margin-top:10px;">
+  <button class="btn" onclick="setFilter('all')">All</button>
+  <button class="btn success" onclick="setFilter('deposit')">Deposit</button>
+  <button class="btn danger" onclick="setFilter('withdraw')">Withdraw</button>
+  <button class="btn warning" onclick="setFilter('transfer')">Transfer</button>
+</div>
+
 
       <div class="txnList" id="txns"></div>
     </section>
