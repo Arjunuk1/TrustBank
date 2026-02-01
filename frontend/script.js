@@ -32,6 +32,11 @@ async function createAccount() {
     `✅ Account Created: ${data.accountNumber}`;
 }
 
+function setFilter(type) {
+  currentFilter = type;
+  loadTransactions();
+}
+
 // ---------------- LOGIN ----------------
 async function login() {
   const accountNumber = document.getElementById("lacc").value;
@@ -243,24 +248,35 @@ async function loadTransactions() {
     return;
   }
 
-  data.forEach(txn => {
-    let icon = "🔁";
-    if (txn.includes("Deposited")) icon = "💰";
-    if (txn.includes("Withdrew")) icon = "💸";
+data.forEach(txn => {
 
-    const card = document.createElement("div");
-    card.className = "txnCard";
+  let type = "transfer";
+  let icon = "🔁";
 
-    card.innerHTML = `
-      <div class="txnLeft">
-        <div class="txnIcon">${icon}</div>
-        <div class="txnAmount">${txn}</div>
-      </div>
-      <div class="txnTime">${new Date().toLocaleString()}</div>
-    `;
+  if (txn.includes("Deposited")) {
+    type = "deposit";
+    icon = "💰";
+  } else if (txn.includes("Withdrew")) {
+    type = "withdraw";
+    icon = "💸";
+  }
 
-    container.appendChild(card);
-  });
+  // FILTER LOGIC
+  if (currentFilter !== "all" && currentFilter !== type) return;
+
+  const card = document.createElement("div");
+  card.className = "txnCard";
+
+  card.innerHTML = `
+    <div class="txnLeft">
+      <div class="txnIcon">${icon}</div>
+      <div class="txnAmount ${type}">${txn}</div>
+    </div>
+    <div class="txnTime">${new Date().toLocaleString()}</div>
+  `;
+
+  container.appendChild(card);
+});
 }
 
 // ---------------- TOGGLE PIN ----------------
