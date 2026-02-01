@@ -1,6 +1,6 @@
-/home/arjun/TrustBank/src/main/java/com/trustbank/trustbank_web/TrustbankWebApplication.java
-/home/arjun/TrustBank/src/main/java/com/trustbank/trustbank_web/controller/BankController.java
-/home/arjun/TrustBank/src/main/java/com/trustbank/trustbank_web/controller/TestController.java
-/home/arjun/TrustBank/src/main/java/com/trustbank/trustbank_web/model/BankAccount.java
-/home/arjun/TrustBank/src/main/java/com/trustbank/trustbank_web/service/BankService.java
-/home/arjun/TrustBank/src/main/java/com/trustbank/trustbank_web/storage/FileStorage.java
+/home/arjun/TrustBank/src/main/java/com/trustbank/app/TrustbankWebApplication.java
+/home/arjun/TrustBank/src/main/java/com/trustbank/app/controller/BankController.java
+/home/arjun/TrustBank/src/main/java/com/trustbank/app/controller/TestController.java
+/home/arjun/TrustBank/src/main/java/com/trustbank/app/model/BankAccount.java
+/home/arjun/TrustBank/src/main/java/com/trustbank/app/service/BankService.java
+/home/arjun/TrustBank/src/main/java/com/trustbank/app/storage/FileStorage.java

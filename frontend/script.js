@@ -44,22 +44,25 @@ async function login() {
 
   const res = await fetch(`${API}/accounts/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ accountNumber, pin })
   });
 
-  if (!res.ok) {
-    document.getElementById("loginMsg").innerText = "❌ Login failed";
-    return;
+  const data = await res.json();
+
+  // ✅ ONLY redirect if backend returns success
+  if (res.ok && data.accountNumber) {
+
+    localStorage.setItem("accNo", data.accountNumber);
+    localStorage.setItem("name", data.name);
+
+    window.location.href = "dashboard.html";
+
+  } else {
+    document.getElementById("loginMsg").innerText = "❌ Invalid account number or PIN";
   }
-
-  const acc = await res.json();
-
-  localStorage.setItem("accNo", acc.accountNumber);
-  localStorage.setItem("name", acc.name);
-
-  window.location.href = "dashboard.html";
 }
+
 
 // ---------------- LOGOUT ----------------
 function logout() {
