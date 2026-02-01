@@ -73,23 +73,40 @@ async function deposit(event) {
 
   const amount = document.getElementById("depAmt").value;
 
-  const res = await fetch(`${API}/accounts/deposit`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ accountNumber: currentAccNo, amount })
-  });
+  if (!amount || amount <= 0) {
+    showToast("Enter valid amount", "error");
+    setLoading(button, false);
+    return;
+  }
 
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API}/accounts/deposit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        accountNumber: currentAccNo,
+        amount
+      })
+    });
 
-  if (res.ok) {
-    showToast(data.message, "success");
-    loadBalance();
-  } else {
-    showToast(data.message || "Deposit failed", "error");
+    const data = await res.json();
+
+    if (res.ok) {
+      showToast(data.message, "success");
+      document.getElementById("depAmt").value = "";
+      loadBalance();
+      loadTransactions();
+    } else {
+      showToast(data.message || "Deposit failed", "error");
+    }
+
+  } catch (error) {
+    showToast("Server error. Try again.", "error");
   }
 
   setLoading(button, false);
 }
+
 
 
 
