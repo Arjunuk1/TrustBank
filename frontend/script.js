@@ -108,33 +108,52 @@ async function deposit(event) {
 }
 
 
-
-
 // ---------------- WITHDRAW ----------------
-async function withdraw() {
+async function withdraw(event) {
   if (!currentAccNo) {
     showToast("Login first!", "error");
     return;
   }
 
+  const button = event.target;
+  setLoading(button, true);
+
   const amount = document.getElementById("withAmt").value;
 
-  const res = await fetch(`${API}/accounts/withdraw`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ accountNumber: currentAccNo, amount })
-  });
+  if (!amount || amount <= 0) {
+    showToast("Enter valid amount", "error");
+    setLoading(button, false);
+    return;
+  }
 
-  const data = await res.json();
-  if (res.ok) {
-    showToast(data.message, "success");
-    loadBalance();
-  } else {
-    showToast(data.message || "Deposit failed", "error");
+  try {
+    const res = await fetch(`${API}/accounts/withdraw`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        accountNumber: currentAccNo,
+        amount
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      showToast(data.message, "success");
+      document.getElementById("withAmt").value = "";
+      loadBalance();
+      loadTransactions();
+    } else {
+      showToast(data.message || "Withdraw failed", "error");
+    }
+
+  } catch (error) {
+    showToast("Server error. Try again.", "error");
   }
 
   setLoading(button, false);
 }
+
 
 // ---------------- TRANSFER ----------------
 async function transfer() {
