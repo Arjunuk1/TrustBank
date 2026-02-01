@@ -156,31 +156,54 @@ async function withdraw(event) {
 
 
 // ---------------- TRANSFER ----------------
-async function transfer() {
+async function transfer(event) {
   if (!currentAccNo) {
     showToast("Login first!", "error");
     return;
   }
 
+  const button = event.target;
+  setLoading(button, true);
+
   const toAccount = document.getElementById("toAcc").value;
   const amount = document.getElementById("trAmt").value;
 
-  const res = await fetch(`${API}/accounts/transfer`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ fromAccount: currentAccNo, toAccount, amount })
-  });
+  if (!toAccount || !amount || amount <= 0) {
+    showToast("Enter valid details", "error");
+    setLoading(button, false);
+    return;
+  }
 
-  const data = await res.json();
-  if (res.ok) {
-    showToast(data.message, "success");
-    loadBalance();
-  } else {
-    showToast(data.message || "Deposit failed", "error");
+  try {
+    const res = await fetch(`${API}/accounts/transfer`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fromAccount: currentAccNo,
+        toAccount,
+        amount
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      showToast(data.message, "success");
+      document.getElementById("toAcc").value = "";
+      document.getElementById("trAmt").value = "";
+      loadBalance();
+      loadTransactions();
+    } else {
+      showToast(data.message || "Transfer failed", "error");
+    }
+
+  } catch (error) {
+    showToast("Server error. Try again.", "error");
   }
 
   setLoading(button, false);
 }
+
 
 // ---------------- BALANCE ----------------
 async function loadBalance() {
