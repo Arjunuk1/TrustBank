@@ -3,6 +3,8 @@
 1001,Account created successfully
 1001,Account created successfully
 1001,Account created successfully
+1001,Account created successfully
+1002,Account created successfully
 1002,Account created successfully
 1002,Account created successfully
 1002,Account created successfully
@@ -15,6 +17,11 @@
 1002,Sent Rs. 2000.0 to Ayush
 1002,Withdrew Rs. 500.0
 1002,Deposited Rs. 1000.0
+1002,Deposited Rs. 100.0
+1002,Withdrew Rs. 100.0
+1002,Withdrew Rs. 5000.0
+1002,Sent Rs. 5000.0 to Ayush
+1003,Account created successfully
 1003,Account created successfully
 1003,Account created successfully
 1003,Account created successfully
@@ -22,6 +29,9 @@
 1003,Deposited Rs. 2000.0
 1003,Received Rs. 2000.0 from Arjun
 1003,Withdrew Rs. 500.0
+1003,Deposited Rs. 5000.0
+1003,Received Rs. 5000.0 from Arjun
+1004,Account created successfully
 1004,Account created successfully
 1004,Account created successfully
 1004,Account created successfully

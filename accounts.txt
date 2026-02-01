@@ -1,4 +1,4 @@
 1001,Arjun,1234,0.0,true
-1002,Arjun,2006,37000.0,true
-1003,Ayush,2007,1500.0,true
+1002,Arjun,2006,32000.0,true
+1003,Ayush,2007,6500.0,true
 1004,Ananya Mahajan,2008,0.0,true
