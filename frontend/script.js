@@ -13,6 +13,7 @@ function setLoading(button, state) {
 
 // ---------------- SESSION ----------------
 let currentAccNo = localStorage.getItem("accNo");
+let currentFilter = "all";
 let currentName = localStorage.getItem("name");
 
 // ---------------- CREATE ACCOUNT ----------------
