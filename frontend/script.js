@@ -263,6 +263,8 @@ async function loadTransactions() {
     return;
   }
 
+let visibleCount = 0;
+
 data.forEach(txn => {
 
   let type = "transfer";
@@ -277,7 +279,10 @@ data.forEach(txn => {
   }
 
   // FILTER LOGIC
-  if (currentFilter !== "all" && currentFilter !== type) return;
+if (currentFilter !== "all" && currentFilter !== type) return;
+
+visibleCount++;
+
 
   const card = document.createElement("div");
   card.className = "txnCard";
@@ -291,6 +296,9 @@ data.forEach(txn => {
   `;
 
   container.appendChild(card);
+
+  document.getElementById("txnCount").innerText = visibleCount;
+
 });
 }
 
