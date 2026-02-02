@@ -67,11 +67,11 @@
   <button class="btn" onclick="loadTransactions()">Refresh</button>
 </div>
 
-<div class="row" style="margin-top:10px;">
-  <button class="btn" onclick="setFilter('all')">All</button>
-  <button class="btn success" onclick="setFilter('deposit')">Deposit</button>
-  <button class="btn danger" onclick="setFilter('withdraw')">Withdraw</button>
-  <button class="btn warning" onclick="setFilter('transfer')">Transfer</button>
+<div class="row filterRow" style="margin-top:10px;">
+  <button class="btn filterBtn active" data-type="all" onclick="setFilter('all', this)">All</button>
+  <button class="btn success filterBtn" data-type="deposit" onclick="setFilter('deposit', this)">Deposit</button>
+  <button class="btn danger filterBtn" data-type="withdraw" onclick="setFilter('withdraw', this)">Withdraw</button>
+  <button class="btn warning filterBtn" data-type="transfer" onclick="setFilter('transfer', this)">Transfer</button>
 </div>
 
 
