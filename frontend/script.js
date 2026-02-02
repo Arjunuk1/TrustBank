@@ -234,6 +234,7 @@ async function loadBalance() {
   const bal = await res.json();
 
   document.getElementById("balance").innerText = bal.toFixed(2);
+  updateBalanceGraph(bal);
 }
 
 function showToast(message, type = "success") {
@@ -320,3 +321,40 @@ if (window.location.pathname.includes("dashboard.html")) {
     loadTransactions();
   }
 }
+
+// chart logic
+
+let balanceHistory = [];
+let chart;
+
+function updateBalanceGraph(balance) {
+  balanceHistory.push(balance);
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  const ctx = document.getElementById("balanceChart").getContext("2d");
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: balanceHistory.map((_, i) => `T${i+1}`),
+      datasets: [{
+        label: "Balance",
+        data: balanceHistory,
+        borderColor: "#22c55e",
+        backgroundColor: "rgba(34,197,94,0.2)",
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
