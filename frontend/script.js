@@ -32,10 +32,22 @@ async function createAccount() {
     `✅ Account Created: ${data.accountNumber}`;
 }
 
-function setFilter(type) {
+function setFilter(type, button) {
   currentFilter = type;
+
+  // Remove active class from all buttons
+  document.querySelectorAll(".filterBtn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  // Add active class to clicked button
+  if (button) {
+    button.classList.add("active");
+  }
+
   loadTransactions();
 }
+
 
 // ---------------- LOGIN ----------------
 async function login() {
