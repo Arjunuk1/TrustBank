@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>TrustBank | Dashboard</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -22,6 +23,12 @@
     <!-- USER INFO -->
     <section class="card wide account-card">
   <h2>Account Info</h2>
+  
+  <section class="card wide">
+  <h2>Balance Graph</h2>
+  <canvas id="balanceChart" height="100"></canvas>
+</section>
+
 
   <div class="account-row">
     <span class="label">User</span>
