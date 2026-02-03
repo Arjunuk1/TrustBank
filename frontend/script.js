@@ -1,8 +1,17 @@
-const CONFIG = {
-  API_BASE: "http://localhost:8081/api"
-};
+const API = "http://localhost:8081/api";
 
-const API = CONFIG.API_BASE;
+// Centralized API wrapper
+async function safeFetch(url, options) {
+  try {
+    const res = await fetch(url, options);
+    const data = await res.json();
+    return { ok: res.ok, data };
+  } catch (error) {
+    showToast("Network error. Server might be down.", "error");
+    return { ok: false, data: null };
+  }
+}
+
 
 
 function setLoading(button, state) {
@@ -50,6 +59,17 @@ if (button) setLoading(button, true);
     document.getElementById("cpin").value = "";
 
 }
+
+// async function safeFetch(url, options) {
+//   try {
+//     const res = await fetch(url, options);
+//     return await res.json();
+//   } catch (error) {
+//     showToast("Network error. Server might be down.", "error");
+//     throw error;
+//   }
+// }
+
 
 function setFilter(type, button) {
   currentFilter = type;
@@ -143,29 +163,22 @@ async function deposit(event) {
     return;
   }
 
-  try {
-    const res = await fetch(`${API}/accounts/deposit`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        accountNumber: currentAccNo,
-        amount
-      })
-    });
+  const result = await safeFetch(`${API}/accounts/deposit`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      accountNumber: currentAccNo,
+      amount
+    })
+  });
 
-    const data = await res.json();
-
-    if (res.ok) {
-      showToast(data.message, "success");
-      document.getElementById("depAmt").value = "";
-      loadBalance();
-      loadTransactions();
-    } else {
-      showToast(data.message || "Deposit failed", "error");
-    }
-
-  } catch (error) {
-    showToast("Server error. Try again.", "error");
+  if (result.ok) {
+    showToast(result.data.message, "success");
+    document.getElementById("depAmt").value = "";
+    loadBalance();
+    loadTransactions();
+  } else {
+    showToast(result.data?.message || "Deposit failed", "error");
   }
 
   setLoading(button, false);
