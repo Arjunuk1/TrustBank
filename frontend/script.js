@@ -41,6 +41,9 @@ if (button) setLoading(button, true);
   const data = await res.json();
   document.getElementById("createMsg").innerText =
     `✅ Account Created: ${data.accountNumber}`;
+
+    document.getElementById("cpin").value = "";
+
 }
 
 function setFilter(type, button) {
@@ -90,7 +93,7 @@ if (button) setLoading(button, true);
 
     localStorage.setItem("accNo", data.accountNumber);
     localStorage.setItem("name", data.name);
-
+    document.getElementById("lpin").value = "";
     window.location.href = "dashboard.html";
 
   } else {
