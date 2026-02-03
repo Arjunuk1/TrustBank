@@ -19,6 +19,10 @@ let currentName = localStorage.getItem("name");
 // ---------------- CREATE ACCOUNT ----------------
 async function createAccount() {
 
+  const button = event?.target;
+if (button) setLoading(button, true);
+
+
   if (!name || !pin) {
   document.getElementById("createMsg").innerText =
     "⚠ Please enter name and PIN";
@@ -53,16 +57,22 @@ function setFilter(type, button) {
   }
 
   loadTransactions();
+  if (button) setLoading(button, false);
+
 }
 
 
 // ---------------- LOGIN ----------------
 async function login() {
+  const button = event?.target;
+if (button) setLoading(button, true);
+
   if (!accountNumber || !pin) {
   document.getElementById("loginMsg").innerText =
     "⚠ Please enter account number and PIN";
   return;
 }
+
 
   const accountNumber = document.getElementById("lacc").value;
   const pin = document.getElementById("lpin").value;
@@ -86,6 +96,8 @@ async function login() {
   } else {
     document.getElementById("loginMsg").innerText = "❌ Invalid account number or PIN";
   }
+  if (button) setLoading(button, false);
+
 }
 
 
