@@ -1,4 +1,9 @@
-const API = "http://localhost:8081/api";
+const CONFIG = {
+  API_BASE: "http://localhost:8081/api"
+};
+
+const API = CONFIG.API_BASE;
+
 
 function setLoading(button, state) {
   if (state) {
