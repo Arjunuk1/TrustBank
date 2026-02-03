@@ -315,10 +315,18 @@ async function loadTransactions() {
   const container = document.getElementById("txns");
   container.innerHTML = "";
 
-  if (data.length === 0) {
-    container.innerHTML = "<p class='muted'>No transactions found.</p>";
-    return;
-  }
+  // if (data.length === 0) {
+  //   container.innerHTML = "<p class='muted'>No transactions found.</p>";
+  //   return;
+  // }
+
+  container.innerHTML = `
+  <div style="text-align:center; padding:20px; opacity:0.6;">
+    📭 <br><br>
+    No transactions found.
+  </div>
+`;
+
 
 let visibleCount = 0;
 
