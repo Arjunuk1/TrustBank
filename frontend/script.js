@@ -18,6 +18,13 @@ let currentName = localStorage.getItem("name");
 
 // ---------------- CREATE ACCOUNT ----------------
 async function createAccount() {
+
+  if (!name || !pin) {
+  document.getElementById("createMsg").innerText =
+    "⚠ Please enter name and PIN";
+  return;
+}
+
   const name = document.getElementById("cname").value;
   const pin = document.getElementById("cpin").value;
 
@@ -51,6 +58,12 @@ function setFilter(type, button) {
 
 // ---------------- LOGIN ----------------
 async function login() {
+  if (!accountNumber || !pin) {
+  document.getElementById("loginMsg").innerText =
+    "⚠ Please enter account number and PIN";
+  return;
+}
+
   const accountNumber = document.getElementById("lacc").value;
   const pin = document.getElementById("lpin").value;
 
