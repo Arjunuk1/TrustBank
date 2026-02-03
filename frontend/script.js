@@ -100,6 +100,16 @@ if (button) setLoading(button, true);
 
 }
 
+function autoClear(elementId, delay = 3000) {
+  setTimeout(() => {
+    const el = document.getElementById(elementId);
+    if (el) el.innerText = "";
+  }, delay);
+}
+
+autoClear("loginMsg");
+autoClear("createMsg");
+
 
 // ---------------- LOGOUT ----------------
 function logout() {
