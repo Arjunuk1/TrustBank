@@ -8,4 +8,3 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 // updated the react
-// same
