@@ -91,52 +91,36 @@ function setFilter(type, button) {
 
 
 // ---------------- LOGIN ----------------
-async function login() {
+async function login(event) {
+
   const button = event?.target;
-if (button) setLoading(button, true);
-
-  if (!accountNumber || !pin) {
-  document.getElementById("loginMsg").innerText =
-    "⚠ Please enter account number and PIN";
-  return;
-}
-
+  if (button) setLoading(button, true);
 
   const accountNumber = document.getElementById("lacc").value;
   const pin = document.getElementById("lpin").value;
 
-  const res = await fetch(`${API}/accounts/login`, {
+  const result = await safeFetch(`${API}/accounts/login`, {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ accountNumber, pin })
   });
 
-  const data = await res.json();
+  if (result.ok && result.data.accountNumber) {
 
-  // ✅ ONLY redirect if backend returns success
-  if (res.ok && data.accountNumber) {
+    localStorage.setItem("accNo", result.data.accountNumber);
+    localStorage.setItem("name", result.data.name);
 
-    localStorage.setItem("accNo", data.accountNumber);
-    localStorage.setItem("name", data.name);
-    document.getElementById("lpin").value = "";
+    document.getElementById("lpin").value = "";   // security clear
+
     window.location.href = "dashboard.html";
 
   } else {
-    document.getElementById("loginMsg").innerText = "❌ Invalid account number or PIN";
+    document.getElementById("loginMsg").innerText =
+      "❌ Invalid account number or PIN";
   }
+
   if (button) setLoading(button, false);
-
 }
-
-function autoClear(elementId, delay = 3000) {
-  setTimeout(() => {
-    const el = document.getElementById(elementId);
-    if (el) el.innerText = "";
-  }, delay);
-}
-
-autoClear("loginMsg");
-autoClear("createMsg");
 
 
 // ---------------- LOGOUT ----------------
