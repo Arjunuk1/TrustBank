@@ -5,3 +5,11 @@ function App() {
 }
 
 export default App;
+
+// useState() → React state management
+
+// Controlled inputs
+
+// Components structure
+
+// Import/export system
