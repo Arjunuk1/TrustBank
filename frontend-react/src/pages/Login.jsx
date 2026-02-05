@@ -1,11 +1,24 @@
 import { useState } from "react";
+import { loginUser } from "../services/api";
 
 function Login() {
   const [accountNumber, setAccountNumber] = useState("");
   const [pin, setPin] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
-    console.log("Login attempt:", accountNumber, pin);
+    try {
+      const data = await loginUser(accountNumber, pin);
+
+      // Save session
+      localStorage.setItem("accNo", data.accountNumber);
+      localStorage.setItem("name", data.name);
+
+      // Redirect
+      window.location.href = "/dashboard";
+    } catch (err) {
+      setError("Invalid account number or PIN");
+    }
   };
 
   return (
@@ -30,6 +43,8 @@ function Login() {
       <button onClick={handleLogin} style={styles.button}>
         Login
       </button>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
