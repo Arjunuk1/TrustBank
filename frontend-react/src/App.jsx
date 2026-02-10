@@ -1,15 +1,7 @@
-import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  return <Login />;
+  return <Dashboard />;
 }
 
 export default App;
-
-// useState() → React state management
-
-// Controlled inputs
-
-// Components structure
-
-// Import/export system
