@@ -26,6 +26,19 @@ body {
   border: 1px solid rgba(255,255,255,0.08);
   margin-bottom: 20px;
 }
+.sidebar {
+  animation: slideIn 0.6s ease forwards;
+  transform: translateX(-40px);
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 
 .brand {
   display: flex;
