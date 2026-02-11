@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TrustBank</title>
+  <title>TrustBank - Modern Banking Experience</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -14,7 +16,7 @@
         <div class="logo">🏦</div>
         <div>
           <h1>TrustBank</h1>
-          <p>Secure Banking Demo (Spring Boot + JS)</p>
+          <p>Secure Banking Platform • Spring Boot Powered</p>
         </div>
       </div>
 
@@ -28,34 +30,29 @@
 
       <!-- CREATE ACCOUNT -->
       <section class="card">
-        <h2>Create Account</h2>
-        <p class="muted">Create a new account with name and PIN.</p>
+        <h2>🎯 Create Account</h2>
+        <p class="muted">Start your banking journey with us</p>
 
-        <div class="row">
-          <input id="cname" placeholder="Full Name" />
-          <input id="cpin" type="password" placeholder="Set PIN" />
-        </div>
+        <input id="cname" placeholder="Enter Your Full Name" />
+        <input id="cpin" type="password" placeholder="Set a Secure 4-6 Digit PIN" />
 
-        <button class="btn primary" onclick="createAccount()">Create Account</button>
+        <button class="btn primary" onclick="createAccount(event)">Create Account</button>
         <div class="msg" id="createMsg"></div>
       </section>
 
       <!-- LOGIN -->
       <section class="card">
-        <h2>Login</h2>
-        <p class="muted">Login using your account number and PIN.</p>
+        <h2>🔐 Login</h2>
+        <p class="muted">Access your account securely</p>
 
+        <input id="lacc" placeholder="Account Number" />
         <div class="row">
-          <input id="lacc" placeholder="Account Number" />
-          <div class="row">
-          <input id="lpin" type="password" placeholder="PIN" />
+          <input id="lpin" type="password" placeholder="Enter PIN" />
           <button class="btn" onclick="togglePin()">👁</button>
         </div>
 
-        </div>
-
         <div class="row">
-          <button class="btn primary" onclick="login()">Login</button>
+          <button class="btn primary" onclick="login(event)">Login</button>
           <button class="btn" onclick="logout()">Logout</button>
         </div>
 
@@ -69,40 +66,40 @@
 
         <div class="dashboard">
           <div class="infoBox">
-          <div class="label">Account Holder</div>
-        <div class="value" id="userInfo">Not logged in</div>
+          <d📊 Dashboard</h2>
+        <p class="muted">Manage your banking operations</p>
 
-        <div class="label" style="margin-top:10px;">Balance</div>
-        <div class="value">Rs. <span id="balance">0.00</span></div>
-      </div>
+        <div class="dashboard">
+          <div class="infoBox">
+            <div class="label">Account Holder</div>
+            <div class="value" id="userInfo">Not logged in</div>
 
+            <div class="label" style="margin-top:20px;">Current Balance</div>
+            <div class="value">₹ <span id="balance">0.00</span></div>
+          </div>
 
           <div class="actions">
-
             <div class="actionCard">
-              <h3>Deposit</h3>
-              <div class="row">
-                <input id="depAmt" placeholder="Amount (Rs.)" />
-                <button class="btn success" onclick="deposit()">Deposit</button>
-              </div>
+              <h3>💰 Deposit</h3>
+              <input id="depAmt" placeholder="Amount (₹)" />
+              <button class="btn success" onclick="deposit(event)">Deposit</button>
             </div>
 
             <div class="actionCard">
-              <h3>Withdraw</h3>
-              <div class="row">
-                <input id="withAmt" placeholder="Amount (Rs.)" />
-                <button class="btn danger" onclick="withdraw()">Withdraw</button>
-              </div>
+              <h3>💸 Withdraw</h3>
+              <input id="withAmt" placeholder="Amount (₹)" />
+              <button class="btn danger" onclick="withdraw(event)">Withdraw</button>
             </div>
 
             <div class="actionCard">
-              <h3>Transfer</h3>
-              <div class="row">
-                <input id="toAcc" placeholder="Receiver Acc No" />
-                <input id="trAmt" placeholder="Amount (Rs.)" />
-                <button class="btn warning" onclick="transfer()">Transfer</button>
-              </div>
+              <h3>🔄 Transfer</h3>
+              <input id="toAcc" placeholder="Receiver Account" />
+              <input id="trAmt" placeholder="Amount (₹)" />
+              <button class="btn warning" onclick="transfer(event)">Transfer</button>
             </div>
+          </div>
+        </div>
+      </section
 
           </div>
         </div>
@@ -112,25 +109,25 @@
       <section class="card wide">
         <div class="row space">
           <div>
-            <h2>Transactions</h2>
-            <p class="muted">View your transaction history.</p>
+            <h2>📜 Transaction History</h2>
+            <p class="muted">View all your recent transactions</p>
           </div>
-          <button class="btn" onclick="loadTransactions()">Show Transactions</button>
+          <button class="btn" onclick="loadTransactions()">🔄 Refresh</button>
         </div>
 
         <div class="txnList" id="txns">
-        <p class="muted">No transactions loaded.</p>
-      </div>
-
+          <p class="muted">No transactions loaded yet.</p>
+        </div>
       </section>
 
     </main>
 
     <footer class="footer">
-      <p>Made by Arjun • TrustBank Project</p>
+      <p>🚀 Made with ❤️ by Arjun • TrustBank © 2026</p>
     </footer>
   </div>
 
+  <div id="toast" class="toast"></div>
   <script src="script.js"></script>
 </body>
 </html>

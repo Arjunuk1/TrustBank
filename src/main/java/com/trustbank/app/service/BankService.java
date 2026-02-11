@@ -1,7 +1,7 @@
-package com.trustbank.trustbank_web.service;
+package com.trustbank.app.service;
 
-import com.trustbank.trustbank_web.model.BankAccount;
-import com.trustbank.trustbank_web.storage.FileStorage;
+import com.trustbank.app.model.BankAccount;
+import com.trustbank.app.storage.FileStorage;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

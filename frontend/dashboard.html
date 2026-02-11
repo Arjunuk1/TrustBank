@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TrustBank | Dashboard</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -12,79 +15,79 @@
   <header class="topbar">
     <div class="brand">
       <div class="logo">🏦</div>
-      <h1>TrustBank</h1>
+      <h1>TrustBank Dashboard</h1>
     </div>
 
-    <button class="btn danger" onclick="logout()">Logout</button>
+    <button class="btn danger" onclick="logout()">🚪 Logout</button>
   </header>
 
   <main class="grid">
 
     <!-- USER INFO -->
     <section class="card wide account-card">
-  <h2>Account Info</h2>
-  
-  <section class="card wide">
-  <h2>Balance Graph</h2>
-  <canvas id="balanceChart" height="100"></canvas>
-</section>
+      <h2>👤 Account Information</h2>
+      
+      <div class="account-row">
+        <span class="label">Account Holder</span>
+        <span id="userInfo" class="value">—</span>
+      </div>
 
+      <div class="account-row balance-row">
+        <span class="label">💰 Current Balance</span>
+        <span class="balance-amount">
+          ₹ <span id="balance">0</span>
+        </span>
+      </div>
+    </section>
 
-  <div class="account-row">
-    <span class="label">User</span>
-    <span id="userInfo" class="value">—</span>
-  </div>
-
-  <div class="account-row balance-row">
-    <span class="label">Balance</span>
-    <span class="balance-amount">
-      ₹ <span id="balance">0</span>
-    </span>
-  </div>
-</section>
-
+    <!-- BALANCE GRAPH -->
+    <section class="card wide">
+      <h2>📈 Balance Tracker</h2>
+      <p class="muted">Monitor your balance changes over time</p>
+      <canvas id="balanceChart" height="100"></canvas>
+    </section>
 
     <!-- ACTIONS -->
     <section class="card">
-      <h3>Deposit</h3>
-      <input id="depAmt" placeholder="Amount" />
+      <h3>💰 Deposit Money</h3>
+      <input id="depAmt" placeholder="Enter Amount (₹)" />
       <button class="btn success" onclick="deposit(event)">Deposit</button>
     </section>
 
     <section class="card">
-      <h3>Withdraw</h3>
-      <input id="withAmt" placeholder="Amount" />
+      <h3>💸 Withdraw Money</h3>
+      <input id="withAmt" placeholder="Enter Amount (₹)" />
       <button class="btn danger" onclick="withdraw(event)">Withdraw</button>
     </section>
 
-    <section class="card">
-      <h3>Transfer</h3>
-      <input id="toAcc" placeholder="Receiver Account No" />
-      <input id="trAmt" placeholder="Amount" />
-      <button class="btn warning" onclick="transfer(event)">Transfer</button>
+    <section class="card wide">
+      <h3>🔄 Transfer Funds</h3>
+      <div class="row">
+        <input id="toAcc" placeholder="Receiver Account Number" style="flex: 2;" />
+        <input id="trAmt" placeholder="Amount (₹)" style="flex: 1;" />
+        <button class="btn warning" onclick="transfer(event)">Transfer</button>
+      </div>
     </section>
 
     <!-- TRANSACTIONS -->
     <section class="card wide">
       <div class="row space">
-  <div>
-    <h2>
-  Transactions 
-  <span id="txnCount" class="txnBadge">0</span>
-</h2>
+        <div>
+          <h2>
+            📜 Transactions 
+            <span id="txnCount" class="txnBadge">0</span>
+          </h2>
+          <p class="muted">Filter and view your complete transaction history</p>
+        </div>
+        <button class="btn" onclick="loadTransactions()">🔄 Refresh</button>
+      </div>
 
-    <p class="muted">Filter and view your transaction history.</p>
-  </div>
-  <button class="btn" onclick="loadTransactions()">Refresh</button>
-</div>
-
-<div class="row filterRow" style="margin-top:10px;">
-  <button class="btn filterBtn active" data-type="all" onclick="setFilter('all', this)">All</button>
-  <button class="btn success filterBtn" data-type="deposit" onclick="setFilter('deposit', this)">Deposit</button>
-  <button class="btn danger filterBtn" data-type="withdraw" onclick="setFilter('withdraw', this)">Withdraw</button>
-  <button class="btn warning filterBtn" data-type="transfer" onclick="setFilter('transfer', this)">Transfer</button>
-</div>
-
+      <div class="row filterRow" style="margin-top:16px;">
+        <button class="btn filterBtn active" onclick="setFilter('all', this)">All</button>
+        <button class="btn success filterBtn" onclick="setFilter('deposit', this)">💰 Deposits</button>
+        <button class="btn danger filterBtn" onclick="setFilter('withdraw', this)">💸 Withdrawals</button>
+        <button class="btn warning filterBtn" onclick="setFilter('transfer', this)">🔄 Transfers</button>
+      </div>
 
       <div class="txnList" id="txns"></div>
     </section>
@@ -92,8 +95,8 @@
   </main>
 </div>
 
-<script src="script.js"></script>
 <div id="toast" class="toast"></div>
+<script src="script.js"></script>
 
 </body>
 </html>

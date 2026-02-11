@@ -1,4 +1,4 @@
-package com.trustbank.trustbank_web;
+package com.trustbank.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

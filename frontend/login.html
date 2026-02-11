@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TrustBank | Login</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -11,7 +14,10 @@
   <header class="topbar">
     <div class="brand">
       <div class="logo">🏦</div>
-      <h1>TrustBank</h1>
+      <div>
+        <h1>TrustBank</h1>
+        <p>Secure Banking Platform • Spring Boot Powered</p>
+      </div>
     </div>
   </header>
 
@@ -19,32 +25,35 @@
 
     <!-- CREATE ACCOUNT -->
     <section class="card">
-      <h2>Create Account</h2>
+      <h2>🎯 Create Account</h2>
+      <p class="muted">Start your banking journey with us</p>
 
-      <input id="cname" placeholder="Full Name" />
-      <input id="cpin" type="password" placeholder="Set PIN" />
+      <input id="cname" placeholder="Enter Your Full Name" />
+      <input id="cpin" type="password" placeholder="Set a Secure 4-6 Digit PIN" />
 
-      <button class="btn primary" onclick="createAccount()">Create</button>
+      <button class="btn primary" onclick="createAccount(event)">Create Account</button>
       <p class="msg" id="createMsg"></p>
     </section>
 
     <!-- LOGIN -->
     <section class="card">
-      <h2>Login</h2>
+      <h2>🔐 Login</h2>
+      <p class="muted">Access your account securely</p>
 
       <input id="lacc" placeholder="Account Number" />
       <div class="row">
-        <input id="lpin" type="password" placeholder="PIN" />
+        <input id="lpin" type="password" placeholder="Enter PIN" />
         <button class="btn" onclick="togglePin()">👁</button>
       </div>
 
-<button class="btn success" onclick="login(event)">Login</button>
+      <button class="btn success" onclick="login(event)">Login</button>
       <p class="msg" id="loginMsg"></p>
     </section>
 
   </main>
 </div>
 
+<div id="toast" class="toast"></div>
 <script src="script.js"></script>
 </body>
 </html>

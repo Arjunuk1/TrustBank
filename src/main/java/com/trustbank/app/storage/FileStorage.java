@@ -1,6 +1,6 @@
-package com.trustbank.trustbank_web.storage;
+package com.trustbank.app.storage;
 
-import com.trustbank.trustbank_web.model.BankAccount;
+import com.trustbank.app.model.BankAccount;
 import org.springframework.stereotype.Component;
 
 import java.io.*;

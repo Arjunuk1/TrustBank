@@ -1,7 +1,7 @@
-package com.trustbank.trustbank_web.controller;
+package com.trustbank.app.controller;
 
-import com.trustbank.trustbank_web.model.BankAccount;
-import com.trustbank.trustbank_web.service.BankService;
+import com.trustbank.app.model.BankAccount;
+import com.trustbank.app.service.BankService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

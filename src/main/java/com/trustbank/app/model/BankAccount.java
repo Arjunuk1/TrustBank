@@ -1,4 +1,4 @@
-package com.trustbank.trustbank_web.model;
+package com.trustbank.app.model;
 
 import java.util.ArrayList;
 import java.util.List;
