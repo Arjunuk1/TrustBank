@@ -425,3 +425,19 @@ body {
   margin-left: 8px;
 }
 
+/* Page fade animation */
+.mainContent {
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
