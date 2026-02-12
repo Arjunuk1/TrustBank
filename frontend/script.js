@@ -1,78 +1,359 @@
 const API = "http://localhost:8081/api";
 
-// Centralized API wrapper
+// ============= SESSION =============
+let currentAccNo = localStorage.getItem("accNo");
+let currentName = localStorage.getItem("name");
+let currentFilter = "all";
+
+// ============= UTILITY FUNCTIONS =============
+function setLoading(button, state) {
+  if (!button) return;
+  if (state) {
+    button.dataset.original = button.innerText;
+    button.innerText = "Processing...";
+    button.disabled = true;
+  } else {
+    button.innerText = button.dataset.original || button.innerText.replace("Processing...", "Submit");
+    button.disabled = false;
+  }
+}
+
+function showToast(message, type = "success") {
+  const toast = document.getElementById("toast");
+  if (!toast) return;
+
+  toast.className = `toast show ${type}`;
+  toast.innerText = message;
+
+  setTimeout(() => {
+    toast.className = "toast";
+  }, 2500);
+}
+
 async function safeFetch(url, options) {
   try {
     const res = await fetch(url, options);
     const data = await res.json();
     return { ok: res.ok, data };
   } catch (error) {
+    console.error("Fetch error:", error);
     showToast("Network error. Server might be down.", "error");
     return { ok: false, data: null };
   }
 }
 
-
-
-function setLoading(button, state) {
-  if (state) {
-    button.dataset.original = button.innerText;
-    button.innerText = "Processing...";
-    button.disabled = true;
-  } else {
-    button.innerText = button.dataset.original;
-    button.disabled = false;
-  }
-}
-
-// ---------------- SESSION ----------------
-let currentAccNo = localStorage.getItem("accNo");
-let currentFilter = "all";
-let currentName = localStorage.getItem("name");
-
-// ---------------- CREATE ACCOUNT ----------------
-async function createAccount() {
+// ============= CREATE ACCOUNT =============
+async function createAccount(event) {
   const button = event?.target;
   if (button) setLoading(button, true);
 
-  const name = document.getElementById("cname").value;
-  const pin = document.getElementById("cpin").value;
+  const name = document.getElementById("cname")?.value;
+  const pin = document.getElementById("cpin")?.value;
+  const msgEl = document.getElementById("createMsg");
 
   if (!name || !pin) {
-    document.getElementById("createMsg").innerText = "⚠ Please enter name and PIN";
+    if (msgEl) msgEl.innerText = "⚠ Please enter name and PIN";
+    showToast("Please fill all fields", "error");
     if (button) setLoading(button, false);
     return;
   }
 
-  const res = await fetch(`${API}/accounts/create`, {
+  const result = await safeFetch(`${API}/accounts/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, pin })
   });
 
-  const data = await res.json();
-  document.getElementById("createMsg").innerText = `✅ Account Created: ${data.accountNumber}`;
-  document.getElementById("cname").value = "";
-  document.getElementById("cpin").value = "";
+  if (result.ok && result.data) {
+    if (msgEl) msgEl.innerText = `✅ Account Created: ${result.data.accountNumber}`;
+    document.getElementById("cname").value = "";
+    document.getElementById("cpin").value = "";
+    showToast(`Account ${result.data.accountNumber} created successfully!`, "success");
+  } else {
+    if (msgEl) msgEl.innerText = "❌ Error creating account";
+    showToast("Failed to create account", "error");
+  }
 
   if (button) setLoading(button, false);
 }
 
-// async function safeFetch(url, options) {
-//   try {
-//     const res = await fetch(url, options);
-//     return await res.json();
-//   } catch (error) {
-//     showToast("Network error. Server might be down.", "error");
-//     throw error;
-//   }
-// }
+// ============= LOGIN =============
+async function login(event) {
+  const button = event?.target;
+  if (button) setLoading(button, true);
 
+  const accountNumber = document.getElementById("lacc")?.value;
+  const pin = document.getElementById("lpin")?.value;
+  const msgEl = document.getElementById("loginMsg");
 
+  if (!accountNumber || !pin) {
+    if (msgEl) msgEl.innerText = "⚠ Please enter account number and PIN";
+    showToast("Please fill all fields", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  const result = await safeFetch(`${API}/accounts/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ accountNumber, pin })
+  });
+
+  if (result.ok && result.data && result.data.accountNumber) {
+    localStorage.setItem("accNo", result.data.accountNumber);
+    localStorage.setItem("name", result.data.name);
+    
+    if (msgEl) msgEl.innerText = "✅ Login successful! Redirecting...";
+    showToast("Login successful!", "success");
+    
+    // Clear PIN for security
+    document.getElementById("lpin").value = "";
+    
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 500);
+  } else {
+    if (msgEl) msgEl.innerText = "❌ Invalid account number or PIN";
+    showToast("Login failed. Check your credentials.", "error");
+  }
+
+  if (button) setLoading(button, false);
+}
+
+// ============= LOGOUT =============
+function logout() {
+  localStorage.clear();
+  currentAccNo = null;
+  currentName = null;
+  showToast("Logged out successfully", "success");
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 500);
+}
+
+// ============= TOGGLE PIN VISIBILITY =============
+function togglePin() {
+  const pin = document.getElementById("lpin");
+  if (!pin) return;
+  pin.type = pin.type === "password" ? "text" : "password";
+}
+
+// ============= DEPOSIT =============
+async function deposit(event) {
+  if (!currentAccNo) {
+    showToast("Please login first!", "error");
+    return;
+  }
+
+  const button = event?.target;
+  if (button) setLoading(button, true);
+
+  const amount = document.getElementById("depAmt")?.value;
+
+  if (!amount || parseFloat(amount) <= 0) {
+    showToast("Enter valid amount", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  const result = await safeFetch(`${API}/accounts/deposit`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      accountNumber: currentAccNo,
+      amount: amount
+    })
+  });
+
+  if (result.ok) {
+    showToast(result.data.message || "Deposit successful!", "success");
+    document.getElementById("depAmt").value = "";
+    await loadBalance();
+    await loadTransactions();
+  } else {
+    showToast(result.data?.message || "Deposit failed", "error");
+  }
+
+  if (button) setLoading(button, false);
+}
+
+// ============= WITHDRAW =============
+async function withdraw(event) {
+  if (!currentAccNo) {
+    showToast("Please login first!", "error");
+    return;
+  }
+
+  const button = event?.target;
+  if (button) setLoading(button, true);
+
+  const amount = document.getElementById("withAmt")?.value;
+
+  if (!amount || parseFloat(amount) <= 0) {
+    showToast("Enter valid amount", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  const result = await safeFetch(`${API}/accounts/withdraw`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      accountNumber: currentAccNo,
+      amount: amount
+    })
+  });
+
+  if (result.ok) {
+    showToast(result.data.message || "Withdrawal successful!", "success");
+    document.getElementById("withAmt").value = "";
+    await loadBalance();
+    await loadTransactions();
+  } else {
+    showToast(result.data?.message || "Withdrawal failed", "error");
+  }
+
+  if (button) setLoading(button, false);
+}
+
+// ============= TRANSFER =============
+async function transfer(event) {
+  if (!currentAccNo) {
+    showToast("Please login first!", "error");
+    return;
+  }
+
+  const button = event?.target;
+  if (button) setLoading(button, true);
+
+  const toAccount = document.getElementById("toAcc")?.value;
+  const amount = document.getElementById("trAmt")?.value;
+
+  if (!toAccount || !amount || parseFloat(amount) <= 0) {
+    showToast("Enter valid details", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  const result = await safeFetch(`${API}/accounts/transfer`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fromAccount: currentAccNo,
+      toAccount: toAccount,
+      amount: amount
+    })
+  });
+
+  if (result.ok) {
+    showToast(result.data.message || "Transfer successful!", "success");
+    document.getElementById("toAcc").value = "";
+    document.getElementById("trAmt").value = "";
+    await loadBalance();
+    await loadTransactions();
+  } else {
+    showToast(result.data?.message || "Transfer failed", "error");
+  }
+
+  if (button) setLoading(button, false);
+}
+
+// ============= LOAD BALANCE =============
+async function loadBalance() {
+  if (!currentAccNo) return;
+
+  try {
+    const res = await fetch(`${API}/accounts/${currentAccNo}/balance`);
+    if (!res.ok) throw new Error("Failed to load balance");
+    
+    const balance = await res.json();
+    const balanceEl = document.getElementById("balance");
+    if (balanceEl) {
+      balanceEl.innerText = parseFloat(balance).toFixed(2);
+    }
+    
+    updateBalanceGraph(balance);
+  } catch (error) {
+    console.error("Error loading balance:", error);
+    showToast("Failed to load balance", "error");
+  }
+}
+
+// ============= LOAD TRANSACTIONS =============
+async function loadTransactions() {
+  if (!currentAccNo) return;
+
+  try {
+    const res = await fetch(`${API}/accounts/${currentAccNo}/transactions`);
+    if (!res.ok) throw new Error("Failed to load transactions");
+    
+    const data = await res.json();
+    const container = document.getElementById("txns");
+    
+    if (!container) return;
+    
+    container.innerHTML = "";
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center; padding:40px; opacity:0.6;">
+          📭 <br><br>
+          <span style="font-size:16px; font-weight:600;">No transactions found</span>
+        </div>
+      `;
+      const txnCountEl = document.getElementById("txnCount");
+      if (txnCountEl) txnCountEl.innerText = "0";
+      return;
+    }
+
+    let visibleCount = 0;
+
+    data.forEach(txn => {
+      let type = "transfer";
+      let icon = "🔁";
+
+      if (txn.includes("Deposited")) {
+        type = "deposit";
+        icon = "💰";
+      } else if (txn.includes("Withdrew")) {
+        type = "withdraw";
+        icon = "💸";
+      }
+
+      // Apply filter
+      if (currentFilter !== "all" && currentFilter !== type) return;
+
+      visibleCount++;
+
+      const card = document.createElement("div");
+      card.className = "txnCard";
+
+      card.innerHTML = `
+        <div class="txnLeft">
+          <div class="txnIcon">${icon}</div>
+          <div class="txnAmount ${type}">${txn}</div>
+        </div>
+        <div class="txnTime">${new Date().toLocaleString()}</div>
+      `;
+
+      container.appendChild(card);
+    });
+
+    const txnCountEl = document.getElementById("txnCount");
+    if (txnCountEl) {
+      txnCountEl.innerText = visibleCount;
+    }
+  } catch (error) {
+    console.error("Error loading transactions:", error);
+    showToast("Failed to load transactions", "error");
+  }
+}
+
+// ============= FILTER TRANSACTIONS =============
 function setFilter(type, button) {
   currentFilter = type;
 
-  // Remove active class from all buttons
+  // Remove active class from all filter buttons
   document.querySelectorAll(".filterBtn").forEach(btn => {
     btn.classList.remove("active");
   });
@@ -83,295 +364,14 @@ function setFilter(type, button) {
   }
 
   loadTransactions();
-  if (button) setLoading(button, false);
-
 }
 
-
-// ---------------- LOGIN ----------------
-async function login(event) {
-
-  const button = event?.target;
-  if (button) setLoading(button, true);
-
-  const accountNumber = document.getElementById("lacc").value;
-  const pin = document.getElementById("lpin").value;
-
-  const result = await safeFetch(`${API}/accounts/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ accountNumber, pin })
-  });
-
-  if (result.ok && result.data.accountNumber) {
-
-    localStorage.setItem("accNo", result.data.accountNumber);
-    localStorage.setItem("name", result.data.name);
-
-    document.getElementById("lpin").value = "";   // security clear
-
-    window.location.href = "dashboard.html";
-
-  } else {
-    document.getElementById("loginMsg").innerText =
-      "❌ Invalid account number or PIN";
-  }
-
-  if (button) setLoading(button, false);
-}
-
-
-// ---------------- LOGOUT ----------------
-function logout() {
-  localStorage.clear();
-  window.location.href = "login.html";
-}
-
-// ---------------- DEPOSIT ----------------
-async function deposit(event) {
-  if (!currentAccNo) {
-    showToast("Login first!", "error");
-    return;
-  }
-
-  const button = event.target;
-  setLoading(button, true);
-
-  const amount = document.getElementById("depAmt").value;
-
-  if (!amount || amount <= 0) {
-    showToast("Enter valid amount", "error");
-    setLoading(button, false);
-    return;
-  }
-
-  const result = await safeFetch(`${API}/accounts/deposit`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      accountNumber: currentAccNo,
-      amount
-    })
-  });
-
-  if (result.ok) {
-    showToast(result.data.message, "success");
-    document.getElementById("depAmt").value = "";
-    loadBalance();
-    loadTransactions();
-  } else {
-    showToast(result.data?.message || "Deposit failed", "error");
-  }
-
-  setLoading(button, false);
-}
-
-
-// ---------------- WITHDRAW ----------------
-async function withdraw(event) {
-  if (!currentAccNo) {
-    showToast("Login first!", "error");
-    return;
-  }
-
-  const button = event.target;
-  setLoading(button, true);
-
-  const amount = document.getElementById("withAmt").value;
-
-  if (!amount || amount <= 0) {
-    showToast("Enter valid amount", "error");
-    setLoading(button, false);
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/accounts/withdraw`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        accountNumber: currentAccNo,
-        amount
-      })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      showToast(data.message, "success");
-      document.getElementById("withAmt").value = "";
-      loadBalance();
-      loadTransactions();
-    } else {
-      showToast(data.message || "Withdraw failed", "error");
-    }
-
-  } catch (error) {
-    showToast("Server error. Try again.", "error");
-  }
-
-  setLoading(button, false);
-}
-
-
-// ---------------- TRANSFER ----------------
-async function transfer(event) {
-  if (!currentAccNo) {
-    showToast("Login first!", "error");
-    return;
-  }
-
-  const button = event.target;
-  setLoading(button, true);
-
-  const toAccount = document.getElementById("toAcc").value;
-  const amount = document.getElementById("trAmt").value;
-
-  if (!toAccount || !amount || amount <= 0) {
-    showToast("Enter valid details", "error");
-    setLoading(button, false);
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/accounts/transfer`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        fromAccount: currentAccNo,
-        toAccount,
-        amount
-      })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      showToast(data.message, "success");
-      document.getElementById("toAcc").value = "";
-      document.getElementById("trAmt").value = "";
-      loadBalance();
-      loadTransactions();
-    } else {
-      showToast(data.message || "Transfer failed", "error");
-    }
-
-  } catch (error) {
-    showToast("Server error. Try again.", "error");
-  }
-
-  setLoading(button, false);
-}
-
-
-// ---------------- BALANCE ----------------
-async function loadBalance() {
-  if (!currentAccNo) return;
-
-  const res = await fetch(`${API}/accounts/${currentAccNo}/balance`);
-  const bal = await res.json();
-
-  document.getElementById("balance").innerText = bal.toFixed(2);
-  updateBalanceGraph(bal);
-}
-
-function showToast(message, type = "success") {
-  const toast = document.getElementById("toast");
-
-  toast.className = `toast show ${type}`;
-  toast.innerText = message;
-
-  setTimeout(() => {
-    toast.className = "toast";
-  }, 2500);
-}
-
-
-// ---------------- TRANSACTIONS ----------------
-async function loadTransactions() {
-  if (!currentAccNo) return;
-
-  const res = await fetch(`${API}/accounts/${currentAccNo}/transactions`);
-  const data = await res.json();
-
-  const container = document.getElementById("txns");
-  container.innerHTML = "";
-
-  if (data.length === 0) {
-    container.innerHTML = `
-      <div style="text-align:center; padding:40px; opacity:0.6;">
-        📭 <br><br>
-        <span style="font-size:16px; font-weight:600;">No transactions found</span>
-      </div>
-    `;
-    document.getElementById("txnCount")?.innerText = "0";
-    return;
-  }
-
-  let visibleCount = 0;
-
-data.forEach(txn => {
-  let type = "transfer";
-  let icon = "🔁";
-
-  if (txn.includes("Deposited")) {
-    type = "deposit";
-    icon = "💰";
-  } else if (txn.includes("Withdrew")) {
-    type = "withdraw";
-    icon = "💸";
-  }
-
-  // FILTER LOGIC
-  if (currentFilter !== "all" && currentFilter !== type) return;
-
-  visibleCount++;
-
-  const card = document.createElement("div");
-  card.className = "txnCard";
-
-  card.innerHTML = `
-    <div class="txnLeft">
-      <div class="txnIcon">${icon}</div>
-      <div class="txnAmount ${type}">${txn}</div>
-    </div>
-    <div class="txnTime">${new Date().toLocaleString()}</div>
-  `;
-
-  container.appendChild(card);
-});
-
-const txnCountEl = document.getElementById("txnCount");
-if (txnCountEl) {
-  txnCountEl.innerText = visibleCount;
-}
-}
-
-// ---------------- TOGGLE PIN ----------------
-function togglePin() {
-  const pin = document.getElementById("lpin");
-  pin.type = pin.type === "password" ? "text" : "password";
-}
-
-// ---------------- DASHBOARD AUTO LOAD ----------------
-if (window.location.pathname.includes("dashboard.html")) {
-  if (!currentAccNo || !currentName) {
-    window.location.href = "login.html";
-  } else {
-    const userInfoEl = document.getElementById("userInfo");
-    if (userInfoEl) {
-      userInfoEl.innerText = `${currentName} (Acc: ${currentAccNo})`;
-    }
-
-    // Update status indicator
-    const statusDot = document.getElementById("statusDot");
-    const statusText = document.getElementById("statusText");
-    if (statusDot) statusDot.classList.add("online");
+// ============= BALANCE CHART =============
 let balanceHistory = [];
 let chart;
 
 function updateBalanceGraph(balance) {
-  balanceHistory.push(balance);
+  balanceHistory.push(parseFloat(balance));
 
   // Keep only last 10 data points
   if (balanceHistory.length > 10) {
@@ -381,6 +381,7 @@ function updateBalanceGraph(balance) {
   const chartCanvas = document.getElementById("balanceChart");
   if (!chartCanvas) return;
 
+  // Destroy existing chart if exists
   if (chart) {
     chart.destroy();
   }
@@ -440,25 +441,51 @@ function updateBalanceGraph(balance) {
           grid: {
             color: 'rgba(255, 255, 255, 0.05)'
           }
-       
-    type: "line",
-    data: {
-      labels: balanceHistory.map((_, i) => `T${i+1}`),
-      datasets: [{
-        label: "Balance",
-        data: balanceHistory,
-        borderColor: "#22c55e",
-        backgroundColor: "rgba(34,197,94,0.2)",
-        tension: 0.3,
-        fill: true
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false }
+        }
       }
     }
   });
+}
+
+// ============= DASHBOARD INITIALIZATION =============
+if (window.location.pathname.includes("dashboard.html")) {
+  // Check if user is logged in
+  if (!currentAccNo || !currentName) {
+    showToast("Please login first!", "error");
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 1000);
+  } else {
+    // Update user info
+    const userInfoEl = document.getElementById("userInfo");
+    if (userInfoEl) {
+      userInfoEl.innerText = `${currentName} (Acc: ${currentAccNo})`;
+    }
+
+    // Load initial data
+    loadBalance();
+    loadTransactions();
+  }
+}
+
+// ============= HOME PAGE INITIALIZATION =============
+if (window.location.pathname.includes("index.html") || window.location.pathname.endsWith("/")) {
+  // Update status indicator if user is logged in
+  const statusDot = document.getElementById("statusDot");
+  const statusText = document.getElementById("statusText");
+  const userInfoEl = document.getElementById("userInfo");
+
+  if (currentAccNo && currentName) {
+    if (statusDot) statusDot.classList.add("online");
+    if (statusText) statusText.innerText = `Logged in as ${currentName}`;
+    if (userInfoEl) userInfoEl.innerText = `${currentName} (Acc: ${currentAccNo})`;
+    
+    // Load data if on home page
+    loadBalance();
+    loadTransactions();
+  } else {
+    if (statusText) statusText.innerText = "Not logged in";
+    if (userInfoEl) userInfoEl.innerText = "Not logged in";
+  }
 }
 

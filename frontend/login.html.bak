@@ -32,7 +32,7 @@
       <input id="cpin" type="password" placeholder="Set a Secure 4-6 Digit PIN" />
 
       <button class="btn primary" onclick="createAccount(event)">Create Account</button>
-      <div class="msg" id="createMsg"></div>
+      <p class="msg" id="createMsg"></p>
     </section>
 
     <!-- LOGIN -->
@@ -47,7 +47,7 @@
       </div>
 
       <button class="btn success" onclick="login(event)">Login</button>
-      <div class="msg" id="loginMsg"></div>
+      <p class="msg" id="loginMsg"></p>
     </section>
 
   </main>

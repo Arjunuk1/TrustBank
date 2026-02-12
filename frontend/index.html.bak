@@ -52,7 +52,7 @@
         </div>
 
         <div class="row">
-          <button class="btn success" onclick="login(event)">Login</button>
+          <button class="btn primary" onclick="login(event)">Login</button>
           <button class="btn" onclick="logout()">Logout</button>
         </div>
 
@@ -61,7 +61,12 @@
 
       <!-- DASHBOARD -->
       <section class="card wide">
-        <h2>📊 Dashboard</h2>
+        <h2>Dashboard</h2>
+        <p class="muted">Perform banking actions after login.</p>
+
+        <div class="dashboard">
+          <div class="infoBox">
+          <d📊 Dashboard</h2>
         <p class="muted">Manage your banking operations</p>
 
         <div class="dashboard">
@@ -94,6 +99,10 @@
             </div>
           </div>
         </div>
+      </section
+
+          </div>
+        </div>
       </section>
 
       <!-- TRANSACTIONS -->
@@ -114,7 +123,7 @@
     </main>
 
     <footer class="footer">
-      <p>🚀 Made with ❤️ • TrustBank © 2026</p>
+      <p>🚀 Made with ❤️ by Arjun • TrustBank © 2026</p>
     </footer>
   </div>
 
