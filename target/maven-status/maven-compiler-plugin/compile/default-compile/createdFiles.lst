@@ -1,0 +1,6 @@
+com/trustbank/app/storage/FileStorage.class
+com/trustbank/app/service/BankService.class
+com/trustbank/trustbank_web/controller/TestController.class
+com/trustbank/app/model/BankAccount.class
+com/trustbank/app/controller/BankController.class
+com/trustbank/app/TrustbankWebApplication.class
