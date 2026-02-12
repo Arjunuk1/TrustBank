@@ -32,6 +32,7 @@
 1002,Deposited Rs. 100.0
 1002,Withdrew Rs. 100.0
 1002,Deposited Rs. 1000.0
+1002,Withdrew Rs. 50.0
 1003,Account created successfully
 1003,Account created successfully
 1003,Account created successfully

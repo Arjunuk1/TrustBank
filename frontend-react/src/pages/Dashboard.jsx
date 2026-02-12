@@ -149,22 +149,79 @@ function Dashboard({ onLogout }) {
 
           {/* Navigation */}
           <nav style={styles.nav}>
-            <button style={{...styles.navButton, ...styles.navButtonActive}}>
+            <button 
+              style={{...styles.navButton, ...styles.navButtonActive}}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateX(4px)";
+                e.currentTarget.querySelector('span:first-child').style.transform = "scale(1.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateX(0)";
+                e.currentTarget.querySelector('span:first-child').style.transform = "scale(1)";
+              }}
+            >
               <span style={styles.navIcon}>📊</span>
               <span>Dashboard</span>
             </button>
-            <button style={styles.navButton}>
+            <button 
+              style={styles.navButton}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
+                e.currentTarget.style.color = "#e2e8f0";
+                e.currentTarget.style.transform = "translateX(4px)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
+                e.currentTarget.querySelector('span:first-child').style.transform = "scale(1.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.05)";
+                e.currentTarget.style.color = "#94a3b8";
+                e.currentTarget.style.transform = "translateX(0)";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.querySelector('span:first-child').style.transform = "scale(1)";
+              }}
+            >
               <span style={styles.navIcon}>📜</span>
               <span>Transactions</span>
             </button>
-            <button style={styles.navButton}>
+            <button 
+              style={styles.navButton}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.15)";
+                e.currentTarget.style.color = "#e2e8f0";
+                e.currentTarget.style.transform = "translateX(4px)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
+                e.currentTarget.querySelector('span:first-child').style.transform = "scale(1.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.05)";
+                e.currentTarget.style.color = "#94a3b8";
+                e.currentTarget.style.transform = "translateX(0)";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.querySelector('span:first-child').style.transform = "scale(1)";
+              }}
+            >
               <span style={styles.navIcon}>📈</span>
               <span>Analytics</span>
             </button>
           </nav>
 
           {/* Logout Button */}
-          <button onClick={handleLogout} style={styles.logoutButton}>
+          <button 
+            onClick={handleLogout} 
+            style={styles.logoutButton}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(239, 68, 68, 0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 16px rgba(239, 68, 68, 0.3)";
+            }}
+          >
             <span style={styles.navIcon}>🚪</span>
             <span>Logout</span>
           </button>
@@ -380,10 +437,12 @@ const styles = {
     pointerEvents: "none",
   },
   sidebar: {
-    width: "280px",
-    background: "rgba(255, 255, 255, 0.03)",
-    backdropFilter: "blur(20px)",
-    borderRight: "1px solid rgba(255, 255, 255, 0.1)",
+    width: "290px",
+    background: "rgba(255, 255, 255, 0.04)",
+    backdropFilter: "blur(30px)",
+    WebkitBackdropFilter: "blur(30px)",
+    borderRight: "1px solid rgba(255, 255, 255, 0.12)",
+    boxShadow: "4px 0 24px rgba(0, 0, 0, 0.2)",
     display: "flex",
     flexDirection: "column",
     position: "relative",
@@ -391,103 +450,120 @@ const styles = {
     animation: "slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
   },
   sidebarContent: {
-    padding: "30px 20px",
+    padding: "32px 24px",
     display: "flex",
     flexDirection: "column",
     height: "100%",
   },
   logoSection: {
     textAlign: "center",
-    marginBottom: "30px",
+    marginBottom: "36px",
+    paddingBottom: "24px",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
   },
   logo: {
-    fontSize: "48px",
-    marginBottom: "12px",
+    fontSize: "52px",
+    marginBottom: "14px",
     animation: "float 3s ease-in-out infinite",
+    filter: "drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3))",
   },
   brandName: {
-    fontSize: "24px",
+    fontSize: "26px",
     fontWeight: "800",
     color: "#f8fafc",
     margin: 0,
+    letterSpacing: "-0.5px",
+    textShadow: "0 2px 8px rgba(59, 130, 246, 0.2)",
   },
   userCard: {
     display: "flex",
     alignItems: "center",
-    gap: "12px",
-    padding: "16px",
-    background: "rgba(59, 130, 246, 0.1)",
-    border: "1px solid rgba(59, 130, 246, 0.3)",
-    borderRadius: "12px",
-    marginBottom: "30px",
+    gap: "14px",
+    padding: "18px",
+    background: "linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(37, 99, 235, 0.08) 100%)",
+    border: "1px solid rgba(59, 130, 246, 0.25)",
+    borderRadius: "14px",
+    marginBottom: "32px",
+    boxShadow: "0 4px 16px rgba(59, 130, 246, 0.1)",
   },
   userAvatar: {
-    width: "48px",
-    height: "48px",
+    width: "52px",
+    height: "52px",
     borderRadius: "50%",
     background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: "24px",
+    fontSize: "26px",
+    boxShadow: "0 4px 12px rgba(59, 130, 246, 0.4)",
   },
   userInfo: {
     flex: 1,
   },
   userName: {
-    fontSize: "16px",
-    fontWeight: "600",
+    fontSize: "17px",
+    fontWeight: "700",
     color: "#f8fafc",
-    marginBottom: "4px",
+    marginBottom: "5px",
+    letterSpacing: "-0.2px",
   },
   userAccount: {
     fontSize: "13px",
     color: "#94a3b8",
+    fontWeight: "500",
   },
   nav: {
     display: "flex",
     flexDirection: "column",
-    gap: "8px",
+    gap: "10px",
     flex: 1,
+    marginBottom: "24px",
   },
   navButton: {
     display: "flex",
     alignItems: "center",
-    gap: "12px",
-    padding: "12px 16px",
+    gap: "14px",
+    padding: "14px 18px",
     background: "transparent",
-    border: "1px solid transparent",
-    borderRadius: "10px",
+    border: "1px solid rgba(255, 255, 255, 0.05)",
+    borderRadius: "12px",
     color: "#94a3b8",
     fontSize: "15px",
-    fontWeight: "500",
+    fontWeight: "600",
     cursor: "pointer",
-    transition: "all 0.3s",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     textAlign: "left",
+    position: "relative",
+    overflow: "hidden",
   },
   navButtonActive: {
-    background: "rgba(59, 130, 246, 0.1)",
-    border: "1px solid rgba(59, 130, 246, 0.3)",
-    color: "#3b82f6",
+    background: "linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%)",
+    border: "1px solid rgba(59, 130, 246, 0.4)",
+    color: "#60a5fa",
+    boxShadow: "0 4px 16px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
   },
   navIcon: {
-    fontSize: "18px",
+    fontSize: "20px",
+    transition: "transform 0.3s",
   },
   logoutButton: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: "10px",
-    padding: "14px",
+    gap: "12px",
+    padding: "16px",
     background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
     border: "none",
-    borderRadius: "10px",
+    borderRadius: "12px",
     color: "white",
     fontSize: "15px",
-    fontWeight: "600",
+    fontWeight: "700",
     cursor: "pointer",
     marginTop: "auto",
-    transition: "transform 0.2s",
+    boxShadow: "0 4px 16px rgba(239, 68, 68, 0.3)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    position: "relative",
+    overflow: "hidden",
   },
   mainContent: {
     flex: 1,
