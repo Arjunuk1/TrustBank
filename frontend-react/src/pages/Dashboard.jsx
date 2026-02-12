@@ -1,4 +1,10 @@
-function Dashboard() {
+function Dashboard({ onLogout }) {
+  
+  const handleLogout = () => {
+    localStorage.clear();
+    onLogout();
+  };
+
   return (
     <div className="appLayout">
       <div className="sidebar">
@@ -6,7 +12,7 @@ function Dashboard() {
         <button>Dashboard</button>
         <button>Transactions</button>
         <button>Analytics</button>
-        <button>Logout</button>
+        <button onClick={handleLogout}>Logout</button>
       </div>
 
       <div className="mainContent">
