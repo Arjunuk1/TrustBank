@@ -23,6 +23,37 @@
 
   <main class="grid">
 
+    <!-- CONFIDENCE INDICATORS -->
+    <section class="card confidence-card balance-indicator">
+      <div class="confidence-icon">💰</div>
+      <div class="confidence-content">
+        <h3 class="confidence-label">Current Balance</h3>
+        <div class="confidence-value">
+          ₹ <span id="balance">0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card confidence-card deposit-indicator">
+      <div class="confidence-icon">📈</div>
+      <div class="confidence-content">
+        <h3 class="confidence-label">Total Deposits</h3>
+        <div class="confidence-value deposit-value">
+          ₹ <span id="totalDeposits">0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card confidence-card withdraw-indicator">
+      <div class="confidence-icon">📉</div>
+      <div class="confidence-content">
+        <h3 class="confidence-label">Total Withdrawals</h3>
+        <div class="confidence-value withdraw-value">
+          ₹ <span id="totalWithdrawals">0.00</span>
+        </div>
+      </div>
+    </section>
+
     <!-- USER INFO -->
     <section class="card wide account-card">
       <h2>👤 Account Information</h2>
@@ -33,10 +64,8 @@
       </div>
 
       <div class="account-row balance-row">
-        <span class="label">💰 Current Balance</span>
-        <span class="balance-amount">
-          ₹ <span id="balance">0</span>
-        </span>
+        <span class="label">Account Number</span>
+        <span class="value" id="accNumber">—</span>
       </div>
     </section>
 

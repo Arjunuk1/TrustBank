@@ -303,10 +303,13 @@ async function loadTransactions() {
       `;
       const txnCountEl = document.getElementById("txnCount");
       if (txnCountEl) txnCountEl.innerText = "0";
+      updateTotals(0, 0);
       return;
     }
 
     let visibleCount = 0;
+    let totalDeposits = 0;
+    let totalWithdrawals = 0;
 
     data.forEach(txn => {
       let type = "transfer";
@@ -315,9 +318,19 @@ async function loadTransactions() {
       if (txn.includes("Deposited")) {
         type = "deposit";
         icon = "💰";
+        // Extract amount from transaction string
+        const match = txn.match(/[₹$]?\s*([0-9,.]+)/);
+        if (match) {
+          totalDeposits += parseFloat(match[1].replace(/,/g, ''));
+        }
       } else if (txn.includes("Withdrew")) {
         type = "withdraw";
         icon = "💸";
+        // Extract amount from transaction string
+        const match = txn.match(/[₹$]?\s*([0-9,.]+)/);
+        if (match) {
+          totalWithdrawals += parseFloat(match[1].replace(/,/g, ''));
+        }
       }
 
       // Apply filter
@@ -343,9 +356,26 @@ async function loadTransactions() {
     if (txnCountEl) {
       txnCountEl.innerText = visibleCount;
     }
+
+    // Update totals
+    updateTotals(totalDeposits, totalWithdrawals);
   } catch (error) {
     console.error("Error loading transactions:", error);
     showToast("Failed to load transactions", "error");
+  }
+}
+
+// ============= UPDATE TOTALS =============
+function updateTotals(deposits, withdrawals) {
+  const depositsEl = document.getElementById("totalDeposits");
+  const withdrawalsEl = document.getElementById("totalWithdrawals");
+  
+  if (depositsEl) {
+    depositsEl.innerText = deposits.toFixed(2);
+  }
+  
+  if (withdrawalsEl) {
+    withdrawalsEl.innerText = withdrawals.toFixed(2);
   }
 }
 
@@ -459,12 +489,28 @@ if (window.location.pathname.includes("dashboard.html")) {
     // Update user info
     const userInfoEl = document.getElementById("userInfo");
     if (userInfoEl) {
-      userInfoEl.innerText = `${currentName} (Acc: ${currentAccNo})`;
+      userInfoEl.innerText = currentName;
+    }
+    
+    const accNumberEl = document.getElementById("accNumber");
+    if (accNumberEl) {
+      accNumberEl.innerText = currentAccNo;
     }
 
     // Load initial data
     loadBalance();
     loadTransactions();
+    
+    // Add mouse tracking for confidence cards glow effect
+    document.querySelectorAll('.confidence-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--x', `${x}%`);
+        card.style.setProperty('--y', `${y}%`);
+      });
+    });
   }
 }
 
