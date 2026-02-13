@@ -311,6 +311,22 @@ async function loadTransactions() {
     let totalDeposits = 0;
     let totalWithdrawals = 0;
 
+    // First pass: Calculate totals from ALL transactions
+    data.forEach(txn => {
+      if (txn.includes("Deposited")) {
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) {
+          totalDeposits += parseFloat(match[1]);
+        }
+      } else if (txn.includes("Withdrew")) {
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) {
+          totalWithdrawals += parseFloat(match[1]);
+        }
+      }
+    });
+
+    // Second pass: Display filtered transactions
     data.forEach(txn => {
       let type = "transfer";
       let icon = "🔁";
@@ -318,19 +334,9 @@ async function loadTransactions() {
       if (txn.includes("Deposited")) {
         type = "deposit";
         icon = "💰";
-        // Extract amount from transaction string
-        const match = txn.match(/[₹$]?\s*([0-9,.]+)/);
-        if (match) {
-          totalDeposits += parseFloat(match[1].replace(/,/g, ''));
-        }
       } else if (txn.includes("Withdrew")) {
         type = "withdraw";
         icon = "💸";
-        // Extract amount from transaction string
-        const match = txn.match(/[₹$]?\s*([0-9,.]+)/);
-        if (match) {
-          totalWithdrawals += parseFloat(match[1].replace(/,/g, ''));
-        }
       }
 
       // Apply filter
