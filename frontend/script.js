@@ -345,14 +345,33 @@ async function loadTransactions() {
       visibleCount++;
 
       const card = document.createElement("div");
-      card.className = "txnCard";
+      card.className = `txnCard ${type}`;
+
+      // Generate random recent date for demo
+      const now = new Date();
+      const randomHoursAgo = Math.floor(Math.random() * 72); // Random within last 3 days
+      const txnDate = new Date(now - randomHoursAgo * 60 * 60 * 1000);
+      
+      const dateOptions = { 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      const formattedDate = txnDate.toLocaleDateString('en-GB', dateOptions);
 
       card.innerHTML = `
+        <div class="txnIcon">${icon}</div>
         <div class="txnLeft">
-          <div class="txnIcon">${icon}</div>
-          <div class="txnAmount ${type}">${txn}</div>
+          <div class="txnDetails">
+            <div class="txnAmount">${txn}</div>
+          </div>
         </div>
-        <div class="txnTime">${new Date().toLocaleString()}</div>
+        <div class="txnTime">
+          <span>🕒</span>
+          <span>${formattedDate}</span>
+        </div>
       `;
 
       container.appendChild(card);
