@@ -15,10 +15,19 @@
   <header class="topbar">
     <div class="brand">
       <div class="logo">🏦</div>
-      <h1>TrustBank Dashboard</h1>
+      <div>
+        <h1>TrustBank Dashboard</h1>
+        <p class="tagline">Bank-grade security • Real-time updates</p>
+      </div>
     </div>
 
-    <button class="btn danger" onclick="logout()">🚪 Logout</button>
+    <div class="header-actions">
+      <div class="security-badge">
+        <span class="badge-icon">🔒</span>
+        <span class="badge-text">256-bit Encrypted</span>
+      </div>
+      <button class="btn danger" onclick="logout()">Logout</button>
+    </div>
   </header>
 
   <main class="grid">
@@ -56,16 +65,31 @@
 
     <!-- USER INFO -->
     <section class="card wide account-card">
-      <h2>👤 Account Information</h2>
-      
-      <div class="account-row">
-        <span class="label">Account Holder</span>
-        <span id="userInfo" class="value">—</span>
+      <div class="card-header">
+        <h2>👤 Account Information</h2>
+        <span class="account-status-badge active">● Active</span>
       </div>
+      
+      <div class="account-grid">
+        <div class="account-row">
+          <span class="label">Account Holder</span>
+          <span id="userInfo" class="value">—</span>
+        </div>
 
-      <div class="account-row balance-row">
-        <span class="label">Account Number</span>
-        <span class="value" id="accNumber">—</span>
+        <div class="account-row">
+          <span class="label">Account Number</span>
+          <span class="value" id="accNumber">—</span>
+        </div>
+
+        <div class="account-row">
+          <span class="label">Account Type</span>
+          <span class="value">Premium Savings</span>
+        </div>
+
+        <div class="account-row">
+          <span class="label">Status</span>
+          <span class="value status-active">Active & Verified</span>
+        </div>
       </div>
     </section>
 
@@ -122,6 +146,19 @@
     </section>
 
   </main>
+
+  <footer class="dashboard-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <p class="footer-text">© 2026 TrustBank • <span class="security-text">🛡️ SSL Secured</span> • Built with Spring Boot</p>
+      </div>
+      <div class="footer-links">
+        <span class="footer-link">Privacy Policy</span>
+        <span class="footer-link">Terms of Service</span>
+        <span class="footer-link">24/7 Support</span>
+      </div>
+    </div>
+  </footer>
 </div>
 
 <div id="toast" class="toast"></div>

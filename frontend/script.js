@@ -563,87 +563,40 @@ if (window.location.pathname.includes("dashboard.html")) {
     // Load initial data
     loadBalance();
     loadTransactions();
-    
-    // Add mouse tracking for confidence cards glow effect
-    document.querySelectorAll('.confidence-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        card.style.setProperty('--x', `${x}%`);
-        card.style.setProperty('--y', `${y}%`);
-      });
-    });
-    
-    // Add mouse tracking for regular cards
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        card.style.setProperty('--mouse-x', `${x}%`);
-        card.style.setProperty('--mouse-y', `${y}%`);
-      });
-    });
-    
-    // Smooth scroll reveal for transaction cards
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateX(0) scale(1)';
-        }
-      });
-    }, observerOptions);
-    
-    // Observe transaction cards
-    const txnList = document.getElementById('txns');
-    if (txnList) {
-      const observeTxns = new MutationObserver(() => {
-        document.querySelectorAll('.txnCard').forEach(card => {
-          observer.observe(card);
-        });
-      });
-      observeTxns.observe(txnList, { childList: true, subtree: true });
-    }
   }
 }
 
 // ============= ADD RIPPLE EFFECT TO BUTTONS =============
 document.addEventListener('DOMContentLoaded', () => {
-  // Add click ripple effect
-  document.querySelectorAll('.btn').forEach(button => {
-    button.addEventListener('click', function(e) {
-      const ripple = document.createElement('span');
-      const rect = this.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      const x = e.clientX - rect.left - size / 2;
-      const y = e.clientY - rect.top - size / 2;
-      
-      ripple.style.cssText = `
-        position: absolute;
-        width: ${size}px;
-        height: ${size}px;
-        left: ${x}px;
-        top: ${y}px;
-        background: rgba(255, 255, 255, 0.4);
-        border-radius: 50%;
-        pointer-events: none;
-        animation: rippleEffect 0.6s ease-out;
-        z-index: 0;
-      `;
-      
-      this.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 600);
-    });
+  // Add simple click ripple effect - optimized for performance
+  document.addEventListener('click', function(e) {
+    const button = e.target.closest('.btn');
+    if (!button) return;
+    
+    const ripple = document.createElement('span');
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    ripple.style.cssText = `
+      position: absolute;
+      width: ${size}px;
+      height: ${size}px;
+      left: ${x}px;
+      top: ${y}px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: rippleEffect 0.5s ease-out;
+      z-index: 0;
+    `;
+    
+    button.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 500);
   });
   
-  // Add CSS for ripple animation
+  // Add CSS for ripple animation if not exists
   if (!document.getElementById('ripple-style')) {
     const style = document.createElement('style');
     style.id = 'ripple-style';
