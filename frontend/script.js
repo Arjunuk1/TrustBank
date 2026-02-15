@@ -5,12 +5,39 @@ let currentAccNo = localStorage.getItem("accNo");
 let currentName = localStorage.getItem("name");
 let currentFilter = "all";
 
+// ============= LOADING OVERLAY =============
+function showLoader() {
+  let loader = document.getElementById("loadingOverlay");
+  if (!loader) {
+    loader = document.createElement("div");
+    loader.id = "loadingOverlay";
+    loader.className = "loading-overlay";
+    loader.innerHTML = `
+      <div>
+        <div class="loading-spinner">
+          <div class="loading-text">🏦</div>
+        </div>
+        <div class="loading-message">Processing your request...</div>
+      </div>
+    `;
+    document.body.appendChild(loader);
+  }
+  setTimeout(() => loader.classList.add("active"), 10);
+}
+
+function hideLoader() {
+  const loader = document.getElementById("loadingOverlay");
+  if (loader) {
+    loader.classList.remove("active");
+  }
+}
+
 // ============= UTILITY FUNCTIONS =============
 function setLoading(button, state) {
   if (!button) return;
   if (state) {
     button.dataset.original = button.innerText;
-    button.innerText = "Processing...";
+    button.innerHTML = '<span class="spinner"></span>' + button.dataset.original;
     button.disabled = true;
   } else {
     button.innerText = button.dataset.original || button.innerText.replace("Processing...", "Submit");
@@ -22,21 +49,32 @@ function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
   if (!toast) return;
 
+  // Clear any existing timeout
+  if (toast.timeoutId) {
+    clearTimeout(toast.timeoutId);
+  }
+
   toast.className = `toast show ${type}`;
   toast.innerText = message;
 
-  setTimeout(() => {
-    toast.className = "toast";
-  }, 2500);
+  // Add entrance sound effect simulation (visual feedback)
+  toast.style.transform = 'translateX(0) scale(1)';
+
+  toast.timeoutId = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
 }
 
 async function safeFetch(url, options) {
+  showLoader();
   try {
     const res = await fetch(url, options);
     const data = await res.json();
+    hideLoader();
     return { ok: res.ok, data };
   } catch (error) {
     console.error("Fetch error:", error);
+    hideLoader();
     showToast("Network error. Server might be down.", "error");
     return { ok: false, data: null };
   }
@@ -536,8 +574,94 @@ if (window.location.pathname.includes("dashboard.html")) {
         card.style.setProperty('--y', `${y}%`);
       });
     });
+    
+    // Add mouse tracking for regular cards
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mouse-x', `${x}%`);
+        card.style.setProperty('--mouse-y', `${y}%`);
+      });
+    });
+    
+    // Smooth scroll reveal for transaction cards
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateX(0) scale(1)';
+        }
+      });
+    }, observerOptions);
+    
+    // Observe transaction cards
+    const txnList = document.getElementById('txns');
+    if (txnList) {
+      const observeTxns = new MutationObserver(() => {
+        document.querySelectorAll('.txnCard').forEach(card => {
+          observer.observe(card);
+        });
+      });
+      observeTxns.observe(txnList, { childList: true, subtree: true });
+    }
   }
 }
+
+// ============= ADD RIPPLE EFFECT TO BUTTONS =============
+document.addEventListener('DOMContentLoaded', () => {
+  // Add click ripple effect
+  document.querySelectorAll('.btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+      const ripple = document.createElement('span');
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x}px;
+        top: ${y}px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: rippleEffect 0.6s ease-out;
+        z-index: 0;
+      `;
+      
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+  
+  // Add CSS for ripple animation
+  if (!document.getElementById('ripple-style')) {
+    const style = document.createElement('style');
+    style.id = 'ripple-style';
+    style.textContent = `
+      @keyframes rippleEffect {
+        from {
+          transform: scale(0);
+          opacity: 1;
+        }
+        to {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+});
 
 // ============= HOME PAGE INITIALIZATION =============
 if (window.location.pathname.includes("index.html") || window.location.pathname.endsWith("/")) {
