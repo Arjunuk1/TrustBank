@@ -97,6 +97,56 @@ body::before {
   z-index: 1;
 }
 
+/* ===== DISCLAIMER BANNER ===== */
+.disclaimer-banner {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+  padding: 16px 24px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: slideDown 0.5s ease, warningPulse 3s ease-in-out infinite;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+}
+
+.disclaimer-icon {
+  font-size: 24px;
+  animation: warningBounce 2s ease-in-out infinite;
+}
+
+@keyframes warningBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes warningPulse {
+  0%, 100% { 
+    border-color: rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2);
+  }
+  50% { 
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+  }
+}
+
+.disclaimer-content {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.disclaimer-content strong {
+  color: #f59e0b;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+
 /* ===== TOPBAR ===== */
 .topbar {
   display: flex;
@@ -164,6 +214,36 @@ body::before {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.demo-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+  animation: demoPulse 2s ease-in-out infinite;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background-clip: initial;
+}
+
+@keyframes demoPulse {
+  0%, 100% { 
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 2px 16px rgba(245, 158, 11, 0.6);
+    transform: scale(1.05);
+  }
 }
 
 .topbar .tagline {
@@ -1433,6 +1513,15 @@ input:focus {
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
+}
+
+.footer-disclaimer {
+  color: var(--warning);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+  opacity: 0.9;
+  animation: fadeIn 1s ease 0.8s both;
 }
 
 .security-text {
