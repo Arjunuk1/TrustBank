@@ -1,4 +1,11 @@
-const API = "http://localhost:8081/api";
+/**
+ * TrustBank Main Application Script
+ * 
+ * Dependencies: config.js (must be loaded first)
+ * 
+ * This file contains all the client-side logic for the TrustBank application
+ * including account management, transactions, and UI interactions.
+ */
 
 // ============= SESSION =============
 let currentAccNo = localStorage.getItem("accNo");
