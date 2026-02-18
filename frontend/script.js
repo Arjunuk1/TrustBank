@@ -11,6 +11,80 @@
 let currentAccNo = localStorage.getItem("accNo");
 let currentName = localStorage.getItem("name");
 let currentFilter = "all";
+let allTransactions = []; // Store all transactions for search/filter
+
+// ============= SESSION TIMEOUT =============
+const SESSION_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+const WARNING_TIME = 60 * 1000; // Show warning 1 minute before timeout
+let sessionTimer = null;
+let warningTimer = null;
+
+function startSessionTimer() {
+  clearSessionTimer();
+  
+  // Set warning timer (4 minutes)
+  warningTimer = setTimeout(() => {
+    showSessionWarning();
+  }, SESSION_TIMEOUT - WARNING_TIME);
+  
+  // Set logout timer (5 minutes)
+  sessionTimer = setTimeout(() => {
+    autoLogout();
+  }, SESSION_TIMEOUT);
+}
+
+function resetSessionTimer() {
+  if (currentAccNo) {
+    startSessionTimer();
+  }
+}
+
+function clearSessionTimer() {
+  if (sessionTimer) clearTimeout(sessionTimer);
+  if (warningTimer) clearTimeout(warningTimer);
+  sessionTimer = null;
+  warningTimer = null;
+}
+
+function showSessionWarning() {
+  const warning = document.createElement('div');
+  warning.id = 'sessionWarning';
+  warning.className = 'session-warning';
+  warning.innerHTML = `
+    <div class="session-warning-content">
+      <h3>⏰ Session Expiring Soon</h3>
+      <p>You will be logged out in <strong>60 seconds</strong> due to inactivity.</p>
+      <div style="display: flex; gap: 12px; margin-top: 16px;">
+        <button class="btn success" onclick="extendSession()">Stay Logged In</button>
+        <button class="btn danger" onclick="logout()">Logout Now</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(warning);
+  setTimeout(() => warning.classList.add('active'), 10);
+}
+
+function extendSession() {
+  const warning = document.getElementById('sessionWarning');
+  if (warning) {
+    warning.classList.remove('active');
+    setTimeout(() => warning.remove(), 300);
+  }
+  resetSessionTimer();
+  showToast('Session extended successfully', 'success');
+}
+
+function autoLogout() {
+  showToast('Session expired due to inactivity', 'error');
+  setTimeout(() => logout(), 1500);
+}
+
+// Activity listeners to reset timer
+if (typeof window !== 'undefined') {
+  ['mousedown', 'keypress', 'scroll', 'touchstart', 'click'].forEach(event => {
+    document.addEventListener(event, resetSessionTimer, { passive: true });
+  });
+}
 
 // ============= LOADING OVERLAY =============
 function showLoader() {
@@ -151,6 +225,9 @@ async function login(event) {
     if (msgEl) msgEl.innerText = "✅ Login successful! Redirecting...";
     showToast("Login successful!", "success");
     
+    // Start session timeout
+    startSessionTimer();
+    
     // Clear PIN for security
     document.getElementById("lpin").value = "";
     
@@ -167,6 +244,13 @@ async function login(event) {
 
 // ============= LOGOUT =============
 function logout() {
+  // Clear session timer
+  clearSessionTimer();
+  
+  // Remove session warning if present
+  const warning = document.getElementById('sessionWarning');
+  if (warning) warning.remove();
+  
   localStorage.clear();
   currentAccNo = null;
   currentName = null;
@@ -333,105 +417,132 @@ async function loadTransactions() {
     if (!res.ok) throw new Error("Failed to load transactions");
     
     const data = await res.json();
-    const container = document.getElementById("txns");
     
-    if (!container) return;
+    // Store all transactions
+    allTransactions = data || [];
     
-    container.innerHTML = "";
-
-    if (!data || data.length === 0) {
-      container.innerHTML = `
-        <div style="text-align:center; padding:40px; opacity:0.6;">
-          📭 <br><br>
-          <span style="font-size:16px; font-weight:600;">No transactions found</span>
-        </div>
-      `;
-      const txnCountEl = document.getElementById("txnCount");
-      if (txnCountEl) txnCountEl.innerText = "0";
-      updateTotals(0, 0);
-      return;
-    }
-
-    let visibleCount = 0;
-    let totalDeposits = 0;
-    let totalWithdrawals = 0;
-
-    // First pass: Calculate totals from ALL transactions
-    data.forEach(txn => {
-      if (txn.includes("Deposited")) {
-        const match = txn.match(/Rs\.\s*([0-9.]+)/);
-        if (match) {
-          totalDeposits += parseFloat(match[1]);
-        }
-      } else if (txn.includes("Withdrew")) {
-        const match = txn.match(/Rs\.\s*([0-9.]+)/);
-        if (match) {
-          totalWithdrawals += parseFloat(match[1]);
-        }
-      }
-    });
-
-    // Second pass: Display filtered transactions
-    data.forEach(txn => {
-      let type = "transfer";
-      let icon = "🔁";
-
-      if (txn.includes("Deposited")) {
-        type = "deposit";
-        icon = "💰";
-      } else if (txn.includes("Withdrew")) {
-        type = "withdraw";
-        icon = "💸";
-      }
-
-      // Apply filter
-      if (currentFilter !== "all" && currentFilter !== type) return;
-
-      visibleCount++;
-
-      const card = document.createElement("div");
-      card.className = `txnCard ${type}`;
-
-      // Generate random recent date for demo
-      const now = new Date();
-      const randomHoursAgo = Math.floor(Math.random() * 72); // Random within last 3 days
-      const txnDate = new Date(now - randomHoursAgo * 60 * 60 * 1000);
-      
-      const dateOptions = { 
-        day: 'numeric', 
-        month: 'short', 
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      };
-      const formattedDate = txnDate.toLocaleDateString('en-GB', dateOptions);
-
-      card.innerHTML = `
-        <div class="txnIcon">${icon}</div>
-        <div class="txnLeft">
-          <div class="txnDetails">
-            <div class="txnAmount">${txn}</div>
-          </div>
-        </div>
-        <div class="txnTime">
-          <span>🕒</span>
-          <span>${formattedDate}</span>
-        </div>
-      `;
-
-      container.appendChild(card);
-    });
-
-    const txnCountEl = document.getElementById("txnCount");
-    if (txnCountEl) {
-      txnCountEl.innerText = visibleCount;
-    }
-
-    // Update totals
-    updateTotals(totalDeposits, totalWithdrawals);
+    // Render with current filter and search
+    renderTransactions();
   } catch (error) {
     console.error("Error loading transactions:", error);
     showToast("Failed to load transactions", "error");
+  }
+}
+
+// ============= RENDER TRANSACTIONS =============
+function renderTransactions() {
+  const container = document.getElementById("txns");
+  if (!container) return;
+  
+  container.innerHTML = "";
+
+  if (!allTransactions || allTransactions.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:40px; opacity:0.6;">
+        📭 <br><br>
+        <span style="font-size:16px; font-weight:600;">No transactions found</span>
+      </div>
+    `;
+    const txnCountEl = document.getElementById("txnCount");
+    if (txnCountEl) txnCountEl.innerText = "0";
+    updateTotals(0, 0);
+    return;
+  }
+
+  // Get search term
+  const searchEl = document.getElementById("txnSearch");
+  const searchTerm = searchEl ? searchEl.value.toLowerCase().trim() : "";
+
+  let visibleCount = 0;
+  let totalDeposits = 0;
+  let totalWithdrawals = 0;
+
+  // First pass: Calculate totals from ALL transactions
+  allTransactions.forEach(txn => {
+    if (txn.includes("Deposited")) {
+      const match = txn.match(/Rs\.\s*([0-9.]+)/);
+      if (match) {
+        totalDeposits += parseFloat(match[1]);
+      }
+    } else if (txn.includes("Withdrew")) {
+      const match = txn.match(/Rs\.\s*([0-9.]+)/);
+      if (match) {
+        totalWithdrawals += parseFloat(match[1]);
+      }
+    }
+  });
+
+  // Second pass: Display filtered transactions
+  allTransactions.forEach(txn => {
+    let type = "transfer";
+    let icon = "🔁";
+
+    if (txn.includes("Deposited")) {
+      type = "deposit";
+      icon = "💰";
+    } else if (txn.includes("Withdrew")) {
+      type = "withdraw";
+      icon = "💸";
+    }
+
+    // Apply type filter
+    if (currentFilter !== "all" && currentFilter !== type) return;
+
+    // Apply search filter
+    if (searchTerm && !txn.toLowerCase().includes(searchTerm)) return;
+
+    visibleCount++;
+
+    const card = document.createElement("div");
+    card.className = `txnCard ${type}`;
+
+    // Generate random recent date for demo
+    const now = new Date();
+    const randomHoursAgo = Math.floor(Math.random() * 72); // Random within last 3 days
+    const txnDate = new Date(now - randomHoursAgo * 60 * 60 * 1000);
+    
+    const dateOptions = { 
+      day: 'numeric', 
+      month: 'short', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    const formattedDate = txnDate.toLocaleDateString('en-GB', dateOptions);
+
+    card.innerHTML = `
+      <div class="txnIcon">${icon}</div>
+      <div class="txnLeft">
+        <div class="txnDetails">
+          <div class="txnAmount">${txn}</div>
+        </div>
+      </div>
+      <div class="txnTime">
+        <span>🕒</span>
+        <span>${formattedDate}</span>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  const txnCountEl = document.getElementById("txnCount");
+  if (txnCountEl) {
+    txnCountEl.innerText = visibleCount;
+  }
+
+  // Update totals
+  updateTotals(totalDeposits, totalWithdrawals);
+  
+  // Show "no results" message if search filtered everything out
+  if (visibleCount === 0 && searchTerm) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:40px; opacity:0.6;">
+        🔍 <br><br>
+        <span style="font-size:16px; font-weight:600;">No transactions match "${searchTerm}"</span><br>
+        <span style="font-size:14px; margin-top:8px; display:block;">Try a different search term</span>
+      </div>
+    `;
   }
 }
 
@@ -463,7 +574,89 @@ function setFilter(type, button) {
     button.classList.add("active");
   }
 
-  loadTransactions();
+  renderTransactions();
+}
+
+// ============= SEARCH TRANSACTIONS =============
+function filterTransactions() {
+  renderTransactions();
+}
+
+// ============= EXPORT TRANSACTIONS TO CSV =============
+function exportTransactionsCSV() {
+  if (!allTransactions || allTransactions.length === 0) {
+    showToast("No transactions to export", "error");
+    return;
+  }
+
+  try {
+    // CSV header
+    const csvHeader = "Transaction Type,Description,Amount (₹),Date & Time\n";
+    
+    // CSV rows
+    const csvRows = allTransactions.map((txn, index) => {
+      let type = "Transfer";
+      let amount = "";
+      let description = txn;
+      
+      // Parse transaction type and amount
+      if (txn.includes("Deposited")) {
+        type = "Deposit";
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) amount = match[1];
+      } else if (txn.includes("Withdrew")) {
+        type = "Withdrawal";
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) amount = match[1];
+      } else if (txn.includes("Transferred")) {
+        type = "Transfer";
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) amount = match[1];
+      }
+      
+      // Generate timestamp (demo - in production this would come from backend)
+      const now = new Date();
+      const randomHoursAgo = Math.floor(Math.random() * 72 * (index + 1) / allTransactions.length);
+      const txnDate = new Date(now - randomHoursAgo * 60 * 60 * 1000);
+      const timestamp = txnDate.toLocaleString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      
+      // Escape commas in description
+      const escapedDescription = `"${description.replace(/"/g, '""')}"`;
+      
+      return `${type},${escapedDescription},${amount},${timestamp}`;
+    }).join("\n");
+    
+    // Combine header and rows
+    const csvContent = csvHeader + csvRows;
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    
+    // Generate filename with account number and date
+    const dateStr = new Date().toISOString().split('T')[0];
+    const filename = `TrustBank_Transactions_${currentAccNo}_${dateStr}.csv`;
+    
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showToast(`Exported ${allTransactions.length} transactions successfully`, "success");
+  } catch (error) {
+    console.error("Export error:", error);
+    showToast("Failed to export transactions", "error");
+  }
 }
 
 // ============= BALANCE CHART =============
@@ -635,6 +828,9 @@ if (window.location.pathname.includes("index.html") || window.location.pathname.
     if (statusText) statusText.innerText = `Logged in as ${currentName}`;
     if (userInfoEl) userInfoEl.innerText = `${currentName} (Acc: ${currentAccNo})`;
     
+    // Start session timer for logged-in users
+    startSessionTimer();
+    
     // Load data if on home page
     loadBalance();
     loadTransactions();
@@ -644,3 +840,144 @@ if (window.location.pathname.includes("index.html") || window.location.pathname.
   }
 }
 
+// ============= DASHBOARD PAGE INITIALIZATION =============
+if (window.location.pathname.includes("dashboard.html")) {
+  if (currentAccNo && currentName) {
+    // Start session timer for dashboard
+    startSessionTimer();
+  }
+}
+
+// ============= KEYBOARD SHORTCUTS =============
+document.addEventListener('keydown', (event) => {
+  // Get the active element to avoid conflicts with input fields
+  const activeElement = document.activeElement;
+  const isInputField = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
+  
+  // Ctrl/Cmd + K: Focus search (only when not in input field)
+  if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+    event.preventDefault();
+    const searchInput = document.getElementById('txnSearch');
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.select();
+      showToast('Search focused - start typing', 'info');
+    }
+  }
+  
+  // Ctrl/Cmd + L: Logout
+  if ((event.ctrlKey || event.metaKey) && event.key === 'l') {
+    event.preventDefault();
+    if (currentAccNo) {
+      logout();
+    }
+  }
+  
+  // Ctrl/Cmd + R: Refresh transactions (override default refresh)
+  if ((event.ctrlKey || event.metaKey) && event.key === 'r' && !isInputField) {
+    const txnList = document.getElementById('txns');
+    if (txnList && currentAccNo) {
+      event.preventDefault();
+      loadTransactions();
+      showToast('Transactions refreshed', 'success');
+    }
+  }
+  
+  // Ctrl/Cmd + E: Export CSV
+  if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
+    event.preventDefault();
+    if (currentAccNo && allTransactions && allTransactions.length > 0) {
+      exportTransactionsCSV();
+    }
+  }
+  
+  // Escape: Close modals/warnings
+  if (event.key === 'Escape') {
+    const sessionWarning = document.getElementById('sessionWarning');
+    if (sessionWarning) {
+      sessionWarning.classList.remove('active');
+      setTimeout(() => sessionWarning.remove(), 300);
+      resetSessionTimer();
+    }
+  }
+  
+  // Enter on login form: Submit
+  if (event.key === 'Enter' && isInputField) {
+    const loginPin = document.getElementById('lpin');
+    const loginAcc = document.getElementById('lacc');
+    const createPin = document.getElementById('cpin');
+    const createName = document.getElementById('cname');
+    
+    // Login form
+    if (activeElement === loginPin || activeElement === loginAcc) {
+      event.preventDefault();
+      const loginBtn = document.querySelector('button[onclick*="login"]');
+      if (loginBtn) loginBtn.click();
+    }
+    
+    // Create account form
+    if (activeElement === createPin || activeElement === createName) {
+      event.preventDefault();
+      const createBtn = document.querySelector('button[onclick*="createAccount"]');
+      if (createBtn) createBtn.click();
+    }
+  }
+  
+  // ? key: Show keyboard shortcuts help (when not in input)
+  if (event.key === '?' && !isInputField) {
+    event.preventDefault();
+    showKeyboardShortcutsHelp();
+  }
+});
+
+// ============= KEYBOARD SHORTCUTS HELP =============
+function showKeyboardShortcutsHelp() {
+  const helpModal = document.createElement('div');
+  helpModal.id = 'keyboardHelp';
+  helpModal.className = 'session-warning active';
+  helpModal.innerHTML = `
+    <div class="keyboard-help-content">
+      <h3>⌨️ Keyboard Shortcuts</h3>
+      <div class="shortcuts-list">
+        <div class="shortcut-item">
+          <kbd>Ctrl/Cmd + K</kbd>
+          <span>Focus search</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Ctrl/Cmd + L</kbd>
+          <span>Logout</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Ctrl/Cmd + R</kbd>
+          <span>Refresh transactions</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Ctrl/Cmd + E</kbd>
+          <span>Export CSV</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Escape</kbd>
+          <span>Close modal</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>Enter</kbd>
+          <span>Submit form</span>
+        </div>
+        <div class="shortcut-item">
+          <kbd>?</kbd>
+          <span>Show this help</span>
+        </div>
+      </div>
+      <button class="btn primary" onclick="closeKeyboardHelp()" style="margin-top: 20px;">Got it!</button>
+    </div>
+  `;
+  document.body.appendChild(helpModal);
+}
+
+function closeKeyboardHelp() {
+  const helpModal = document.getElementById('keyboardHelp');
+  if (helpModal) {
+    helpModal.classList.remove('active');
+    setTimeout(() => helpModal.remove(), 300);
+  }
+}
