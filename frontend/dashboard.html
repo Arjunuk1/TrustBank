@@ -166,7 +166,21 @@
           </h2>
           <p class="muted">Filter and view your complete transaction history</p>
         </div>
-        <button class="btn" onclick="loadTransactions()">🔄 Refresh</button>
+        <div class="row" style="gap: 8px;">
+          <button class="btn success" onclick="exportTransactionsCSV()">📥 Export CSV</button>
+          <button class="btn" onclick="loadTransactions()">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="transaction-search" style="margin-top: 16px;">
+        <input 
+          type="text" 
+          id="txnSearch" 
+          placeholder="🔍 Search transactions by amount, type, or account..." 
+          oninput="filterTransactions()"
+          autocomplete="off"
+        />
       </div>
 
       <div class="row filterRow" style="margin-top:16px;">
@@ -186,9 +200,9 @@
       <div class="footer-section">
         <p class="footer-text">© 2026 TrustBank • <span class="security-text">🛡️ SSL Secured</span> • Built with Spring Boot</p>
         <p class="footer-disclaimer">⚠️ Demo Application Only – Not for Production Use – Educational Purpose</p>
+        <p class="footer-hint" style="margin-top: 8px; font-size: 12px; opacity: 0.6;">💡 Press <kbd style="padding: 2px 6px; background: rgba(255,255,255,0.1); border-radius: 4px;">?</kbd> for keyboard shortcuts</p>
       </div>
-      <div class="footer-links">
-        <span class="footer-link">Privacy Policy</span>
+      <div class="footer-links">\n        <span class="footer-link">Privacy Policy</span>
         <span class="footer-link">Terms of Service</span>
         <span class="footer-link">24/7 Support</span>
       </div>
