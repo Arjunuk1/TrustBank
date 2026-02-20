@@ -70,9 +70,14 @@
     <section class="card confidence-card balance-indicator">
       <div class="confidence-icon">💰</div>
       <div class="confidence-content">
-        <h3 class="confidence-label">Current Balance</h3>
+        <h3 class="confidence-label">
+          Current Balance
+          <button class="balance-toggle-btn" onclick="toggleBalanceVisibility()" title="Toggle balance visibility">
+            <span id="balanceToggleIcon">👁️</span>
+          </button>
+        </h3>
         <div class="confidence-value">
-          ₹ <span id="balance">0.00</span>
+          ₹ <span id="balance" class="balance-amount">0.00</span>
         </div>
       </div>
     </section>
@@ -93,6 +98,30 @@
         <h3 class="confidence-label">Total Withdrawals</h3>
         <div class="confidence-value withdraw-value">
           ₹ <span id="totalWithdrawals">0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card confidence-card transfer-indicator">
+      <div class="confidence-icon">📊</div>
+      <div class="confidence-content">
+        <h3 class="confidence-label">Transactions</h3>
+        <div class="confidence-value transfer-value">
+          <span id="totalTransactionCount">0</span>
+        </div>
+        <div class="transaction-breakdown">
+          <span class="breakdown-item deposit">
+            <span class="breakdown-icon">💰</span>
+            <span id="depositCount">0</span>
+          </span>
+          <span class="breakdown-item withdraw">
+            <span class="breakdown-icon">💸</span>
+            <span id="withdrawCount">0</span>
+          </span>
+          <span class="breakdown-item transfer">
+            <span class="breakdown-icon">🔄</span>
+            <span id="transferCount">0</span>
+          </span>
         </div>
       </div>
     </section>
@@ -138,12 +167,24 @@
     <section class="card">
       <h3>💰 Deposit Money</h3>
       <input id="depAmt" placeholder="Enter Amount (₹)" />
+      <div class="quick-amounts">
+        <button class="quick-amount-btn" onclick="setQuickAmount('depAmt', 100)">+₹100</button>
+        <button class="quick-amount-btn" onclick="setQuickAmount('depAmt', 500)">+₹500</button>
+        <button class="quick-amount-btn" onclick="setQuickAmount('depAmt', 1000)">+₹1000</button>
+        <button class="quick-amount-btn" onclick="setQuickAmount('depAmt', 5000)">+₹5000</button>
+      </div>
       <button class="btn success" onclick="deposit(event)">Deposit</button>
     </section>
 
     <section class="card">
       <h3>💸 Withdraw Money</h3>
       <input id="withAmt" placeholder="Enter Amount (₹)" />
+      <div class="quick-amounts">
+        <button class="quick-amount-btn" onclick="setQuickAmount('withAmt', 100)">+₹100</button>
+        <button class="quick-amount-btn" onclick="setQuickAmount('withAmt', 500)">+₹500</button>
+        <button class="quick-amount-btn" onclick="setQuickAmount('withAmt', 1000)">+₹1000</button>
+        <button class="quick-amount-btn" onclick="setQuickAmount('withAmt', 5000)">+₹5000</button>
+      </div>
       <button class="btn danger" onclick="withdraw(event)">Withdraw</button>
     </section>
 
