@@ -550,6 +550,103 @@ body::before {
   transform: scale(1.05);
 }
 
+/* Balance visibility toggle */
+.balance-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 8px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.balance-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary);
+  transform: scale(1.1);
+}
+
+.balance-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.hidden-balance::before {
+  content: '••••••';
+  font-size: 28px;
+  letter-spacing: 4px;
+  color: var(--text-secondary);
+}
+
+.hidden-balance {
+  visibility: hidden;
+  position: relative;
+}
+
+.hidden-balance::before {
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Transaction breakdown stats */
+.transaction-breakdown {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  justify-content: center;
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.breakdown-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.breakdown-item.deposit {
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.breakdown-item.withdraw {
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.breakdown-item.transfer {
+  color: var(--warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.breakdown-icon {
+  font-size: 14px;
+}
+
+.transfer-value {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* Mouse tracking glow effect */
 @media (hover: hover) {
   .confidence-card {
@@ -608,6 +705,106 @@ input:focus {
   background: rgba(59, 130, 246, 0.05);
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 4px 12px rgba(59, 130, 246, 0.2);
   transform: translateY(-2px) scale(1.01);
+}
+
+/* Input validation states */
+input.input-valid {
+  border-color: var(--success);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+input.input-valid:focus {
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1), 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+input.input-invalid {
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.05);
+  animation: shake 0.4s ease;
+}
+
+input.input-invalid:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1), 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.input-error {
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 8px;
+  padding-left: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: fadeInDown 0.3s ease;
+}
+
+.input-error::before {
+  content: '⚠';
+  font-size: 14px;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Input animation on amount update */
+input.amount-updated {
+  animation: amountPulse 0.3s ease;
+}
+
+@keyframes amountPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+}
+
+/* ===== QUICK AMOUNT BUTTONS ===== */
+.quick-amounts {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.quick-amount-btn {
+  flex: 1;
+  min-width: 70px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.quick-amount-btn:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+  border-color: var(--success);
+  color: var(--success);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.quick-amount-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.15);
 }
 
 /* ===== BUTTONS ===== */
