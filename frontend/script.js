@@ -161,6 +161,137 @@ async function safeFetch(url, options) {
   }
 }
 
+// ============= INPUT VALIDATION =============
+function validateInput(inputId, validationType) {
+  const input = document.getElementById(inputId);
+  if (!input) return true;
+  
+  const value = input.value;
+  let isValid = true;
+  let errorMessage = "";
+  
+  // Remove previous validation classes
+  input.classList.remove('input-valid', 'input-invalid');
+  
+  // Remove existing error message
+  const existingError = input.parentElement.querySelector('.input-error');
+  if (existingError) existingError.remove();
+  
+  if (!value) {
+    return true; // Don't show error for empty fields (let form submission handle it)
+  }
+  
+  switch (validationType) {
+    case 'name':
+      if (value.length < 2) {
+        isValid = false;
+        errorMessage = "Name must be at least 2 characters";
+      } else if (value.length > 50) {
+        isValid = false;
+        errorMessage = "Name must be less than 50 characters";
+      } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+        isValid = false;
+        errorMessage = "Name can only contain letters and spaces";
+      }
+      break;
+      
+    case 'pin':
+      if (!/^\d+$/.test(value)) {
+        isValid = false;
+        errorMessage = "PIN must contain only numbers";
+      } else if (value.length < 4 || value.length > 6) {
+        isValid = false;
+        errorMessage = "PIN must be 4-6 digits";
+      }
+      break;
+      
+    case 'amount':
+      const amount = parseFloat(value);
+      if (isNaN(amount)) {
+        isValid = false;
+        errorMessage = "Please enter a valid number";
+      } else if (amount <= 0) {
+        isValid = false;
+        errorMessage = "Amount must be greater than 0";
+      } else if (amount > 1000000) {
+        isValid = false;
+        errorMessage = "Amount cannot exceed ₹10,00,000";
+      } else if (!/^\d+(\.\d{1,2})?$/.test(value)) {
+        isValid = false;
+        errorMessage = "Use up to 2 decimal places";
+      }
+      break;
+      
+    case 'accountNumber':
+      if (!/^\d+$/.test(value)) {
+        isValid = false;
+        errorMessage = "Account number must contain only digits";
+      } else if (value.length < 3) {
+        isValid = false;
+        errorMessage = "Account number too short";
+      }
+      break;
+  }
+  
+  // Apply validation styling
+  if (value && isValid) {
+    input.classList.add('input-valid');
+  } else if (value && !isValid) {
+    input.classList.add('input-invalid');
+    
+    // Add error message
+    const errorEl = document.createElement('div');
+    errorEl.className = 'input-error';
+    errorEl.textContent = errorMessage;
+    input.parentElement.insertBefore(errorEl, input.nextSibling);
+  }
+  
+  return isValid;
+}
+
+// Attach validation listeners
+function attachValidationListeners() {
+  // Name validation
+  const nameInput = document.getElementById('cname');
+  if (nameInput) {
+    nameInput.addEventListener('input', () => validateInput('cname', 'name'));
+    nameInput.addEventListener('blur', () => validateInput('cname', 'name'));
+  }
+  
+  // PIN validation
+  const pinInputs = ['cpin', 'lpin'];
+  pinInputs.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener('input', () => validateInput(id, 'pin'));
+      input.addEventListener('blur', () => validateInput(id, 'pin'));
+    }
+  });
+  
+  // Amount validation
+  const amountInputs = ['depAmt', 'withAmt', 'trAmt'];
+  amountInputs.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener('input', () => validateInput(id, 'amount'));
+      input.addEventListener('blur', () => validateInput(id, 'amount'));
+    }
+  });
+  
+  // Account number validation
+  const accInputs = ['lacc', 'toAcc'];
+  accInputs.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener('input', () => validateInput(id, 'accountNumber'));
+      input.addEventListener('blur', () => validateInput(id, 'accountNumber'));
+    }
+  });
+}
+
+// Call after DOM loads
+setTimeout(attachValidationListeners, 100);
+
 // ============= CREATE ACCOUNT =============
 async function createAccount(event) {
   const button = event?.target;
@@ -456,19 +587,26 @@ function renderTransactions() {
   let visibleCount = 0;
   let totalDeposits = 0;
   let totalWithdrawals = 0;
+  let depositCount = 0;
+  let withdrawCount = 0;
+  let transferCount = 0;
 
-  // First pass: Calculate totals from ALL transactions
+  // First pass: Calculate totals and counts from ALL transactions
   allTransactions.forEach(txn => {
     if (txn.includes("Deposited")) {
+      depositCount++;
       const match = txn.match(/Rs\.\s*([0-9.]+)/);
       if (match) {
         totalDeposits += parseFloat(match[1]);
       }
     } else if (txn.includes("Withdrew")) {
+      withdrawCount++;
       const match = txn.match(/Rs\.\s*([0-9.]+)/);
       if (match) {
         totalWithdrawals += parseFloat(match[1]);
       }
+    } else {
+      transferCount++;
     }
   });
 
@@ -531,8 +669,8 @@ function renderTransactions() {
     txnCountEl.innerText = visibleCount;
   }
 
-  // Update totals
-  updateTotals(totalDeposits, totalWithdrawals);
+  // Update totals and counts
+  updateTotals(totalDeposits, totalWithdrawals, depositCount, withdrawCount, transferCount);
   
   // Show "no results" message if search filtered everything out
   if (visibleCount === 0 && searchTerm) {
@@ -547,7 +685,7 @@ function renderTransactions() {
 }
 
 // ============= UPDATE TOTALS =============
-function updateTotals(deposits, withdrawals) {
+function updateTotals(deposits, withdrawals, depCount = 0, withCount = 0, transCount = 0) {
   const depositsEl = document.getElementById("totalDeposits");
   const withdrawalsEl = document.getElementById("totalWithdrawals");
   
@@ -557,6 +695,28 @@ function updateTotals(deposits, withdrawals) {
   
   if (withdrawalsEl) {
     withdrawalsEl.innerText = withdrawals.toFixed(2);
+  }
+  
+  // Update transaction counts
+  const totalCountEl = document.getElementById("totalTransactionCount");
+  const depositCountEl = document.getElementById("depositCount");
+  const withdrawCountEl = document.getElementById("withdrawCount");
+  const transferCountEl = document.getElementById("transferCount");
+  
+  if (totalCountEl) {
+    totalCountEl.innerText = depCount + withCount + transCount;
+  }
+  
+  if (depositCountEl) {
+    depositCountEl.innerText = depCount;
+  }
+  
+  if (withdrawCountEl) {
+    withdrawCountEl.innerText = withCount;
+  }
+  
+  if (transferCountEl) {
+    transferCountEl.innerText = transCount;
   }
 }
 
@@ -981,3 +1141,62 @@ function closeKeyboardHelp() {
     setTimeout(() => helpModal.remove(), 300);
   }
 }
+
+// ============= BALANCE VISIBILITY TOGGLE =============
+let balanceVisible = true;
+
+function toggleBalanceVisibility() {
+  balanceVisible = !balanceVisible;
+  const balanceEl = document.getElementById('balance');
+  const toggleIcon = document.getElementById('balanceToggleIcon');
+  const depositsEl = document.getElementById('totalDeposits');
+  const withdrawalsEl = document.getElementById('totalWithdrawals');
+  
+  if (balanceVisible) {
+    // Show balances
+    balanceEl?.classList.remove('hidden-balance');
+    depositsEl?.classList.remove('hidden-balance');
+    withdrawalsEl?.classList.remove('hidden-balance');
+    if (toggleIcon) toggleIcon.textContent = '👁️';
+    
+    // Reload actual values
+    loadBalance();
+    showToast('Balance visible', 'info');
+  } else {
+    // Hide balances
+    balanceEl?.classList.add('hidden-balance');
+    depositsEl?.classList.add('hidden-balance');
+    withdrawalsEl?.classList.add('hidden-balance');
+    if (toggleIcon) toggleIcon.textContent = '🙈';
+    
+    showToast('Balance hidden', 'info');
+  }
+  
+  // Save preference to localStorage
+  localStorage.setItem('balanceVisible', balanceVisible);
+}
+
+// ============= QUICK AMOUNT BUTTONS =============
+function setQuickAmount(inputId, amount) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  const currentValue = parseFloat(input.value) || 0;
+  const newValue = currentValue + amount;
+  input.value = newValue;
+  
+  // Add visual feedback
+  input.classList.add('amount-updated');
+  setTimeout(() => input.classList.remove('amount-updated'), 300);
+  
+  showToast(`Added ₹${amount}`, 'success');
+}
+
+// Restore balance visibility preference on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const savedPreference = localStorage.getItem('balanceVisible');
+  if (savedPreference === 'false') {
+    balanceVisible = true; // Set to true first so toggle makes it false
+    toggleBalanceVisibility();
+  }
+});
