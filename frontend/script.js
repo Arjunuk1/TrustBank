@@ -660,6 +660,10 @@ function renderTransactions() {
         <span>${formattedDate}</span>
       </div>
     `;
+    
+    // Add click handler for receipt modal
+    card.style.cursor = 'pointer';
+    card.onclick = () => showTransactionReceipt(txn, type, icon, formattedDate);
 
     container.appendChild(card);
   });
@@ -740,6 +744,186 @@ function setFilter(type, button) {
 // ============= SEARCH TRANSACTIONS =============
 function filterTransactions() {
   renderTransactions();
+}
+
+// ============= SORT TRANSACTIONS =============
+function sortTransactions() {
+  const sortSelect = document.getElementById('sortSelect');
+  if (!sortSelect || !allTransactions) return;
+  
+  const sortType = sortSelect.value;
+  
+  // Create a copy with metadata for sorting
+  const transactionsWithMeta = allTransactions.map((txn, index) => {
+    let amount = 0;
+    const match = txn.match(/Rs\.\s*([0-9.]+)/);
+    if (match) {
+      amount = parseFloat(match[1]);
+    }
+    
+    return {
+      text: txn,
+      amount: amount,
+      originalIndex: index
+    };
+  });
+  
+  // Sort based on selection
+  switch (sortType) {
+    case 'newest':
+      transactionsWithMeta.reverse(); // Most recent first
+      break;
+    case 'oldest':
+      // Keep original order (oldest first)
+      break;
+    case 'amount-high':
+      transactionsWithMeta.sort((a, b) => b.amount - a.amount);
+      break;
+    case 'amount-low':
+      transactionsWithMeta.sort((a, b) => a.amount - b.amount);
+      break;
+  }
+  
+  // Update allTransactions with sorted order
+  allTransactions = transactionsWithMeta.map(item => item.text);
+  
+  // Re-render
+  renderTransactions();
+  
+  showToast(`Sorted by ${sortSelect.options[sortSelect.selectedIndex].text}`, 'info');
+}
+
+// ============= TRANSACTION RECEIPT MODAL =============
+function showTransactionReceipt(txn, type, icon, dateTime) {
+  // Extract amount from transaction text
+  let amount = "N/A";
+  const match = txn.match(/Rs\.\s*([0-9.]+)/);
+  if (match) {
+    amount = match[1];
+  }
+  
+  // Generate transaction ID
+  const txnId = `TXN${Date.now().toString().slice(-8)}`;
+  
+  // Determine status and color
+  const statusMap = {
+    'deposit': { status: 'Completed', color: 'var(--success)', bg: 'rgba(16, 185, 129, 0.1)' },
+    'withdraw': { status: 'Completed', color: 'var(--danger)', bg: 'rgba(239, 68, 68, 0.1)' },
+    'transfer': { status: 'Completed', color: 'var(--warning)', bg: 'rgba(245, 158, 11, 0.1)' }
+  };
+  
+  const statusInfo = statusMap[type] || statusMap['transfer'];
+  
+  const modal = document.createElement('div');
+  modal.id = 'receiptModal';
+  modal.className = 'receipt-modal active';
+  modal.innerHTML = `
+    <div class="receipt-content">
+      <div class="receipt-header">
+        <h2>🧾 Transaction Receipt</h2>
+        <button class="receipt-close" onclick="closeReceipt()">✕</button>
+      </div>
+      
+      <div class="receipt-body">
+        <div class="receipt-icon-large" style="background: ${statusInfo.bg};">
+          <span style="font-size: 48px;">${icon}</span>
+        </div>
+        
+        <div class="receipt-status" style="color: ${statusInfo.color};">
+          ✓ ${statusInfo.status}
+        </div>
+        
+        <div class="receipt-amount">₹ ${amount}</div>
+        
+        <div class="receipt-divider"></div>
+        
+        <div class="receipt-details">
+          <div class="receipt-row">
+            <span class="receipt-label">Transaction ID</span>
+            <span class="receipt-value">${txnId}</span>
+          </div>
+          
+          <div class="receipt-row">
+            <span class="receipt-label">Type</span>
+            <span class="receipt-value">${type.charAt(0).toUpperCase() + type.slice(1)}</span>
+          </div>
+          
+          <div class="receipt-row">
+            <span class="receipt-label">Account Number</span>
+            <span class="receipt-value">${currentAccNo}</span>
+          </div>
+          
+          <div class="receipt-row">
+            <span class="receipt-label">Account Holder</span>
+            <span class="receipt-value">${currentName}</span>
+          </div>
+          
+          <div class="receipt-row">
+            <span class="receipt-label">Date & Time</span>
+            <span class="receipt-value">${dateTime}</span>
+          </div>
+          
+          <div class="receipt-row">
+            <span class="receipt-label">Description</span>
+            <span class="receipt-value">${txn}</span>
+          </div>
+        </div>
+        
+        <div class="receipt-divider"></div>
+        
+        <div class="receipt-footer">
+          <p>🏦 TrustBank • Bank-grade Security</p>
+          <p class="receipt-note">This is a digitally generated receipt</p>
+        </div>
+        
+        <div class="receipt-actions">
+          <button class="btn success" onclick="printReceipt()">🖨️ Print</button>
+          <button class="btn primary" onclick="shareReceipt('${txnId}', '${amount}', '${type}')">📤 Share</button>
+          <button class="btn" onclick="closeReceipt()">Close</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
+
+function closeReceipt() {
+  const modal = document.getElementById('receiptModal');
+  if (modal) {
+    modal.classList.remove('active');
+    setTimeout(() => modal.remove(), 300);
+  }
+}
+
+function printReceipt() {
+  window.print();
+  showToast('Opening print dialog...', 'info');
+}
+
+function shareReceipt(txnId, amount, type) {
+  const shareText = `TrustBank Transaction\nID: ${txnId}\nType: ${type}\nAmount: ₹${amount}\nAccount: ${currentAccNo}`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Transaction Receipt',
+      text: shareText
+    }).then(() => {
+      showToast('Receipt shared successfully', 'success');
+    }).catch(() => {
+      copyToClipboard(shareText);
+    });
+  } else {
+    copyToClipboard(shareText);
+  }
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Receipt details copied to clipboard', 'success');
+  }).catch(() => {
+    showToast('Could not copy receipt details', 'error');
+  });
 }
 
 // ============= EXPORT TRANSACTIONS TO CSV =============
@@ -1190,6 +1374,55 @@ function setQuickAmount(inputId, amount) {
   setTimeout(() => input.classList.remove('amount-updated'), 300);
   
   showToast(`Added ₹${amount}`, 'success');
+}
+
+// ============= COPY ACCOUNT NUMBER =============
+async function copyAccountNumber() {
+  if (!currentAccNo) {
+    showToast('No account number to copy', 'error');
+    return;
+  }
+  
+  try {
+    // Use modern clipboard API
+    await navigator.clipboard.writeText(currentAccNo);
+    
+    // Update icon temporarily
+    const copyIcon = document.getElementById('copyIcon');
+    if (copyIcon) {
+      copyIcon.textContent = '✅';
+      setTimeout(() => {
+        copyIcon.textContent = '📋';
+      }, 2000);
+    }
+    
+    showToast(`Account number ${currentAccNo} copied!`, 'success');
+  } catch (err) {
+    // Fallback for older browsers
+    const textarea = document.createElement('textarea');
+    textarea.value = currentAccNo;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+      document.execCommand('copy');
+      showToast(`Account number ${currentAccNo} copied!`, 'success');
+      
+      const copyIcon = document.getElementById('copyIcon');
+      if (copyIcon) {
+        copyIcon.textContent = '✅';
+        setTimeout(() => {
+          copyIcon.textContent = '📋';
+        }, 2000);
+      }
+    } catch (e) {
+      showToast('Failed to copy account number', 'error');
+    }
+    
+    document.body.removeChild(textarea);
+  }
 }
 
 // Restore balance visibility preference on page load
