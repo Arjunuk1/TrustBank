@@ -142,6 +142,9 @@
         <div class="account-row">
           <span class="label">Account Number</span>
           <span class="value" id="accNumber">—</span>
+          <button class="copy-btn" onclick="copyAccountNumber()" title="Copy account number">
+            <span id="copyIcon">📋</span>
+          </button>
         </div>
 
         <div class="account-row">
@@ -224,11 +227,22 @@
         />
       </div>
 
-      <div class="row filterRow" style="margin-top:16px;">
-        <button class="btn filterBtn active" onclick="setFilter('all', this)">All</button>
-        <button class="btn success filterBtn" onclick="setFilter('deposit', this)">💰 Deposits</button>
-        <button class="btn danger filterBtn" onclick="setFilter('withdraw', this)">💸 Withdrawals</button>
-        <button class="btn warning filterBtn" onclick="setFilter('transfer', this)">🔄 Transfers</button>
+      <div class="row filterRow" style="margin-top:16px; justify-content: space-between;">
+        <div class="row" style="gap: 8px; flex-wrap: wrap;">
+          <button class="btn filterBtn active" onclick="setFilter('all', this)">All</button>
+          <button class="btn success filterBtn" onclick="setFilter('deposit', this)">💰 Deposits</button>
+          <button class="btn danger filterBtn" onclick="setFilter('withdraw', this)">💸 Withdrawals</button>
+          <button class="btn warning filterBtn" onclick="setFilter('transfer', this)">🔄 Transfers</button>
+        </div>
+        <div class="sort-controls">
+          <label for="sortSelect" class="sort-label">Sort:</label>
+          <select id="sortSelect" class="sort-select" onchange="sortTransactions()">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="amount-high">Amount: High to Low</option>
+            <option value="amount-low">Amount: Low to High</option>
+          </select>
+        </div>
       </div>
 
       <div class="txnList" id="txns"></div>
