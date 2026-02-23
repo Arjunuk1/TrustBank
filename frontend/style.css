@@ -21,6 +21,34 @@
   --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
+/* ===== LIGHT THEME ===== */
+body.light-theme {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --success: #059669;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --dark-bg: #f8fafc;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 50%, #dbeafe 100%);
+}
+
+body.light-theme::before {
+  opacity: 0.3;
+}
+
+body.light-theme::after {
+  opacity: 0.15;
+}
+
 /* ===== RESET & BASE ===== */
 * {
   margin: 0;
@@ -359,6 +387,33 @@ body::before {
   0%, 100% { transform: rotate(0deg); }
   10%, 30% { transform: rotate(-5deg); }
   20% { transform: rotate(5deg); }
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05) rotate(15deg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
 }
 
 /* ===== GRID LAYOUT ===== */
@@ -1617,6 +1672,90 @@ input.amount-updated {
   padding: 8px;
 }
 
+/* ===== DATE FILTER ===== */
+.date-filter-row {
+  margin: 16px 0;
+  animation: fadeIn 0.6s ease 0.5s both;
+}
+
+.date-filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.date-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.date-input {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  min-width: 140px;
+}
+
+.date-input:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+body.light-theme .date-input::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
+
+.btn-reset {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reset:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
 .txnBadge {
   display: inline-block;
   background: linear-gradient(135deg, var(--primary), var(--success));
@@ -2084,6 +2223,149 @@ input.amount-updated {
   .receipt-close {
     display: none !important;
   }
+}
+
+/* ===== CONFIRMATION MODAL ===== */
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.confirmation-modal.active {
+  display: flex;
+}
+
+.confirmation-content {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 450px;
+  width: 90%;
+  box-shadow: var(--shadow-xl);
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.confirmation-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.confirmation-header h3 {
+  font-size: 22px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.confirmation-header p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.confirmation-details {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.confirmation-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.confirmation-row:last-child {
+  border-bottom: none;
+}
+
+.confirmation-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.confirmation-value {
+  font-size: 15px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.confirmation-value.amount {
+  font-size: 24px;
+  color: var(--primary);
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.confirmation-actions .btn {
+  flex: 1;
+  margin-top: 0;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+.btn-confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.btn-cancel {
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+}
+
+.btn-cancel:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 /* ===== FOOTER ===== */
