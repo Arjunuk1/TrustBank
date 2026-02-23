@@ -398,6 +398,105 @@ function togglePin() {
   pin.type = pin.type === "password" ? "text" : "password";
 }
 
+// ============= TRANSACTION CONFIRMATION DIALOG =============
+function showConfirmationDialog(type, amount, toAccount = null) {
+  return new Promise((resolve) => {
+    // Create modal HTML
+    const modal = document.createElement('div');
+    modal.className = 'confirmation-modal';
+    modal.id = 'confirmationModal';
+    
+    const icons = {
+      'deposit': '💰',
+      'withdrawal': '💸',
+      'transfer': '🔄'
+    };
+    
+    const titles = {
+      'deposit': 'Confirm Deposit',
+      'withdrawal': 'Confirm Withdrawal',
+      'transfer': 'Confirm Transfer'
+    };
+    
+    const icon = icons[type] || '❓';
+    const title = titles[type] || 'Confirm Transaction';
+    
+    modal.innerHTML = `
+      <div class="confirmation-content">
+        <div class="confirmation-header">
+          <div class="confirmation-icon">${icon}</div>
+          <h3>${title}</h3>
+          <p>Please review the transaction details</p>
+        </div>
+        
+        <div class="confirmation-details">
+          <div class="confirmation-row">
+            <span class="confirmation-label">Transaction Type</span>
+            <span class="confirmation-value">${type.charAt(0).toUpperCase() + type.slice(1)}</span>
+          </div>
+          ${toAccount ? `
+          <div class="confirmation-row">
+            <span class="confirmation-label">To Account</span>
+            <span class="confirmation-value">${toAccount}</span>
+          </div>
+          ` : ''}
+          <div class="confirmation-row">
+            <span class="confirmation-label">Amount</span>
+            <span class="confirmation-value amount">₹ ${amount}</span>
+          </div>
+          <div class="confirmation-row">
+            <span class="confirmation-label">From Account</span>
+            <span class="confirmation-value">${currentAccNo}</span>
+          </div>
+        </div>
+        
+        <div class="confirmation-actions">
+          <button class="btn btn-cancel" id="btnCancel">
+            ❌ Cancel
+          </button>
+          <button class="btn btn-confirm" id="btnConfirm">
+            ✓ Confirm
+          </button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Animate in
+    setTimeout(() => modal.classList.add('active'), 10);
+    
+    // Handle confirm
+    document.getElementById('btnConfirm').onclick = () => {
+      modal.classList.remove('active');
+      setTimeout(() => {
+        document.body.removeChild(modal);
+        resolve(true);
+      }, 300);
+    };
+    
+    // Handle cancel
+    document.getElementById('btnCancel').onclick = () => {
+      modal.classList.remove('active');
+      setTimeout(() => {
+        document.body.removeChild(modal);
+        resolve(false);
+      }, 300);
+    };
+    
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+          document.body.removeChild(modal);
+          resolve(false);
+        }, 300);
+      }
+    });
+  });
+}
+
 // ============= DEPOSIT =============
 async function deposit(event) {
   if (!currentAccNo) {
@@ -412,6 +511,15 @@ async function deposit(event) {
 
   if (!amount || parseFloat(amount) <= 0) {
     showToast("Enter valid amount", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  // Show confirmation dialog
+  const confirmed = await showConfirmationDialog('deposit', amount);
+  
+  if (!confirmed) {
+    showToast("Deposit cancelled", "info");
     if (button) setLoading(button, false);
     return;
   }
@@ -455,6 +563,15 @@ async function withdraw(event) {
     return;
   }
 
+  // Show confirmation dialog
+  const confirmed = await showConfirmationDialog('withdrawal', amount);
+  
+  if (!confirmed) {
+    showToast("Withdrawal cancelled", "info");
+    if (button) setLoading(button, false);
+    return;
+  }
+
   const result = await safeFetch(`${API}/accounts/withdraw`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -491,6 +608,15 @@ async function transfer(event) {
 
   if (!toAccount || !amount || parseFloat(amount) <= 0) {
     showToast("Enter valid details", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  // Show confirmation dialog
+  const confirmed = await showConfirmationDialog('transfer', amount, toAccount);
+  
+  if (!confirmed) {
+    showToast("Transfer cancelled", "info");
     if (button) setLoading(button, false);
     return;
   }
@@ -793,6 +919,64 @@ function sortTransactions() {
   showToast(`Sorted by ${sortSelect.options[sortSelect.selectedIndex].text}`, 'info');
 }
 
+// ============= DATE RANGE FILTER =============
+function filterByDateRange() {
+  const dateFrom = document.getElementById('dateFrom')?.value;
+  const dateTo = document.getElementById('dateTo')?.value;
+  
+  if (!dateFrom && !dateTo) {
+    renderTransactions(); // Show all if no dates selected
+    return;
+  }
+  
+  const fromDate = dateFrom ? new Date(dateFrom) : new Date('1900-01-01');
+  const toDate = dateTo ? new Date(dateTo) : new Date('2100-12-31');
+  
+  // Set to end of day for 'to' date to include all transactions on that day
+  toDate.setHours(23, 59, 59, 999);
+  
+  // Filter transactions by date range
+  // Note: In production, dates would come from backend
+  // For demo, we'll generate dates based on transaction index
+  const filteredTransactions = allTransactions.filter((txn, index) => {
+    // Generate a pseudo-date for each transaction (older = higher index)
+    const now = new Date();
+    const daysAgo = Math.floor(index * 7 / allTransactions.length); // Spread over ~1 week
+    const txnDate = new Date(now - daysAgo * 24 * 60 * 60 * 1000);
+    
+    return txnDate >= fromDate && txnDate <= toDate;
+  });
+  
+  // Render filtered results
+  const txnList = document.getElementById('txns');
+  if (!txnList) return;
+  
+  if (filteredTransactions.length === 0) {
+    txnList.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+        <div style="font-size: 48px; margin-bottom: 16px;">📭</div>
+        <p style="font-size: 16px; font-weight: 600;">No transactions found in selected date range</p>
+        <p style="font-size: 14px; margin-top: 8px;">Try selecting a different date range</p>
+      </div>
+    `;
+    showToast(`No transactions found in selected range`, 'info');
+  } else {
+    txnList.innerHTML = filteredTransactions.map(txn => createTransactionHTML(txn)).join('');
+    showToast(`Showing ${filteredTransactions.length} transaction(s)`, 'success');
+  }
+}
+
+function resetDateFilter() {
+  const dateFrom = document.getElementById('dateFrom');
+  const dateTo = document.getElementById('dateTo');
+  
+  if (dateFrom) dateFrom.value = '';
+  if (dateTo) dateTo.value = '';
+  
+  renderTransactions(); // Show all transactions
+  showToast('Date filter cleared', 'info');
+}
+
 // ============= TRANSACTION RECEIPT MODAL =============
 function showTransactionReceipt(txn, type, icon, dateTime) {
   // Extract amount from transaction text
@@ -1000,6 +1184,140 @@ function exportTransactionsCSV() {
   } catch (error) {
     console.error("Export error:", error);
     showToast("Failed to export transactions", "error");
+  }
+}
+
+// ============= DOWNLOAD STATEMENT AS PDF =============
+function downloadStatementPDF() {
+  if (!allTransactions || allTransactions.length === 0) {
+    showToast("No transactions to export", "error");
+    return;
+  }
+
+  try {
+    // Access jsPDF from window
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(20);
+    doc.setTextColor(37, 99, 235); // Primary blue
+    doc.text("TrustBank Account Statement", 20, 20);
+    
+    // Account Info
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Account Holder: ${currentName || 'Account Holder'}`, 20, 35);
+    doc.text(`Account Number: ${currentAccNo || 'N/A'}`, 20, 42);
+    doc.text(`Statement Date: ${new Date().toLocaleDateString('en-GB')}`, 20, 49);
+    doc.text(`Current Balance: ₹${currentBalance || '0.00'}`, 20, 56);
+    
+    // Divider line
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 62, 190, 62);
+    
+    // Transaction header
+    doc.setFontSize(14);
+    doc.setTextColor(37, 99, 235);
+    doc.text("Transaction History", 20, 72);
+    
+    // Table header
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont(undefined, 'bold');
+    doc.text("Type", 20, 82);
+    doc.text("Description", 50, 82);
+    doc.text("Amount (₹)", 155, 82);
+    doc.text("Date", 180, 82);
+    
+    // Reset font
+    doc.setFont(undefined, 'normal');
+    
+    // Table rows
+    let yPos = 90;
+    let pageNumber = 1;
+    
+    allTransactions.forEach((txn, index) => {
+      // Add new page if needed
+      if (yPos > 270) {
+        doc.addPage();
+        pageNumber++;
+        yPos = 20;
+        
+        // Re-add table header on new page
+        doc.setFont(undefined, 'bold');
+        doc.text("Type", 20, yPos);
+        doc.text("Description", 50, yPos);
+        doc.text("Amount (₹)", 155, yPos);
+        doc.text("Date", 180, yPos);
+        doc.setFont(undefined, 'normal');
+        yPos += 8;
+      }
+      
+      // Parse transaction details
+      let type = "Transfer";
+      let amount = "";
+      let description = txn;
+      
+      if (txn.includes("Deposited")) {
+        type = "Deposit";
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) amount = match[1];
+      } else if (txn.includes("Withdrew")) {
+        type = "Withdrawal";
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) amount = match[1];
+      } else if (txn.includes("Transferred")) {
+        type = "Transfer";
+        const match = txn.match(/Rs\.\s*([0-9.]+)/);
+        if (match) amount = match[1];
+      }
+      
+      // Generate date (demo)
+      const now = new Date();
+      const daysAgo = Math.floor(index * 7 / allTransactions.length);
+      const txnDate = new Date(now - daysAgo * 24 * 60 * 60 * 1000);
+      const dateStr = txnDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' });
+      
+      // Truncate description if too long
+      if (description.length > 50) {
+        description = description.substring(0, 47) + '...';
+      }
+      
+      // Color code by type
+      if (type === "Deposit") {
+        doc.setTextColor(16, 185, 129); // Green
+      } else if (type === "Withdrawal") {
+        doc.setTextColor(239, 68, 68); // Red
+      } else {
+        doc.setTextColor(245, 158, 11); // Orange
+      }
+      
+      doc.text(type, 20, yPos);
+      doc.setTextColor(0, 0, 0);
+      doc.text(description, 50, yPos, { maxWidth: 100 });
+      doc.text(amount, 160, yPos);
+      doc.text(dateStr, 182, yPos);
+      
+      yPos += 7;
+    });
+    
+    // Footer on last page
+    const totalPages = pageNumber;
+    doc.setFontSize(8);
+    doc.setTextColor(128, 128, 128);
+    doc.text(`Generated on ${new Date().toLocaleString('en-GB')}`, 20, 285);
+    doc.text(`TrustBank © 2026 | Page ${totalPages}`, 155, 285);
+    
+    // Save PDF
+    const dateStr = new Date().toISOString().split('T')[0];
+    const filename = `TrustBank_Statement_${currentAccNo}_${dateStr}.pdf`;
+    doc.save(filename);
+    
+    showToast(`Statement downloaded successfully`, "success");
+  } catch (error) {
+    console.error("PDF generation error:", error);
+    showToast("Failed to generate PDF. Please try again.", "error");
   }
 }
 
@@ -1360,6 +1678,37 @@ function toggleBalanceVisibility() {
   localStorage.setItem('balanceVisible', balanceVisible);
 }
 
+// ============= THEME TOGGLE =============
+function toggleTheme() {
+  const body = document.body;
+  const themeIcon = document.getElementById('themeIcon');
+  const isLight = body.classList.toggle('light-theme');
+  
+  // Update icon
+  if (themeIcon) {
+    themeIcon.textContent = isLight ? '☀️' : '🌙';
+  }
+  
+  // Save preference to localStorage
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  
+  // Show toast
+  showToast(`${isLight ? 'Light' : 'Dark'} theme activated`, 'success');
+}
+
+// Load theme preference on page load
+function loadThemePreference() {
+  const savedTheme = localStorage.getItem('theme');
+  const themeIcon = document.getElementById('themeIcon');
+  
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+    if (themeIcon) themeIcon.textContent = '☀️';
+  } else {
+    if (themeIcon) themeIcon.textContent = '🌙';
+  }
+}
+
 // ============= QUICK AMOUNT BUTTONS =============
 function setQuickAmount(inputId, amount) {
   const input = document.getElementById(inputId);
@@ -1427,6 +1776,10 @@ async function copyAccountNumber() {
 
 // Restore balance visibility preference on page load
 window.addEventListener('DOMContentLoaded', () => {
+  // Restore theme preference
+  loadThemePreference();
+  
+  // Restore balance visibility
   const savedPreference = localStorage.getItem('balanceVisible');
   if (savedPreference === 'false') {
     balanceVisible = true; // Set to true first so toggle makes it false
