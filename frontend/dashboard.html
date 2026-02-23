@@ -34,6 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -56,6 +57,9 @@
     </div>
 
     <div class="header-actions">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle theme">
+        <span id="themeIcon">🌙</span>
+      </button>
       <div class="security-badge">
         <span class="badge-icon">🔒</span>
         <span class="badge-text">256-bit Encrypted</span>
@@ -212,6 +216,7 @@
         </div>
         <div class="row" style="gap: 8px;">
           <button class="btn success" onclick="exportTransactionsCSV()">📥 Export CSV</button>
+          <button class="btn primary" onclick="downloadStatementPDF()">📄 Download PDF</button>
           <button class="btn" onclick="loadTransactions()">🔄 Refresh</button>
         </div>
       </div>
@@ -242,6 +247,20 @@
             <option value="amount-high">Amount: High to Low</option>
             <option value="amount-low">Amount: Low to High</option>
           </select>
+        </div>
+      </div>
+
+      <div class="date-filter-row">
+        <div class="date-filter-controls">
+          <label for="dateFrom" class="date-label">📅 From:</label>
+          <input type="date" id="dateFrom" class="date-input" onchange="filterByDateRange()">
+          
+          <label for="dateTo" class="date-label">📅 To:</label>
+          <input type="date" id="dateTo" class="date-input" onchange="filterByDateRange()">
+          
+          <button class="btn btn-reset" onclick="resetDateFilter()" title="Clear date filter">
+            🔄 Reset
+          </button>
         </div>
       </div>
 
