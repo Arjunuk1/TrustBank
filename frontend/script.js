@@ -150,9 +150,15 @@ async function safeFetch(url, options) {
   showLoader();
   try {
     const res = await fetch(url, options);
-    const data = await res.json();
+    const responseData = await res.json();
     hideLoader();
-    return { ok: res.ok, data };
+    
+    // Handle new ApiResponse wrapper format
+    if (responseData.success !== undefined) {
+      return { ok: responseData.success, data: responseData.data, response: responseData };
+    }
+    // Fallback for old format
+    return { ok: res.ok, data: responseData };
   } catch (error) {
     console.error("Fetch error:", error);
     hideLoader();
@@ -311,7 +317,7 @@ async function createAccount(event) {
   const result = await safeFetch(`${API}/accounts/create`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, pin })
+    body: JSON.stringify({ name, pin: parseInt(pin) })
   });
 
   if (result.ok && result.data) {
@@ -320,8 +326,9 @@ async function createAccount(event) {
     document.getElementById("cpin").value = "";
     showToast(`Account ${result.data.accountNumber} created successfully!`, "success");
   } else {
-    if (msgEl) msgEl.innerText = "❌ Error creating account";
-    showToast("Failed to create account", "error");
+    const errorMsg = result.response?.message || "Error creating account";
+    if (msgEl) msgEl.innerText = `❌ ${errorMsg}`;
+    showToast(errorMsg, "error");
   }
 
   if (button) setLoading(button, false);
@@ -346,7 +353,7 @@ async function login(event) {
   const result = await safeFetch(`${API}/accounts/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ accountNumber, pin })
+    body: JSON.stringify({ accountNumber: parseInt(accountNumber), pin: parseInt(pin) })
   });
 
   if (result.ok && result.data && result.data.accountNumber) {
@@ -366,8 +373,9 @@ async function login(event) {
       window.location.href = "dashboard.html";
     }, 500);
   } else {
-    if (msgEl) msgEl.innerText = "❌ Invalid account number or PIN";
-    showToast("Login failed. Check your credentials.", "error");
+    const errorMsg = result.response?.message || "Invalid account number or PIN";
+    if (msgEl) msgEl.innerText = `❌ ${errorMsg}`;
+    showToast(errorMsg, "error");
   }
 
   if (button) setLoading(button, false);
@@ -528,18 +536,18 @@ async function deposit(event) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      accountNumber: currentAccNo,
-      amount: amount
+      accountNumber: parseInt(currentAccNo),
+      amount: parseFloat(amount)
     })
   });
 
   if (result.ok) {
-    showToast(result.data.message || "Deposit successful!", "success");
+    showToast(result.response?.message || "Deposit successful!", "success");
     document.getElementById("depAmt").value = "";
     await loadBalance();
     await loadTransactions();
   } else {
-    showToast(result.data?.message || "Deposit failed", "error");
+    showToast(result.response?.message || "Deposit failed", "error");
   }
 
   if (button) setLoading(button, false);
@@ -576,18 +584,18 @@ async function withdraw(event) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      accountNumber: currentAccNo,
-      amount: amount
+      accountNumber: parseInt(currentAccNo),
+      amount: parseFloat(amount)
     })
   });
 
   if (result.ok) {
-    showToast(result.data.message || "Withdrawal successful!", "success");
+    showToast(result.response?.message || "Withdrawal successful!", "success");
     document.getElementById("withAmt").value = "";
     await loadBalance();
     await loadTransactions();
   } else {
-    showToast(result.data?.message || "Withdrawal failed", "error");
+    showToast(result.response?.message || "Withdrawal failed", "error");
   }
 
   if (button) setLoading(button, false);
@@ -625,20 +633,20 @@ async function transfer(event) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      fromAccount: currentAccNo,
-      toAccount: toAccount,
-      amount: amount
+      fromAccount: parseInt(currentAccNo),
+      toAccount: parseInt(toAccount),
+      amount: parseFloat(amount)
     })
   });
 
   if (result.ok) {
-    showToast(result.data.message || "Transfer successful!", "success");
+    showToast(result.response?.message || "Transfer successful!", "success");
     document.getElementById("toAcc").value = "";
     document.getElementById("trAmt").value = "";
     await loadBalance();
     await loadTransactions();
   } else {
-    showToast(result.data?.message || "Transfer failed", "error");
+    showToast(result.response?.message || "Transfer failed", "error");
   }
 
   if (button) setLoading(button, false);
@@ -652,7 +660,10 @@ async function loadBalance() {
     const res = await fetch(`${API}/accounts/${currentAccNo}/balance`);
     if (!res.ok) throw new Error("Failed to load balance");
     
-    const balance = await res.json();
+    const responseData = await res.json();
+    // Handle ApiResponse wrapper
+    const balance = responseData.data !== undefined ? responseData.data : responseData;
+    
     const balanceEl = document.getElementById("balance");
     if (balanceEl) {
       balanceEl.innerText = parseFloat(balance).toFixed(2);
@@ -673,7 +684,9 @@ async function loadTransactions() {
     const res = await fetch(`${API}/accounts/${currentAccNo}/transactions`);
     if (!res.ok) throw new Error("Failed to load transactions");
     
-    const data = await res.json();
+    const responseData = await res.json();
+    // Handle ApiResponse wrapper
+    const data = responseData.data !== undefined ? responseData.data : responseData;
     
     // Store all transactions
     allTransactions = data || [];
