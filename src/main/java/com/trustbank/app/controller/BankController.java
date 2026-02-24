@@ -1,17 +1,23 @@
 package com.trustbank.app.controller;
 
+import com.trustbank.app.dto.*;
 import com.trustbank.app.model.BankAccount;
 import com.trustbank.app.service.BankService;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin("*")
 public class BankController {
 
+    private static final Logger logger = LoggerFactory.getLogger(BankController.class);
     private final BankService service;
 
     public BankController(BankService service) {
@@ -20,78 +26,106 @@ public class BankController {
 
     // ---------------- CREATE ACCOUNT ----------------
     @PostMapping("/accounts/create")
-    public BankAccount create(@RequestBody Map<String, String> body) {
-        String name = body.get("name");
-        int pin = Integer.parseInt(body.get("pin"));
-        return service.createAccount(name, pin);
+    public ResponseEntity<ApiResponse<AccountResponse>> create(@Valid @RequestBody CreateAccountRequest request) {
+        logger.info("API Request: Create account for name={}", request.getName());
+        
+        BankAccount account = service.createAccount(request.getName(), request.getPin());
+        AccountResponse response = new AccountResponse(
+                account.getAccountNumber(),
+                account.getName(),
+                account.getBalance()
+        );
+        
+        logger.info("API Response: Account created successfully - {}", account.getAccountNumber());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Account created successfully", response));
     }
 
     // ---------------- LOGIN ----------------
     @PostMapping("/accounts/login")
-    public Map<String, Object> login(@RequestBody Map<String, String> body) {
-        int accNo = Integer.parseInt(body.get("accountNumber"));
-        int pin = Integer.parseInt(body.get("pin"));
-
-        BankAccount acc = service.login(accNo, pin);
-
-        if (acc == null) {
-            return Map.of("message", "Login failed");
-        }
-
-        return Map.of(
-                "message", "Login successful",
-                "accountNumber", acc.getAccountNumber(),
-                "name", acc.getName()
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
+        logger.info("API Request: Login for account={}", request.getAccountNumber());
+        
+        BankAccount acc = service.login(request.getAccountNumber(), request.getPin());
+        LoginResponse response = new LoginResponse(
+                "Login successful",
+                acc.getAccountNumber(),
+                acc.getName()
         );
+        
+        logger.info("API Response: Login successful for account={}", acc.getAccountNumber());
+        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
     }
 
     // ---------------- DEPOSIT ----------------
     @PostMapping("/accounts/deposit")
-    public Map<String, String> deposit(@RequestBody Map<String, String> body) {
-        int accNo = Integer.parseInt(body.get("accountNumber"));
-        double amount = Double.parseDouble(body.get("amount"));
-
-        service.deposit(accNo, amount);
-        return Map.of("message", "Deposit successful");
+    public ResponseEntity<ApiResponse<String>> deposit(@Valid @RequestBody TransactionRequest request) {
+        logger.info("API Request: Deposit for account={}, amount={}", 
+                    request.getAccountNumber(), request.getAmount());
+        
+        service.deposit(request.getAccountNumber(), request.getAmount());
+        
+        logger.info("API Response: Deposit successful");
+        return ResponseEntity.ok(ApiResponse.success("Deposit successful", null));
     }
 
     // ---------------- WITHDRAW ----------------
     @PostMapping("/accounts/withdraw")
-    public Map<String, String> withdraw(@RequestBody Map<String, String> body) {
-        int accNo = Integer.parseInt(body.get("accountNumber"));
-        double amount = Double.parseDouble(body.get("amount"));
-
-        service.withdraw(accNo, amount);
-        return Map.of("message", "Withdraw successful");
+    public ResponseEntity<ApiResponse<String>> withdraw(@Valid @RequestBody TransactionRequest request) {
+        logger.info("API Request: Withdraw for account={}, amount={}", 
+                    request.getAccountNumber(), request.getAmount());
+        
+        service.withdraw(request.getAccountNumber(), request.getAmount());
+        
+        logger.info("API Response: Withdrawal successful");
+        return ResponseEntity.ok(ApiResponse.success("Withdrawal successful", null));
     }
 
     // ---------------- TRANSFER ----------------
     @PostMapping("/accounts/transfer")
-    public Map<String, String> transfer(@RequestBody Map<String, String> body) {
-        int from = Integer.parseInt(body.get("fromAccount"));
-        int to = Integer.parseInt(body.get("toAccount"));
-        double amount = Double.parseDouble(body.get("amount"));
-
-        service.transfer(from, to, amount);
-        return Map.of("message", "Transfer successful");
+    public ResponseEntity<ApiResponse<String>> transfer(@Valid @RequestBody TransferRequest request) {
+        logger.info("API Request: Transfer from={}, to={}, amount={}", 
+                    request.getFromAccount(), request.getToAccount(), request.getAmount());
+        
+        service.transfer(request.getFromAccount(), request.getToAccount(), request.getAmount());
+        
+        logger.info("API Response: Transfer successful");
+        return ResponseEntity.ok(ApiResponse.success("Transfer successful", null));
     }
 
     // ---------------- TRANSACTIONS ----------------
     @GetMapping("/accounts/{accNo}/transactions")
-    public List<String> transactions(@PathVariable int accNo) {
-        return service.getTransactions(accNo);
+    public ResponseEntity<ApiResponse<List<String>>> transactions(@PathVariable int accNo) {
+        logger.info("API Request: Get transactions for account={}", accNo);
+        
+        List<String> transactions = service.getTransactions(accNo);
+        
+        logger.info("API Response: Retrieved {} transactions", transactions.size());
+        return ResponseEntity.ok(ApiResponse.success(transactions));
     }
 
     // ---------------- BALANCE ----------------
     @GetMapping("/accounts/{accNo}/balance")
-    public double getBalance(@PathVariable int accNo) {
+    public ResponseEntity<ApiResponse<Double>> getBalance(@PathVariable int accNo) {
+        logger.info("API Request: Get balance for account={}", accNo);
+        
         BankAccount acc = service.find(accNo);
-        return acc != null ? acc.getBalance() : 0.0;
+        if (acc == null) {
+            throw new com.trustbank.app.exception.AccountNotFoundException(accNo);
+        }
+        
+        logger.info("API Response: Balance retrieved for account={}", accNo);
+        return ResponseEntity.ok(ApiResponse.success(acc.getBalance()));
     }
 
     // ---------------- ADMIN ----------------
     @GetMapping("/admin/accounts")
-    public List<BankAccount> allAccounts() {
-        return service.getAllAccounts();
+    public ResponseEntity<ApiResponse<List<BankAccount>>> allAccounts() {
+        logger.info("API Request: Get all accounts (admin)");
+        
+        List<BankAccount> accounts = service.getAllAccounts();
+        
+        logger.info("API Response: Retrieved {} accounts", accounts.size());
+        return ResponseEntity.ok(ApiResponse.success(accounts));
     }
 }
