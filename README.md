@@ -72,4 +72,4 @@ Storage
 
 File-based storage (accounts.txt, transactions.txt)
 
-localStorage (session management)
+localStorage
