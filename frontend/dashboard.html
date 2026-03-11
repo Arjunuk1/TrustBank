@@ -170,6 +170,36 @@
       <canvas id="balanceChart" height="100"></canvas>
     </section>
 
+    <!-- CHANGE PIN -->
+    <section class="card">
+      <h3>🔐 Change PIN</h3>
+      <p class="muted">Update your security PIN</p>
+      <input id="currentPin" type="password" placeholder="Current PIN" />
+      <input id="newPin" type="password" placeholder="New PIN (4-6 digits)" />
+      <input id="confirmNewPin" type="password" placeholder="Confirm New PIN" />
+      <button class="btn warning" onclick="changePin(event)">Change PIN</button>
+    </section>
+
+    <!-- ACCOUNT SETTINGS -->
+    <section class="card">
+      <h3>⚙️ Account Settings</h3>
+      <p class="muted">Daily transaction limit</p>
+      <div class="limit-info">
+        <div class="limit-row">
+          <span class="limit-label">Daily Limit:</span>
+          <span class="limit-value">₹ 50,000.00</span>
+        </div>
+        <div class="limit-row">
+          <span class="limit-label">Used Today:</span>
+          <span id="dailyUsed" class="limit-value">₹ 0.00</span>
+        </div>
+        <div class="limit-row">
+          <span class="limit-label">Remaining:</span>
+          <span id="dailyRemaining" class="limit-value success">₹ 50,000.00</span>
+        </div>
+      </div>
+    </section>
+
     <!-- ACTIONS -->
     <section class="card">
       <h3>💰 Deposit Money</h3>

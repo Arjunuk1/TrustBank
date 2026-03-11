@@ -3301,3 +3301,145 @@ body.light-theme .date-input::-webkit-calendar-picker-indicator {
   }
 }
 
+/* ===== NEW FEATURES STYLES ===== */
+
+/* Limit Information Display */
+.limit-info {
+  padding: 16px;
+  background: var(--glass-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-top: 12px;
+}
+
+.limit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.limit-row:last-child {
+  border-bottom: none;
+}
+
+.limit-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.limit-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.limit-value.success {
+  color: var(--success);
+}
+
+.limit-value.warning {
+  color: var(--warning);
+}
+
+.limit-value.danger {
+  color: var(--danger);
+}
+
+/* PIN Input Styling */
+input[type="password"] {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-bottom: 12px;
+  font-family: inherit;
+}
+
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--warning);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  background: var(--glass-bg);
+}
+
+input[type="password"]::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* Enhanced security badges */
+.security-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(16, 185, 129, 0.15);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-icon {
+  font-size: 14px;
+}
+
+/* Improved toast notifications */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  transform: translateX(600px);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 10000;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast.show {
+  transform: translateX(0);
+}
+
+.toast.success {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.toast.warning {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.toast.info {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+

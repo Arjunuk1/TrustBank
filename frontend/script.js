@@ -652,6 +652,73 @@ async function transfer(event) {
   if (button) setLoading(button, false);
 }
 
+// ============= CHANGE PIN =============
+async function changePin(event) {
+  if (!currentAccNo) {
+    showToast("Please login first!", "error");
+    return;
+  }
+
+  const button = event?.target;
+  if (button) setLoading(button, true);
+
+  const currentPin = document.getElementById("currentPin")?.value;
+  const newPin = document.getElementById("newPin")?.value;
+  const confirmNewPin = document.getElementById("confirmNewPin")?.value;
+
+  // Validation
+  if (!currentPin || !newPin || !confirmNewPin) {
+    showToast("Please fill all PIN fields", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  if (newPin.length < 4 || newPin.length > 6 || !/^\d+$/.test(newPin)) {
+    showToast("New PIN must be 4-6 digits", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  if (newPin !== confirmNewPin) {
+    showToast("New PINs do not match", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  if (currentPin === newPin) {
+    showToast("New PIN must be different from current PIN", "error");
+    if (button) setLoading(button, false);
+    return;
+  }
+
+  const result = await safeFetch(`${API}/accounts/change-pin`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      accountNumber: parseInt(currentAccNo),
+      currentPin: parseInt(currentPin),
+      newPin: parseInt(newPin)
+    })
+  });
+
+  if (result.ok) {
+    showToast("PIN changed successfully! Please login again.", "success");
+    // Clear fields
+    document.getElementById("currentPin").value = "";
+    document.getElementById("newPin").value = "";
+    document.getElementById("confirmNewPin").value = "";
+    
+    // Logout after 2 seconds
+    setTimeout(() => {
+      logout();
+    }, 2000);
+  } else {
+    showToast(result.response?.message || "Failed to change PIN", "error");
+  }
+
+  if (button) setLoading(button, false);
+}
+
 // ============= LOAD BALANCE =============
 async function loadBalance() {
   if (!currentAccNo) return;
