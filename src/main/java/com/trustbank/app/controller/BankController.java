@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5500", "http://127.0.0.1:5500"})
 public class BankController {
 
     private static final Logger logger = LoggerFactory.getLogger(BankController.class);
@@ -116,6 +116,17 @@ public class BankController {
         
         logger.info("API Response: Balance retrieved for account={}", accNo);
         return ResponseEntity.ok(ApiResponse.success(acc.getBalance()));
+    }
+
+    // ---------------- CHANGE PIN ----------------
+    @PostMapping("/accounts/change-pin")
+    public ResponseEntity<ApiResponse<String>> changePin(@Valid @RequestBody ChangePinRequest request) {
+        logger.info("API Request: Change PIN for account={}", request.getAccountNumber());
+        
+        service.changePin(request.getAccountNumber(), request.getCurrentPin(), request.getNewPin());
+        
+        logger.info("API Response: PIN changed successfully");
+        return ResponseEntity.ok(ApiResponse.success("PIN changed successfully", null));
     }
 
     // ---------------- ADMIN ----------------

@@ -3,6 +3,8 @@ package com.trustbank.app.storage;
 import com.trustbank.app.model.BankAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -14,6 +16,7 @@ public class FileStorage {
     private static final Logger logger = LoggerFactory.getLogger(FileStorage.class);
     private final String ACC_FILE = "accounts.txt";
     private final String TRANS_FILE = "transactions.txt";
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<BankAccount> loadAccounts() {
         logger.info("Loading accounts from file: {}", ACC_FILE);
@@ -31,17 +34,52 @@ public class FileStorage {
             int accountCount = 0;
 
             while ((line = br.readLine()) != null) {
-                String[] p = line.split(",");
+                String[] p = line.split(",", 6); // Changed to 6 to support new format
 
                 int accNo = Integer.parseInt(p[0]);
                 String name = p[1];
-                int pin = Integer.parseInt(p[2]);
-                double bal = Double.parseDouble(p[3]);
-                boolean active = Boolean.parseBoolean(p[4]);
+                String pinHash;
+                double bal;
+                boolean active;
+                double dailyLimit = 50000.0;
+                double dailyTotal = 0.0;
+                String lastDate = "";
+                
+                // Handle both old format (int PIN) and new format (String pinHash)
+                if (p.length >= 3 && p[2].startsWith("$2a$") || p[2].startsWith("$2b$") || p[2].startsWith("$2y$")) {
+                    // New format with hashed PIN
+                    pinHash = p[2];
+                    bal = Double.parseDouble(p[3]);
+                    active = Boolean.parseBoolean(p[4]);
+                    
+                    // Load additional fields if available
+                    if (p.length >= 6) {
+                        String[] extraFields = p[5].split("\\|");
+                        if (extraFields.length >= 1) {
+                            dailyLimit = Double.parseDouble(extraFields[0]);
+                        }
+                        if (extraFields.length >= 2) {
+                            dailyTotal = Double.parseDouble(extraFields[1]);
+                        }
+                        if (extraFields.length >= 3) {
+                            lastDate = extraFields[2];
+                        }
+                    }
+                } else {
+                    // Old format with plain PIN - migrate to hashed format
+                    int oldPin = Integer.parseInt(p[2]);
+                    pinHash = passwordEncoder.encode(String.valueOf(oldPin));
+                    bal = Double.parseDouble(p[3]);
+                    active = Boolean.parseBoolean(p[4]);
+                    logger.info("Migrating account {} to hashed PIN format", accNo);
+                }
 
-                BankAccount acc = new BankAccount(name, accNo, pin);
+                BankAccount acc = new BankAccount(name, accNo, pinHash);
                 acc.setBalance(bal);
                 acc.setActive(active);
+                acc.setDailyTransactionLimit(dailyLimit);
+                acc.setDailyTransactionTotal(dailyTotal);
+                acc.setLastTransactionDate(lastDate);
 
                 accounts.add(acc);
                 accountCount++;
@@ -89,9 +127,14 @@ public class FileStorage {
             int totalTransactions = 0;
             
             for (BankAccount acc : accounts) {
+                // New format: accNo,name,pinHash,balance,active,dailyLimit|dailyTotal|lastDate
+                String extraFields = acc.getDailyTransactionLimit() + "|" + 
+                                   acc.getDailyTransactionTotal() + "|" + 
+                                   acc.getLastTransactionDate();
+                
                 aw.write(acc.getAccountNumber() + "," + acc.getName() + "," +
-                        acc.getPin() + "," + acc.getBalance() + "," +
-                        acc.isActive() + "\n");
+                        acc.getPinHash() + "," + acc.getBalance() + "," +
+                        acc.isActive() + "," + extraFields + "\n");
 
                 for (String t : acc.getTransactions()) {
                     tw.write(acc.getAccountNumber() + "," + t + "\n");
@@ -106,3 +149,4 @@ public class FileStorage {
         }
     }
 }
+

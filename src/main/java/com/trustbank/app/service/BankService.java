@@ -5,8 +5,10 @@ import com.trustbank.app.model.BankAccount;
 import com.trustbank.app.storage.FileStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,10 +18,14 @@ public class BankService {
 
     private final FileStorage storage;
     private final List<BankAccount> accounts;
+    private final PasswordEncoder passwordEncoder;
+    private final RateLimitService rateLimitService;
     private int nextAccNo = 1001;
 
-    public BankService(FileStorage storage) {
+    public BankService(FileStorage storage, PasswordEncoder passwordEncoder, RateLimitService rateLimitService) {
         this.storage = storage;
+        this.passwordEncoder = passwordEncoder;
+        this.rateLimitService = rateLimitService;
         this.accounts = storage.loadAccounts();
 
         for (BankAccount a : accounts) {
@@ -30,7 +36,14 @@ public class BankService {
 
     public BankAccount createAccount(String name, int pin) {
         logger.info("Creating new account for: {}", name);
-        BankAccount acc = new BankAccount(name, nextAccNo, pin);
+        
+        // Validate PIN length
+        if (pin < 1000 || pin > 999999) {
+            throw new IllegalArgumentException("PIN must be 4-6 digits");
+        }
+        
+        String hashedPin = passwordEncoder.encode(String.valueOf(pin));
+        BankAccount acc = new BankAccount(name, nextAccNo, hashedPin);
         accounts.add(acc);
         nextAccNo++;
         storage.saveAccounts(accounts);
@@ -40,10 +53,18 @@ public class BankService {
 
     public BankAccount login(int accNo, int pin) {
         logger.info("Login attempt for account: {}", accNo);
+        
+        // Check if account is rate-limited
+        if (rateLimitService.isAccountLocked(accNo)) {
+            logger.warn("Login failed: Account temporarily locked due to too many failed attempts - {}", accNo);
+            throw new AccountBlockedException("Account temporarily locked. Try again after 15 minutes.");
+        }
+        
         BankAccount acc = find(accNo);
         
         if (acc == null) {
             logger.warn("Login failed: Account not found - {}", accNo);
+            rateLimitService.recordLoginAttempt(accNo, false);
             throw new AccountNotFoundException(accNo);
         }
         
@@ -52,13 +73,45 @@ public class BankService {
             throw new AccountBlockedException(accNo);
         }
         
-        if (acc.getPin() != pin) {
+        // Verify PIN using BCrypt
+        if (!passwordEncoder.matches(String.valueOf(pin), acc.getPinHash())) {
             logger.warn("Login failed: Invalid PIN for account - {}", accNo);
-            throw new InvalidCredentialsException();
+            rateLimitService.recordLoginAttempt(accNo, false);
+            int remaining = rateLimitService.getRemainingAttempts(accNo);
+            throw new InvalidCredentialsException("Invalid PIN. " + remaining + " attempts remaining.");
         }
         
+        // Successful login
+        rateLimitService.recordLoginAttempt(accNo, true);
         logger.info("Login successful for account: {}", accNo);
         return acc;
+    }
+    
+    public void changePin(int accNo, int currentPin, int newPin) {
+        logger.info("Change PIN request for account: {}", accNo);
+        
+        BankAccount acc = find(accNo);
+        if (acc == null) {
+            throw new AccountNotFoundException(accNo);
+        }
+        
+        // Verify current PIN
+        if (!passwordEncoder.matches(String.valueOf(currentPin), acc.getPinHash())) {
+            logger.warn("Change PIN failed: Invalid current PIN for account - {}", accNo);
+            throw new InvalidCredentialsException("Current PIN is incorrect");
+        }
+        
+        // Validate new PIN
+        if (newPin < 1000 || newPin > 999999) {
+            throw new IllegalArgumentException("New PIN must be 4-6 digits");
+        }
+        
+        // Hash and update PIN
+        String hashedNewPin = passwordEncoder.encode(String.valueOf(newPin));
+        acc.setPinHash(hashedNewPin);
+        acc.addTransaction("PIN changed successfully");
+        storage.saveAccounts(accounts);
+        logger.info("PIN changed successfully for account: {}", accNo);
     }
 
     public BankAccount find(int accNo) {
@@ -66,6 +119,27 @@ public class BankService {
             if (acc.getAccountNumber() == accNo) return acc;
         }
         return null;
+    }
+    
+    private void checkDailyLimit(BankAccount acc, double amount) {
+        String today = LocalDate.now().toString();
+        
+        // Reset daily total if it's a new day
+        if (!today.equals(acc.getLastTransactionDate())) {
+            acc.setDailyTransactionTotal(0);
+            acc.setLastTransactionDate(today);
+        }
+        
+        // Check if transaction would exceed daily limit
+        if (acc.getDailyTransactionTotal() + amount > acc.getDailyTransactionLimit()) {
+            throw new IllegalStateException(
+                String.format("Daily transaction limit exceeded. Limit: Rs. %.2f, Used: Rs. %.2f, Requested: Rs. %.2f",
+                    acc.getDailyTransactionLimit(), acc.getDailyTransactionTotal(), amount)
+            );
+        }
+        
+        // Update daily total
+        acc.setDailyTransactionTotal(acc.getDailyTransactionTotal() + amount);
     }
 
     public void deposit(int accNo, double amount) {
@@ -86,7 +160,8 @@ public class BankService {
             logger.error("Deposit failed: Invalid amount - {}", amount);
             throw new InvalidAmountException(amount);
         }
-
+        
+        checkDailyLimit(acc, amount);
         acc.deposit(amount);
         storage.saveAccounts(accounts);
         logger.info("Deposit successful: Account={}, Amount={}, New Balance={}", accNo, amount, acc.getBalance());
@@ -116,7 +191,8 @@ public class BankService {
                          accNo, acc.getBalance(), amount);
             throw new InsufficientBalanceException(acc.getBalance(), amount);
         }
-
+        
+        checkDailyLimit(acc, amount);
         acc.withdraw(amount);
         storage.saveAccounts(accounts);
         logger.info("Withdrawal successful: Account={}, Amount={}, New Balance={}", accNo, amount, acc.getBalance());
@@ -158,7 +234,8 @@ public class BankService {
                          fromAcc, sender.getBalance(), amount);
             throw new InsufficientBalanceException(sender.getBalance(), amount);
         }
-
+        
+        checkDailyLimit(sender, amount);
         sender.withdraw(amount);
         receiver.deposit(amount);
 
