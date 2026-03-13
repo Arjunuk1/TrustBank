@@ -43,8 +43,6 @@ Toast notifications
 
 Smooth animations
 
-Loading states for operations
-
 🛠️ Tech Stack
 Backend
 
