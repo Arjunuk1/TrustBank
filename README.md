@@ -17,7 +17,7 @@ Real-time account dashboard
 
 Deposit funds
 
-Withdraw funds with validation
+Withdraw funds 
 
 Transfer money between accounts
 
