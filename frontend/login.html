@@ -32,40 +32,35 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="app">
-  <!-- Demo Disclaimer Banner -->
   <div class="disclaimer-banner">
-    <span class="disclaimer-icon">⚠️</span>
     <div class="disclaimer-content">
-      <strong>DEMO APPLICATION</strong> – This is an educational project. Do not use real personal or financial information.
+      <strong>Demo Application:</strong> Use test data only.
     </div>
   </div>
 
   <header class="topbar">
     <div class="brand">
-      <div class="logo">🏦</div>
+      <div class="logo">TB</div>
       <div>
         <h1>TrustBank <span class="demo-badge">DEMO</span></h1>
-        <p class="tagline">Secure Banking Platform • Spring Boot Powered</p>
+        <p class="tagline">Secure access portal</p>
       </div>
     </div>
-    <div class="security-badge">
-      <a href="home.html" class="btn" style="margin-right: 12px; text-decoration: none;">← Home</a>
-      <span class="badge-icon">🔒</span>
-      <span class="badge-text">256-bit SSL</span>
-    </div>
+    <a href="home.html" class="btn">Back to Home</a>
   </header>
 
   <main class="grid">
 
     <!-- CREATE ACCOUNT -->
     <section class="card">
-      <h2>🎯 Create Account</h2>
-      <p class="muted">Start your banking journey with us</p>
+      <h2>Create Account</h2>
+      <p class="muted">Open a demo account in seconds.</p>
 
       <input id="cname" placeholder="Enter Your Full Name" />
       <input id="cpin" type="password" placeholder="Set a Secure 4-6 Digit PIN" />
@@ -76,13 +71,13 @@
 
     <!-- LOGIN -->
     <section class="card">
-      <h2>🔐 Login</h2>
-      <p class="muted">Access your account securely</p>
+      <h2>Login</h2>
+      <p class="muted">Access your account dashboard.</p>
 
       <input id="lacc" placeholder="Account Number" />
       <div class="row">
         <input id="lpin" type="password" placeholder="Enter PIN" />
-        <button class="btn" onclick="togglePin()">👁</button>
+        <button class="btn" onclick="togglePin()">Show</button>
       </div>
 
       <button class="btn success" onclick="login(event)">Login</button>
@@ -92,9 +87,7 @@
   </main>
 
   <footer class="footer">
-    <p>© 2026 TrustBank • 🛡️ Bank-grade Security • Made with Spring Boot</p>
-    <p class="footer-disclaimer">⚠️ Demo Application Only – Not for Production Use – Educational Purpose</p>
-  </footer>
+    <p>© 2026 TrustBank • Educational demo • Not for production use</p>
   </footer>
 </div>
 
