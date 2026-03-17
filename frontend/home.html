@@ -31,242 +31,72 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="app">
-  <!-- Demo Disclaimer Banner -->
   <div class="disclaimer-banner">
-    <span class="disclaimer-icon">⚠️</span>
     <div class="disclaimer-content">
-      <strong>DEMO APPLICATION</strong> – This is an educational project. Do not use real personal or financial information.
+      <strong>Demo Application:</strong> For learning purposes only. Do not use real personal or financial information.
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        <span>Powered by Spring Boot 3.4.2</span>
+  <section class="landing-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">TB</div>
+        <div>
+          <h1>TrustBank <span class="demo-badge">DEMO</span></h1>
+          <p class="tagline">Simple banking interface with modern UX</p>
+        </div>
       </div>
-      
-      <h1 class="hero-title">
-        <span class="logo-large">🏦</span>
-        Welcome to <span class="gradient-text">TrustBank</span>
-        <span class="demo-badge-large">DEMO</span>
-      </h1>
-      
+      <a href="login.html" class="btn primary">Open App</a>
+    </header>
+
+    <section class="card hero-panel">
+      <p class="hero-kicker">Modern Web Banking</p>
+      <h2 class="hero-title">Less clutter. Better control.</h2>
       <p class="hero-description">
-        A modern, full-stack banking platform demonstrating secure account management, 
-        real-time transactions, and beautiful UI/UX design. Built with enterprise-grade 
-        technologies for educational purposes.
+        TrustBank provides a clean and focused banking experience with secure account access,
+        fast transactions, and clear account visibility.
       </p>
-      
       <div class="hero-actions">
-        <a href="login.html" class="btn-hero primary">
-          <span>Get Started</span>
-          <span class="btn-arrow">→</span>
-        </a>
-        <a href="#features" class="btn-hero secondary">
-          <span>Learn More</span>
-          <span class="btn-arrow">↓</span>
-        </a>
+        <a href="login.html" class="btn primary">Get Started</a>
+        <a href="dashboard.html" class="btn">Go to Dashboard</a>
       </div>
-      
       <div class="hero-stats">
-        <div class="stat-item">
-          <div class="stat-icon">🔒</div>
-          <div class="stat-text">
-            <div class="stat-value">Bank-Grade</div>
-            <div class="stat-label">Security</div>
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-icon">⚡</div>
-          <div class="stat-text">
-            <div class="stat-value">Real-Time</div>
-            <div class="stat-label">Updates</div>
-          </div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-icon">📱</div>
-          <div class="stat-text">
-            <div class="stat-value">Responsive</div>
-            <div class="stat-label">Design</div>
-          </div>
-        </div>
+        <div class="stat-item"><span class="stat-value">Secure</span><span class="stat-label">Account sessions</span></div>
+        <div class="stat-item"><span class="stat-value">Fast</span><span class="stat-label">Live transactions</span></div>
+        <div class="stat-item"><span class="stat-value">Responsive</span><span class="stat-label">All screen sizes</span></div>
       </div>
-    </div>
+    </section>
+
+    <section class="simple-grid">
+      <article class="card mini-card">
+        <h3>Account Management</h3>
+        <p class="muted">Create accounts, login securely, and manage your profile details.</p>
+      </article>
+      <article class="card mini-card">
+        <h3>Money Operations</h3>
+        <p class="muted">Deposit, withdraw, and transfer funds with validation and confirmations.</p>
+      </article>
+      <article class="card mini-card">
+        <h3>Activity Tracking</h3>
+        <p class="muted">Review transaction history with filtering, search, and exports.</p>
+      </article>
+    </section>
+
+    <section class="card cta-panel">
+      <h3>Ready to explore TrustBank?</h3>
+      <p class="muted">Start with account creation from the login page and move straight into your dashboard.</p>
+      <a href="login.html" class="btn success">Launch Banking Demo</a>
+    </section>
   </section>
 
-  <!-- Features Section -->
-  <section class="features-section" id="features">
-    <div class="section-header">
-      <h2 class="section-title">✨ Key Features</h2>
-      <p class="section-subtitle">Everything you need for modern banking operations</p>
-    </div>
-    
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🎯</div>
-        <h3 class="feature-title">Account Management</h3>
-        <p class="feature-description">Create and manage banking accounts with secure PIN authentication and persistent storage.</p>
-        <ul class="feature-list">
-          <li>Quick account creation</li>
-          <li>Secure PIN-based login</li>
-          <li>Session management</li>
-        </ul>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">💰</div>
-        <h3 class="feature-title">Banking Operations</h3>
-        <p class="feature-description">Perform deposits, withdrawals, and transfers with instant balance updates and validation.</p>
-        <ul class="feature-list">
-          <li>Deposit funds</li>
-          <li>Withdraw money</li>
-          <li>Transfer between accounts</li>
-        </ul>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3 class="feature-title">Transaction History</h3>
-        <p class="feature-description">Track all your banking activities with detailed transaction logs and filtering options.</p>
-        <ul class="feature-list">
-          <li>Complete transaction log</li>
-          <li>Filter by type</li>
-          <li>Real-time updates</li>
-        </ul>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">📈</div>
-        <h3 class="feature-title">Visual Analytics</h3>
-        <p class="feature-description">Monitor your balance with interactive charts and comprehensive financial insights.</p>
-        <ul class="feature-list">
-          <li>Balance tracker chart</li>
-          <li>Spending analytics</li>
-          <li>Activity overview</li>
-        </ul>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">🎨</div>
-        <h3 class="feature-title">Modern UI/UX</h3>
-        <p class="feature-description">Beautiful glassmorphism design with smooth animations and responsive layouts.</p>
-        <ul class="feature-list">
-          <li>Dark theme interface</li>
-          <li>Toast notifications</li>
-          <li>Loading states</li>
-        </ul>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon">🔐</div>
-        <h3 class="feature-title">Data Persistence</h3>
-        <p class="feature-description">All accounts and transactions are stored securely with file-based persistence.</p>
-        <ul class="feature-list">
-          <li>Account data storage</li>
-          <li>Transaction records</li>
-          <li>Session handling</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tech Stack Section -->
-  <section class="tech-section">
-    <div class="section-header">
-      <h2 class="section-title">🛠️ Technology Stack</h2>
-      <p class="section-subtitle">Built with modern, enterprise-grade technologies</p>
-    </div>
-    
-    <div class="tech-grid">
-      <div class="tech-category">
-        <h3 class="tech-category-title">Backend</h3>
-        <div class="tech-items">
-          <div class="tech-item">
-            <span class="tech-name">Java 21</span>
-            <span class="tech-badge">LTS</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-name">Spring Boot 3.4.2</span>
-            <span class="tech-badge">Latest</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-name">Spring Web</span>
-            <span class="tech-badge">REST API</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-name">Maven</span>
-            <span class="tech-badge">Build Tool</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="tech-category">
-        <h3 class="tech-category-title">Frontend</h3>
-        <div class="tech-items">
-          <div class="tech-item">
-            <span class="tech-name">HTML5/CSS3</span>
-            <span class="tech-badge">Modern</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-name">JavaScript ES6+</span>
-            <span class="tech-badge">Vanilla</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-name">Chart.js</span>
-            <span class="tech-badge">Analytics</span>
-          </div>
-          <div class="tech-item">
-            <span class="tech-name">Google Fonts</span>
-            <span class="tech-badge">Inter</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="cta-section">
-    <div class="cta-content">
-      <h2 class="cta-title">Ready to Experience Modern Banking?</h2>
-      <p class="cta-description">
-        Try TrustBank now and explore all the features of a modern banking platform. 
-        Create an account in seconds and start managing your finances.
-      </p>
-      <div class="cta-actions">
-        <a href="login.html" class="btn-cta primary">
-          <span>Launch TrustBank</span>
-          <span class="btn-icon">🚀</span>
-        </a>
-        <a href="index.html" class="btn-cta secondary">
-          <span>View All-in-One Page</span>
-        </a>
-      </div>
-      <p class="cta-note">
-        💡 <strong>First time?</strong> Go to Login page and create a new account to get started.
-      </p>
-    </div>
-  </section>
-
-  <!-- Footer -->
   <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <p class="footer-text">© 2026 TrustBank • <span class="security-text">🛡️ SSL Secured</span> • Built with Spring Boot</p>
-        <p class="footer-disclaimer">⚠️ Demo Application Only – Not for Production Use – Educational Purpose</p>
-      </div>
-      <div class="footer-links">
-        <a href="login.html" class="footer-link">Login</a>
-        <a href="dashboard.html" class="footer-link">Dashboard</a>
-        <a href="index.html" class="footer-link">All Features</a>
-      </div>
-    </div>
+    <p>© 2026 TrustBank • Educational demo • Not for production use</p>
   </footer>
 </div>
 

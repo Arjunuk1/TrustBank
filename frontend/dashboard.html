@@ -32,27 +32,26 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
 <div class="app">
-  <!-- Demo Disclaimer Banner -->
   <div class="disclaimer-banner">
-    <span class="disclaimer-icon">⚠️</span>
     <div class="disclaimer-content">
-      <strong>DEMO APPLICATION</strong> – This is an educational project. Do not use real personal or financial information.
+      <strong>Demo Application:</strong> Use test data only.
     </div>
   </div>
 
   <header class="topbar">
     <div class="brand">
-      <div class="logo">🏦</div>
+      <div class="logo">TB</div>
       <div>
-        <h1>TrustBank Dashboard <span class="demo-badge">DEMO</span></h1>
-        <p class="tagline">Bank-grade security • Real-time updates</p>
+        <h1>Dashboard <span class="demo-badge">DEMO</span></h1>
+        <p class="tagline">Account overview and actions</p>
       </div>
     </div>
 
@@ -70,9 +69,8 @@
 
   <main class="grid">
 
-    <!-- CONFIDENCE INDICATORS -->
+    <!-- SUMMARY -->
     <section class="card confidence-card balance-indicator">
-      <div class="confidence-icon">💰</div>
       <div class="confidence-content">
         <h3 class="confidence-label">
           Current Balance
@@ -87,7 +85,6 @@
     </section>
 
     <section class="card confidence-card deposit-indicator">
-      <div class="confidence-icon">📈</div>
       <div class="confidence-content">
         <h3 class="confidence-label">Total Deposits</h3>
         <div class="confidence-value deposit-value">
@@ -97,7 +94,6 @@
     </section>
 
     <section class="card confidence-card withdraw-indicator">
-      <div class="confidence-icon">📉</div>
       <div class="confidence-content">
         <h3 class="confidence-label">Total Withdrawals</h3>
         <div class="confidence-value withdraw-value">
@@ -107,7 +103,6 @@
     </section>
 
     <section class="card confidence-card transfer-indicator">
-      <div class="confidence-icon">📊</div>
       <div class="confidence-content">
         <h3 class="confidence-label">Transactions</h3>
         <div class="confidence-value transfer-value">
@@ -133,7 +128,7 @@
     <!-- USER INFO -->
     <section class="card wide account-card">
       <div class="card-header">
-        <h2>👤 Account Information</h2>
+        <h2>Account Information</h2>
         <span class="account-status-badge active">● Active</span>
       </div>
       
@@ -153,7 +148,7 @@
 
         <div class="account-row">
           <span class="label">Account Type</span>
-          <span class="value">Premium Savings</span>
+          <span class="value">Savings</span>
         </div>
 
         <div class="account-row">
@@ -165,14 +160,14 @@
 
     <!-- BALANCE GRAPH -->
     <section class="card wide">
-      <h2>📈 Balance Tracker</h2>
+      <h2>Balance Tracker</h2>
       <p class="muted">Monitor your balance changes over time</p>
       <canvas id="balanceChart" height="100"></canvas>
     </section>
 
     <!-- CHANGE PIN -->
     <section class="card">
-      <h3>🔐 Change PIN</h3>
+      <h3>Change PIN</h3>
       <p class="muted">Update your security PIN</p>
       <input id="currentPin" type="password" placeholder="Current PIN" />
       <input id="newPin" type="password" placeholder="New PIN (4-6 digits)" />
@@ -180,29 +175,9 @@
       <button class="btn warning" onclick="changePin(event)">Change PIN</button>
     </section>
 
-    <!-- ACCOUNT SETTINGS -->
-    <section class="card">
-      <h3>⚙️ Account Settings</h3>
-      <p class="muted">Daily transaction limit</p>
-      <div class="limit-info">
-        <div class="limit-row">
-          <span class="limit-label">Daily Limit:</span>
-          <span class="limit-value">₹ 50,000.00</span>
-        </div>
-        <div class="limit-row">
-          <span class="limit-label">Used Today:</span>
-          <span id="dailyUsed" class="limit-value">₹ 0.00</span>
-        </div>
-        <div class="limit-row">
-          <span class="limit-label">Remaining:</span>
-          <span id="dailyRemaining" class="limit-value success">₹ 50,000.00</span>
-        </div>
-      </div>
-    </section>
-
     <!-- ACTIONS -->
     <section class="card">
-      <h3>💰 Deposit Money</h3>
+      <h3>Deposit</h3>
       <input id="depAmt" placeholder="Enter Amount (₹)" />
       <div class="quick-amounts">
         <button class="quick-amount-btn" onclick="setQuickAmount('depAmt', 100)">+₹100</button>
@@ -214,7 +189,7 @@
     </section>
 
     <section class="card">
-      <h3>💸 Withdraw Money</h3>
+      <h3>Withdraw</h3>
       <input id="withAmt" placeholder="Enter Amount (₹)" />
       <div class="quick-amounts">
         <button class="quick-amount-btn" onclick="setQuickAmount('withAmt', 100)">+₹100</button>
@@ -226,7 +201,7 @@
     </section>
 
     <section class="card wide">
-      <h3>🔄 Transfer Funds</h3>
+      <h3>Transfer Funds</h3>
       <div class="row">
         <input id="toAcc" placeholder="Receiver Account Number" style="flex: 2;" />
         <input id="trAmt" placeholder="Amount (₹)" style="flex: 1;" />
@@ -239,15 +214,15 @@
       <div class="row space">
         <div>
           <h2>
-            📜 Transactions 
+            Transactions
             <span id="txnCount" class="txnBadge">0</span>
           </h2>
-          <p class="muted">Filter and view your complete transaction history</p>
+          <p class="muted">Filter and review transaction activity</p>
         </div>
         <div class="row" style="gap: 8px;">
-          <button class="btn success" onclick="exportTransactionsCSV()">📥 Export CSV</button>
-          <button class="btn primary" onclick="downloadStatementPDF()">📄 Download PDF</button>
-          <button class="btn" onclick="loadTransactions()">🔄 Refresh</button>
+          <button class="btn success" onclick="exportTransactionsCSV()">Export CSV</button>
+          <button class="btn primary" onclick="downloadStatementPDF()">Download PDF</button>
+          <button class="btn" onclick="loadTransactions()">Refresh</button>
         </div>
       </div>
 
@@ -256,7 +231,7 @@
         <input 
           type="text" 
           id="txnSearch" 
-          placeholder="🔍 Search transactions by amount, type, or account..." 
+          placeholder="Search by amount, type, or account" 
           oninput="filterTransactions()"
           autocomplete="off"
         />
@@ -265,9 +240,9 @@
       <div class="row filterRow" style="margin-top:16px; justify-content: space-between;">
         <div class="row" style="gap: 8px; flex-wrap: wrap;">
           <button class="btn filterBtn active" onclick="setFilter('all', this)">All</button>
-          <button class="btn success filterBtn" onclick="setFilter('deposit', this)">💰 Deposits</button>
-          <button class="btn danger filterBtn" onclick="setFilter('withdraw', this)">💸 Withdrawals</button>
-          <button class="btn warning filterBtn" onclick="setFilter('transfer', this)">🔄 Transfers</button>
+          <button class="btn success filterBtn" onclick="setFilter('deposit', this)">Deposits</button>
+          <button class="btn danger filterBtn" onclick="setFilter('withdraw', this)">Withdrawals</button>
+          <button class="btn warning filterBtn" onclick="setFilter('transfer', this)">Transfers</button>
         </div>
         <div class="sort-controls">
           <label for="sortSelect" class="sort-label">Sort:</label>
@@ -282,14 +257,14 @@
 
       <div class="date-filter-row">
         <div class="date-filter-controls">
-          <label for="dateFrom" class="date-label">📅 From:</label>
+          <label for="dateFrom" class="date-label">From:</label>
           <input type="date" id="dateFrom" class="date-input" onchange="filterByDateRange()">
           
-          <label for="dateTo" class="date-label">📅 To:</label>
+          <label for="dateTo" class="date-label">To:</label>
           <input type="date" id="dateTo" class="date-input" onchange="filterByDateRange()">
           
           <button class="btn btn-reset" onclick="resetDateFilter()" title="Clear date filter">
-            🔄 Reset
+            Reset
           </button>
         </div>
       </div>
@@ -300,18 +275,8 @@
     
   </main>
 
-  <footer class="dashboard-footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <p class="footer-text">© 2026 TrustBank • <span class="security-text">🛡️ SSL Secured</span> • Built with Spring Boot</p>
-        <p class="footer-disclaimer">⚠️ Demo Application Only – Not for Production Use – Educational Purpose</p>
-        <p class="footer-hint" style="margin-top: 8px; font-size: 12px; opacity: 0.6;">💡 Press <kbd style="padding: 2px 6px; background: rgba(255,255,255,0.1); border-radius: 4px;">?</kbd> for keyboard shortcuts</p>
-      </div>
-      <div class="footer-links">\n        <span class="footer-link">Privacy Policy</span>
-        <span class="footer-link">Terms of Service</span>
-        <span class="footer-link">24/7 Support</span>
-      </div>
-    </div>
+  <footer class="footer">
+    <p>© 2026 TrustBank • Educational demo • Press ? for shortcuts</p>
   </footer>
 </div>
 
