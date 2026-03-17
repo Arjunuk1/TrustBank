@@ -1,40 +1,23 @@
-2026-03-11 12:38:26 [main] INFO  c.t.app.TrustbankWebApplicationTests - Starting TrustbankWebApplicationTests using Java 17.0.17 with PID 901 (started by arjun in /home/arjun/TrustBank)
-2026-03-11 12:38:26 [main] DEBUG c.t.app.TrustbankWebApplicationTests - Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-11 12:38:26 [main] INFO  c.t.app.TrustbankWebApplicationTests - No active profile set, falling back to 1 default profile: "default"
-2026-03-11 12:38:28 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
-2026-03-11 12:38:28 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
-2026-03-11 12:38:28 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
-2026-03-11 12:38:28 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
-2026-03-11 12:38:28 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
-2026-03-11 12:38:29 [main] INFO  c.t.app.TrustbankWebApplicationTests - Started TrustbankWebApplicationTests in 3.878 seconds (process running for 6.816)
-2026-03-11 12:45:17 [main] INFO  c.t.app.TrustbankWebApplicationTests - Starting TrustbankWebApplicationTests using Java 17.0.17 with PID 2418 (started by arjun in /home/arjun/TrustBank)
-2026-03-11 12:45:17 [main] DEBUG c.t.app.TrustbankWebApplicationTests - Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-11 12:45:17 [main] INFO  c.t.app.TrustbankWebApplicationTests - No active profile set, falling back to 1 default profile: "default"
-2026-03-11 12:45:18 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
-2026-03-11 12:45:18 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
-2026-03-11 12:45:18 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
-2026-03-11 12:45:18 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
-2026-03-11 12:45:19 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
-2026-03-11 12:45:19 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
-2026-03-11 12:45:19 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
-2026-03-11 12:45:19 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
-2026-03-11 12:45:19 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
-2026-03-11 12:45:19 [main] INFO  c.t.app.TrustbankWebApplicationTests - Started TrustbankWebApplicationTests in 2.758 seconds (process running for 4.177)
-2026-03-11 12:47:14 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 2562 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
-2026-03-11 12:47:14 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-11 12:47:14 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
-2026-03-11 12:47:15 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2026-03-11 12:47:15 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-11 12:47:15 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-11 12:47:16 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 975 ms
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
-2026-03-11 12:47:16 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
-2026-03-11 12:47:16 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
-2026-03-11 12:47:16 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 2.469 seconds (process running for 3.096)
+2026-03-17 11:45:59 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 1018 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
+2026-03-17 11:45:59 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-17 11:45:59 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-17 11:46:00 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-03-17 11:46:00 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-17 11:46:00 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-17 11:46:00 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1297 ms
+2026-03-17 11:46:00 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-17 11:46:01 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-17 11:46:01 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-03-17 11:46:01 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 3.223 seconds (process running for 3.717)
+2026-03-17 11:46:48 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-17 11:46:48 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-17 11:46:48 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-17 11:47:46 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-17 11:47:46 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
