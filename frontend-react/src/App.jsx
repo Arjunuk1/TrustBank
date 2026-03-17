@@ -1,19 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Check if user is already logged in
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const accNo = localStorage.getItem('accNo');
     const name = localStorage.getItem('name');
-    
-    if (accNo && name) {
-      setIsLoggedIn(true);
-    }
-  }, []);
+    return Boolean(accNo && name);
+  });
 
   const handleLogin = () => {
     setIsLoggedIn(true);

@@ -4,8 +4,8 @@ import { getBalance, getTransactions, deposit, withdraw, transfer } from "../ser
 function Dashboard({ onLogout }) {
   const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
-  const [userName, setUserName] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
+  const [userName] = useState(() => localStorage.getItem("name") || "");
+  const [accountNumber] = useState(() => localStorage.getItem("accNo") || "");
   
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
@@ -14,43 +14,38 @@ function Dashboard({ onLogout }) {
   
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
 
-  useEffect(() => {
-    const accNo = localStorage.getItem("accNo");
-    const name = localStorage.getItem("name");
-    
-    if (!accNo || !name) {
-      onLogout();
-      return;
-    }
-
-    setAccountNumber(accNo);
-    setUserName(name);
-    
-    fetchBalance(accNo);
-    fetchTransactions(accNo);
-    
-    setTimeout(() => setDataLoaded(true), 300);
-  }, [onLogout]);
-
-  const fetchBalance = async (accNo) => {
+  async function fetchBalance(accNo) {
     try {
       const bal = await getBalance(accNo);
       setBalance(bal);
     } catch (error) {
       console.error("Failed to fetch balance:", error);
     }
-  };
+  }
 
-  const fetchTransactions = async (accNo) => {
+  async function fetchTransactions(accNo) {
     try {
       const txns = await getTransactions(accNo);
       setTransactions(txns);
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
     }
-  };
+  }
+
+  useEffect(() => {
+    if (!accountNumber || !userName) {
+      onLogout();
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      fetchBalance(accountNumber);
+      fetchTransactions(accountNumber);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [onLogout, accountNumber, userName]);
 
   const showMessage = (text, type) => {
     setMessage({ text, type });
@@ -70,7 +65,7 @@ function Dashboard({ onLogout }) {
       setDepositAmount("");
       await fetchBalance(accountNumber);
       await fetchTransactions(accountNumber);
-    } catch (error) {
+    } catch {
       showMessage("❌ Deposit failed", "error");
     }
     setLoading(false);
@@ -89,7 +84,7 @@ function Dashboard({ onLogout }) {
       setWithdrawAmount("");
       await fetchBalance(accountNumber);
       await fetchTransactions(accountNumber);
-    } catch (error) {
+    } catch {
       showMessage("❌ Withdrawal failed", "error");
     }
     setLoading(false);
@@ -109,7 +104,7 @@ function Dashboard({ onLogout }) {
       setTransferAmount("");
       await fetchBalance(accountNumber);
       await fetchTransactions(accountNumber);
-    } catch (error) {
+    } catch {
       showMessage("❌ Transfer failed", "error");
     }
     setLoading(false);
