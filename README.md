@@ -64,7 +64,6 @@ Vanilla JavaScript (ES6+)
 
 Chart.js
 
-Google Fonts (Inter)
 
 Storage
 
