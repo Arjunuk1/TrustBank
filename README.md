@@ -67,6 +67,6 @@ Chart.js
 
 Storage
 
-File-based storage (accounts.txt, transactions.txt)
+File-based storage (accounts.txt and transactions.txt)
 
 localStorage
