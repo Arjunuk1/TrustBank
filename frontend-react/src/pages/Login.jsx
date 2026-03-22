@@ -36,8 +36,8 @@ function Login({ onLogin }) {
         setError("❌ Invalid account number or PIN");
         setTimeout(() => setError(""), 3000);
       }
-    } catch {
-      setError("❌ Invalid account number or PIN");
+    } catch (err) {
+      setError(`❌ ${err.message || "Invalid account number or PIN"}`);
       setTimeout(() => setError(""), 3000);
     } finally {
       setLoading(false);
@@ -65,8 +65,8 @@ function Login({ onLogin }) {
         setIsCreating(false);
         setSuccess("");
       }, 4000);
-    } catch {
-      setError("❌ Failed to create account. Try again.");
+    } catch (err) {
+      setError(`❌ ${err.message || "Failed to create account. Try again."}`);
       setTimeout(() => setError(""), 3000);
     } finally {
       setLoading(false);

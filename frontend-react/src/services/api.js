@@ -1,5 +1,31 @@
 const API_BASE = "http://localhost:8081/api";
 
+async function parseApiResponse(response) {
+  let payload = null;
+
+  try {
+    payload = await response.json();
+  } catch {
+    throw new Error("Unable to read server response");
+  }
+
+  if (!response.ok) {
+    const message = payload?.message || "Request failed";
+    throw new Error(message);
+  }
+
+  // Backend responses are wrapped as { success, message, data }.
+  if (payload && Object.prototype.hasOwnProperty.call(payload, "success")) {
+    if (!payload.success) {
+      throw new Error(payload.message || "Request failed");
+    }
+    return payload.data;
+  }
+
+  // Fallback for endpoints returning plain JSON.
+  return payload;
+}
+
 // Create Account
 export async function createAccount(name, pin) {
   const response = await fetch(`${API_BASE}/accounts/create`, {
@@ -8,8 +34,7 @@ export async function createAccount(name, pin) {
     body: JSON.stringify({ name, pin }),
   });
 
-  if (!response.ok) throw new Error("Failed to create account");
-  return await response.json();
+  return parseApiResponse(response);
 }
 
 // Login
@@ -20,8 +45,7 @@ export async function loginUser(accountNumber, pin) {
     body: JSON.stringify({ accountNumber, pin }),
   });
 
-  if (!response.ok) throw new Error("Invalid login");
-  return await response.json();
+  return parseApiResponse(response);
 }
 
 // Deposit
@@ -32,8 +56,7 @@ export async function deposit(accountNumber, amount) {
     body: JSON.stringify({ accountNumber, amount }),
   });
 
-  if (!response.ok) throw new Error("Deposit failed");
-  return await response.json();
+  return parseApiResponse(response);
 }
 
 // Withdraw
@@ -44,8 +67,7 @@ export async function withdraw(accountNumber, amount) {
     body: JSON.stringify({ accountNumber, amount }),
   });
 
-  if (!response.ok) throw new Error("Withdrawal failed");
-  return await response.json();
+  return parseApiResponse(response);
 }
 
 // Transfer
@@ -56,22 +78,19 @@ export async function transfer(fromAccount, toAccount, amount) {
     body: JSON.stringify({ fromAccount, toAccount, amount }),
   });
 
-  if (!response.ok) throw new Error("Transfer failed");
-  return await response.json();
+  return parseApiResponse(response);
 }
 
 // Get Balance
 export async function getBalance(accountNumber) {
   const response = await fetch(`${API_BASE}/accounts/${accountNumber}/balance`);
-  
-  if (!response.ok) throw new Error("Failed to fetch balance");
-  return await response.json();
+
+  return parseApiResponse(response);
 }
 
 // Get Transactions
 export async function getTransactions(accountNumber) {
   const response = await fetch(`${API_BASE}/accounts/${accountNumber}/transactions`);
-  
-  if (!response.ok) throw new Error("Failed to fetch transactions");
-  return await response.json();
+
+  return parseApiResponse(response);
 }
