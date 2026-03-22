@@ -150,15 +150,23 @@ async function safeFetch(url, options) {
   showLoader();
   try {
     const res = await fetch(url, options);
-    const responseData = await res.json();
+    let responseData = null;
+
+    try {
+      responseData = await res.json();
+    } catch {
+      responseData = null;
+    }
+
     hideLoader();
     
     // Handle new ApiResponse wrapper format
-    if (responseData.success !== undefined) {
+    if (responseData && responseData.success !== undefined) {
       return { ok: responseData.success, data: responseData.data, response: responseData };
     }
-    // Fallback for old format
-    return { ok: res.ok, data: responseData };
+
+    // Fallback for old/non-wrapped format
+    return { ok: res.ok, data: responseData, response: responseData };
   } catch (error) {
     console.error("Fetch error:", error);
     hideLoader();

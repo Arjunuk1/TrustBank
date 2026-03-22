@@ -21,3 +21,102 @@
 2026-03-22 06:36:47 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
 2026-03-22 06:37:58 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
 2026-03-22 06:37:58 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-22 06:56:45 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 1661 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
+2026-03-22 06:56:45 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-22 06:56:45 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-22 06:56:49 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-03-22 06:56:49 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-22 06:56:49 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-22 06:56:49 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 3474 ms
+2026-03-22 06:56:49 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-22 06:56:50 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-22 06:56:51 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-03-22 06:56:51 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 7.074 seconds (process running for 8.468)
+2026-03-22 06:59:02 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-22 06:59:02 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-22 06:59:02 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-03-22 06:59:03 [http-nio-8081-exec-1] ERROR c.t.a.e.GlobalExceptionHandler - Unexpected error occurred: Required request body is missing: public org.springframework.http.ResponseEntity<com.trustbank.app.dto.ApiResponse<com.trustbank.app.dto.LoginResponse>> com.trustbank.app.controller.BankController.login(com.trustbank.app.dto.LoginRequest)
+org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public org.springframework.http.ResponseEntity<com.trustbank.app.dto.ApiResponse<com.trustbank.app.dto.LoginResponse>> com.trustbank.app.controller.BankController.login(com.trustbank.app.dto.LoginRequest)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:178)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:150)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:230)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:180)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1003)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:649)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1778)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-03-22 06:59:45 [http-nio-8081-exec-2] INFO  c.t.app.controller.BankController - API Request: Login for account=1002
+2026-03-22 06:59:45 [http-nio-8081-exec-2] INFO  c.trustbank.app.service.BankService - Login attempt for account: 1002
+2026-03-22 06:59:45 [http-nio-8081-exec-2] INFO  c.trustbank.app.service.BankService - Login successful for account: 1002
+2026-03-22 06:59:45 [http-nio-8081-exec-2] INFO  c.t.app.controller.BankController - API Response: Login successful for account=1002
+2026-03-22 07:02:10 [main] INFO  c.t.app.TrustbankWebApplicationTests - Starting TrustbankWebApplicationTests using Java 17.0.17 with PID 2194 (started by arjun in /home/arjun/TrustBank)
+2026-03-22 07:02:10 [main] DEBUG c.t.app.TrustbankWebApplicationTests - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-22 07:02:10 [main] INFO  c.t.app.TrustbankWebApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-03-22 07:02:14 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-22 07:02:14 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-22 07:02:15 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-22 07:02:15 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-22 07:02:15 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-22 07:02:15 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-22 07:02:15 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-22 07:02:15 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-22 07:02:15 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-22 07:02:17 [main] INFO  c.t.app.TrustbankWebApplicationTests - Started TrustbankWebApplicationTests in 9.596 seconds (process running for 13.264)
+2026-03-22 07:03:01 [main] INFO  c.t.app.TrustbankWebApplicationTests - Starting TrustbankWebApplicationTests using Java 17.0.17 with PID 2483 (started by arjun in /home/arjun/TrustBank)
+2026-03-22 07:03:01 [main] DEBUG c.t.app.TrustbankWebApplicationTests - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-22 07:03:01 [main] INFO  c.t.app.TrustbankWebApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-03-22 07:03:03 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-22 07:03:04 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-22 07:03:07 [main] INFO  c.t.app.TrustbankWebApplicationTests - Started TrustbankWebApplicationTests in 6.77 seconds (process running for 10.288)
+2026-03-22 07:03:22 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-22 07:03:22 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
