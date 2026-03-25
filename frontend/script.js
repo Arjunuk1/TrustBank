@@ -171,7 +171,11 @@ async function safeFetch(url, options) {
     console.error("Fetch error:", error);
     hideLoader();
     showToast("Network error. Server might be down.", "error");
-    return { ok: false, data: null };
+    return {
+      ok: false,
+      data: null,
+      response: { message: "Network error. Server might be down." }
+    };
   }
 }
 
