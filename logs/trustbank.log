@@ -1,84 +1,152 @@
-2026-03-25 18:04:06 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 25.0.2 with PID 11270 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
-2026-03-25 18:04:06 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-25 18:04:06 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
-2026-03-25 18:04:07 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2026-03-25 18:04:07 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-25 18:04:07 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-25 18:04:07 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1081 ms
-2026-03-25 18:04:07 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
-2026-03-25 18:04:07 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
-2026-03-25 18:04:07 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
-2026-03-25 18:04:08 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
-2026-03-25 18:04:08 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
-2026-03-25 18:04:08 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
-2026-03-25 18:04:08 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
-2026-03-25 18:04:08 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
-2026-03-25 18:04:08 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
-2026-03-25 18:04:08 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'testController' defined in file [/home/arjun/TrustBank/target/classes/com/trustbank/app/controller/TestController.class]: Failed to instantiate [com.trustbank.app.controller.TestController]: Constructor threw exception
-2026-03-25 18:04:08 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2026-03-25 18:04:08 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+2026-03-26 07:48:17 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 259 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
+2026-03-26 07:48:17 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-26 07:48:17 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-26 07:48:17 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-03-26 07:48:17 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 07:48:17 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-26 07:48:17 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 582 ms
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-26 07:48:18 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-26 07:48:18 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-03-26 07:48:18 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 1.533 seconds (process running for 1.802)
+2026-03-26 07:48:35 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 07:48:35 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 07:48:35 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-03-26 07:49:19 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 07:49:20 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-26 07:56:31 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 2221 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
+2026-03-26 07:56:31 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-26 07:56:31 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-26 07:56:32 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-03-26 07:56:32 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 07:56:32 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-26 07:56:32 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1047 ms
+2026-03-26 07:56:32 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-26 07:56:32 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-26 07:56:33 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-26 07:56:33 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-26 07:56:33 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-26 07:56:33 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-26 07:56:33 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-26 07:56:33 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-26 07:56:33 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-26 07:56:33 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-03-26 07:56:33 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 2.534 seconds (process running for 3.038)
+2026-03-26 07:57:23 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 2427 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
+2026-03-26 07:57:23 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-26 07:57:23 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-26 07:57:24 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-03-26 07:57:24 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 07:57:24 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-26 07:57:24 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 920 ms
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-26 07:57:24 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-26 07:57:25 [main] WARN  o.s.b.w.s.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-03-26 07:57:25 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
 
 Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2026-03-25 18:04:08 [main] ERROR o.s.boot.SpringApplication - Application run failed
-org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'testController' defined in file [/home/arjun/TrustBank/target/classes/com/trustbank/app/controller/TestController.class]: Failed to instantiate [com.trustbank.app.controller.TestController]: Constructor threw exception
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1344)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1231)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:565)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:525)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:333)
-	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:371)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:331)
-	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:196)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1218)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1184)
-	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1121)
-	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:993)
-	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:620)
-	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143)
-	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756)
-	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365)
-	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
-	at com.trustbank.app.TrustbankWebApplication.main(TrustbankWebApplication.java:10)
-Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.trustbank.app.controller.TestController]: Constructor threw exception
-	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:220)
-	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:106)
-	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1338)
-	... 19 common frames omitted
-Caused by: java.lang.Error: Unresolved compilation problem: 
-	The declared package "com.trustbank.trustbank_web.controller" does not match the expected package "com.trustbank.app.controller"
+2026-03-26 07:57:25 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
 
-	at com.trustbank.app.controller.TestController.<init>(TestController.java:1)
-	at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
-	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
-	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
-	at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:194)
-	... 21 common frames omitted
-2026-03-25 18:05:36 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 25.0.2 with PID 12167 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
-2026-03-25 18:05:36 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-25 18:05:36 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
-2026-03-25 18:05:37 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
-2026-03-25 18:05:37 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-03-25 18:05:37 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
-2026-03-25 18:05:38 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 963 ms
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
-2026-03-25 18:05:38 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
-2026-03-25 18:05:39 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
-2026-03-25 18:05:39 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 2.616 seconds (process running for 2.963)
-2026-03-25 18:06:06 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-03-25 18:06:06 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-03-25 18:06:06 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
-2026-03-25 18:06:06 [http-nio-8081-exec-1] INFO  c.t.app.controller.BankController - API Request: Login for account=1001
-2026-03-25 18:06:06 [http-nio-8081-exec-1] INFO  c.trustbank.app.service.BankService - Login attempt for account: 1001
-2026-03-25 18:06:06 [http-nio-8081-exec-1] INFO  c.trustbank.app.service.BankService - Login successful for account: 1001
-2026-03-25 18:06:06 [http-nio-8081-exec-1] INFO  c.t.app.controller.BankController - API Response: Login successful for account=1001
-2026-03-25 18:06:12 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
-2026-03-25 18:06:12 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+
+2026-03-26 07:57:55 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 07:57:55 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-26 07:59:57 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 2654 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
+2026-03-26 07:59:57 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-26 07:59:57 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-26 07:59:59 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-03-26 07:59:59 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 07:59:59 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-26 07:59:59 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1667 ms
+2026-03-26 07:59:59 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-26 07:59:59 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1001 to hashed PIN format
+2026-03-26 07:59:59 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1002 to hashed PIN format
+2026-03-26 07:59:59 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1003 to hashed PIN format
+2026-03-26 08:00:00 [main] INFO  c.trustbank.app.storage.FileStorage - Migrating account 1004 to hashed PIN format
+2026-03-26 08:00:00 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 4 accounts successfully
+2026-03-26 08:00:00 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-26 08:00:00 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 71 transactions successfully
+2026-03-26 08:00:00 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 4 accounts. Next account number: 1005
+2026-03-26 08:00:00 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-03-26 08:00:00 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 4.2 seconds (process running for 5.046)
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 13 ms
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  c.t.app.controller.BankController - API Request: Create account for name=Arjun Sharmaa
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  c.trustbank.app.service.BankService - Creating new account for: Arjun Sharmaa
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  c.trustbank.app.storage.FileStorage - Saving 5 accounts to file
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  c.trustbank.app.storage.FileStorage - Successfully saved 5 accounts and 76 transactions
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  c.trustbank.app.service.BankService - Account created successfully: 1005
+2026-03-26 08:01:43 [http-nio-8081-exec-1] INFO  c.t.app.controller.BankController - API Response: Account created successfully - 1005
+2026-03-26 08:01:49 [http-nio-8081-exec-2] INFO  c.t.app.controller.BankController - API Request: Login for account=1002
+2026-03-26 08:01:49 [http-nio-8081-exec-2] INFO  c.trustbank.app.service.BankService - Login attempt for account: 1002
+2026-03-26 08:01:49 [http-nio-8081-exec-2] INFO  c.trustbank.app.service.BankService - Login successful for account: 1002
+2026-03-26 08:01:49 [http-nio-8081-exec-2] INFO  c.t.app.controller.BankController - API Response: Login successful for account=1002
+2026-03-26 08:38:47 [SpringApplicationShutdownHook] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-26 08:38:47 [tomcat-shutdown] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-26 08:40:46 [main] INFO  c.t.app.TrustbankWebApplication - Starting TrustbankWebApplication using Java 17.0.17 with PID 3334 (/home/arjun/TrustBank/target/classes started by arjun in /home/arjun/TrustBank)
+2026-03-26 08:40:46 [main] DEBUG c.t.app.TrustbankWebApplication - Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-03-26 08:40:46 [main] INFO  c.t.app.TrustbankWebApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-26 08:40:47 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2026-03-26 08:40:47 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-26 08:40:47 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-03-26 08:40:47 [main] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 683 ms
+2026-03-26 08:40:47 [main] INFO  c.trustbank.app.storage.FileStorage - Loading accounts from file: accounts.txt
+2026-03-26 08:40:47 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 5 accounts successfully
+2026-03-26 08:40:47 [main] INFO  c.trustbank.app.storage.FileStorage - Loading transactions from file: transactions.txt
+2026-03-26 08:40:47 [main] INFO  c.trustbank.app.storage.FileStorage - Loaded 76 transactions successfully
+2026-03-26 08:40:47 [main] INFO  c.trustbank.app.service.BankService - BankService initialized with 5 accounts. Next account number: 1006
+2026-03-26 08:40:47 [main] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path '/'
+2026-03-26 08:40:47 [main] INFO  c.t.app.TrustbankWebApplication - Started TrustbankWebApplication in 1.412 seconds (process running for 1.721)
+2026-03-26 08:42:22 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-26 08:42:22 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-26 08:42:22 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-03-26 08:42:23 [http-nio-8081-exec-3] INFO  c.t.app.controller.BankController - API Request: Create account for name=Arjun Test
+2026-03-26 08:42:23 [http-nio-8081-exec-3] INFO  c.trustbank.app.service.BankService - Creating new account for: Arjun Test
+2026-03-26 08:42:23 [http-nio-8081-exec-3] INFO  c.trustbank.app.storage.FileStorage - Saving 6 accounts to file
+2026-03-26 08:42:23 [http-nio-8081-exec-3] INFO  c.trustbank.app.storage.FileStorage - Successfully saved 6 accounts and 82 transactions
+2026-03-26 08:42:23 [http-nio-8081-exec-3] INFO  c.trustbank.app.service.BankService - Account created successfully: 1006
+2026-03-26 08:42:23 [http-nio-8081-exec-3] INFO  c.t.app.controller.BankController - API Response: Account created successfully - 1006
+2026-03-26 08:42:24 [http-nio-8081-exec-4] INFO  c.t.app.controller.BankController - API Request: Login for account=1002
+2026-03-26 08:42:24 [http-nio-8081-exec-4] INFO  c.trustbank.app.service.BankService - Login attempt for account: 1002
+2026-03-26 08:42:24 [http-nio-8081-exec-4] INFO  c.trustbank.app.service.BankService - Login successful for account: 1002
+2026-03-26 08:42:24 [http-nio-8081-exec-4] INFO  c.t.app.controller.BankController - API Response: Login successful for account=1002
+2026-03-26 08:43:41 [http-nio-8081-exec-7] INFO  c.t.app.controller.BankController - API Request: Create account for name=Bhavjot
+2026-03-26 08:43:41 [http-nio-8081-exec-7] INFO  c.trustbank.app.service.BankService - Creating new account for: Bhavjot
+2026-03-26 08:43:41 [http-nio-8081-exec-7] INFO  c.trustbank.app.storage.FileStorage - Saving 7 accounts to file
+2026-03-26 08:43:41 [http-nio-8081-exec-7] INFO  c.trustbank.app.storage.FileStorage - Successfully saved 7 accounts and 83 transactions
+2026-03-26 08:43:41 [http-nio-8081-exec-7] INFO  c.trustbank.app.service.BankService - Account created successfully: 1007
+2026-03-26 08:43:41 [http-nio-8081-exec-7] INFO  c.t.app.controller.BankController - API Response: Account created successfully - 1007
+2026-03-26 08:43:48 [http-nio-8081-exec-9] INFO  c.t.app.controller.BankController - API Request: Login for account=1002
+2026-03-26 08:43:48 [http-nio-8081-exec-9] INFO  c.trustbank.app.service.BankService - Login attempt for account: 1002
+2026-03-26 08:43:48 [http-nio-8081-exec-9] INFO  c.trustbank.app.service.BankService - Login successful for account: 1002
+2026-03-26 08:43:48 [http-nio-8081-exec-9] INFO  c.t.app.controller.BankController - API Response: Login successful for account=1002
+2026-03-26 08:43:49 [http-nio-8081-exec-10] INFO  c.t.app.controller.BankController - API Request: Get balance for account=1002
+2026-03-26 08:43:49 [http-nio-8081-exec-10] INFO  c.t.app.controller.BankController - API Response: Balance retrieved for account=1002
+2026-03-26 08:43:49 [http-nio-8081-exec-1] INFO  c.t.app.controller.BankController - API Request: Get transactions for account=1002
+2026-03-26 08:43:49 [http-nio-8081-exec-1] INFO  c.trustbank.app.service.BankService - Fetching transactions for account: 1002
+2026-03-26 08:43:49 [http-nio-8081-exec-1] INFO  c.t.app.controller.BankController - API Response: Retrieved 29 transactions
