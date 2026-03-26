@@ -1,4 +1,7 @@
-1001,Arjun,1234,0.0,true
-1002,Arjun,2006,33050.0,true
-1003,Ayush,2007,6500.0,true
-1004,Ananya Mahajan,2008,9.999879990000001E18,true
+1001,Arjun,$2a$10$D6H69CZGkLLdZI7uzhJgF.i8gPcPzqXBAfvsnyj4ZxQ3aS/p3YxYC,0.0,true,50000.0|0.0|
+1002,Arjun,$2a$10$/WPyEwMYD2l8STv6k9Nsfe4xBb09H1CYeiK8Ohb0gtXF554Odctdi,33050.0,true,50000.0|0.0|
+1003,Ayush,$2a$10$EEV7jFCjZO3i5Msp067aQuKjanW3nr0pZe0MlQtfHlg.ddnkooxqy,6500.0,true,50000.0|0.0|
+1004,Ananya Mahajan,$2a$10$zF7CBM.AOY5z8o4BabnL/.DRF04pnUPY68P9xgK9nKj1loVY28h8q,9.999879990000001E18,true,50000.0|0.0|
+1005,Arjun Sharmaa,$2a$10$uH6GN4YwtrR98Nqy.vrfDuDDV11dCk6w..zxm9iVFmrbdwq34bXg6,0.0,true,50000.0|0.0|
+1006,Arjun Test,$2a$10$r96L3e0knP1CxkTL1WN1K.JpjNannspHtcGNiRdIH/3U8tO1BZVwW,0.0,true,50000.0|0.0|
+1007,Bhavjot,$2a$10$3II4R/.KrHdKzc4Edx9CNOCiX3EmqfkdCU3b6mpxb0kyj8E.jd2m6,0.0,true,50000.0|0.0|
