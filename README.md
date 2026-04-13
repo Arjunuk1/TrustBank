@@ -5,7 +5,7 @@ TrustBank is a full-stack banking web application built with Spring Boot backend
 ⚠️ Disclaimer: This is an educational/demonstration project.
 
 ✨ Features
-🔐 Account Management
+🔐 Account Management - 
 
 Create new account with secure PIN
 
@@ -13,7 +13,7 @@ Login/Logout system
 
 Real-time account dashboard
 
-💰 Banking Operations
+💰 Banking Operations - 
 
 Deposit funds
 
@@ -23,7 +23,7 @@ Transfer money between accounts
 
 Real-time balance check
 
-📊 Transaction History
+📊 Transaction History - 
 
 Complete transaction logs
 
@@ -33,7 +33,7 @@ Timestamp-based tracking
 
 Auto refresh updates
 
-🎨 Modern UI/UX
+🎨 Modern UI/UX - 
 
 Responsive design (Desktop + Mobile)
 
